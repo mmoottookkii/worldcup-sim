@@ -100,11 +100,11 @@ document.getElementById("import-btn").addEventListener("change", function (event
     try {
       const jsonData = JSON.parse(e.target.result);
       const dbName = jsonData.dbName || "GameDB";
-      const dbVersion = jsonData.version + 1; // 強制的にアップグレード
-　　　const request = indexedDB.open(dbName, dbVersion);
+      const originalVersion = jsonData.version || 1;
+      const newVersion = originalVersion + 1; // ★ バージョンを1つ上げる！
 
+      const request = indexedDB.open(dbName, newVersion);
 
-      // ストアがなければ作る
       request.onupgradeneeded = function (event) {
         const db = event.target.result;
 
@@ -127,42 +127,42 @@ document.getElementById("import-btn").addEventListener("change", function (event
 
       request.onsuccess = function (event) {
         const db = event.target.result;
-
-        const transaction = db.transaction(
+        const tx = db.transaction(
           jsonData.objectStores.map(s => s.name),
           "readwrite"
         );
 
         jsonData.objectStores.forEach(storeDef => {
-          const store = transaction.objectStore(storeDef.name);
+          const store = tx.objectStore(storeDef.name);
           (storeDef.data || []).forEach(item => {
             store.put(item);
           });
         });
 
-        transaction.oncomplete = function () {
-          alert("すべてのデータをインポートしました！");
+        tx.oncomplete = function () {
+          alert("インポートが完了しました！");
         };
 
-        transaction.onerror = function (event) {
-          console.error("トランザクションエラー:", event.target.error);
-          alert("一部データのインポートに失敗しました");
+        tx.onerror = function (event) {
+          console.error("インポート中のエラー:", event.target.error);
+          alert("データの書き込みに失敗しました。");
         };
       };
 
       request.onerror = function (event) {
-        console.error("データベースオープン失敗:", event.target.error);
-        alert("データベースのオープンに失敗しました。");
+        console.error("DBオープン失敗:", event.target.error);
+        alert("IndexedDBを開けませんでした。");
       };
 
     } catch (err) {
-      console.error("JSON解析エラー:", err);
+      console.error("JSON読み込みエラー", err);
       alert("無効なJSONファイルです。");
     }
   };
 
   reader.readAsText(file);
 });
+
     </script>
   
 </body>
