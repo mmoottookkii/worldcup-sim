@@ -100,9 +100,9 @@ document.getElementById("import-btn").addEventListener("change", function (event
     try {
       const jsonData = JSON.parse(e.target.result);
       const dbName = jsonData.dbName || "GameDB";
-      const dbVersion = jsonData.version || 1;
+      const dbVersion = jsonData.version + 1; // 強制的にアップグレード
+　　　const request = indexedDB.open(dbName, dbVersion);
 
-      const request = indexedDB.open(dbName, dbVersion);
 
       // ストアがなければ作る
       request.onupgradeneeded = function (event) {
