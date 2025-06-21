@@ -89,5 +89,46 @@
   <footer>
     &copy; 2025 ワールドサッカー シミュレーション
   </footer>
+   <br><br>
+    <input type="file" id="importFile" accept=".json" onchange="importDB(event)" style="display: none;" />
+    <button onclick="document.getElementById('importFile').click()">📥 データインポート</button>
+
+    <script>
+      function importDB(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            const request = indexedDB.open("GameDB", 18);
+
+            request.onsuccess = function (event) {
+              const db = event.target.result;
+              const storeNames = Object.keys(data);
+              const tx = db.transaction(storeNames, "readwrite");
+
+              storeNames.forEach(storeName => {
+                const store = tx.objectStore(storeName);
+                data[storeName].forEach(item => store.put(item));
+              });
+
+              tx.oncomplete = function () {
+                alert("インポートが完了しました！");
+              };
+            };
+
+            request.onerror = function () {
+              alert("IndexedDB の読み込みに失敗しました。");
+            };
+          } catch (error) {
+            alert("無効なJSONファイルです。");
+          }
+        };
+        reader.readAsText(file);
+      }
+    </script>
+  
 </body>
 </html>
