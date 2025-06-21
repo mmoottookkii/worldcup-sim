@@ -332,7 +332,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 18
+    const request = indexedDB.open("GameDB", 19
 
 );
     request.onsuccess = () => {
@@ -621,7 +621,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const defence = parseInt(document.getElementById("def").textContent) || 0;
     const total = parseInt(document.getElementById("total-value").textContent) || 0;
 
-    const request = indexedDB.open("GameDB", 17);
+    const request = indexedDB.open("GameDB", 19);
     request.onsuccess = () => {
       const db = request.result;
       const tx = db.transaction("formations", "readwrite");
