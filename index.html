@@ -89,45 +89,80 @@
   <footer>
     &copy; 2025 ワールドサッカー シミュレーション
   </footer>
-   <br><br>
-    <input type="file" id="importFile" accept=".json" onchange="importDB(event)" style="display: none;" />
-    <button onclick="document.getElementById('importFile').click()">📥 データインポート</button>
+<input type="file" id="import-btn" />
+<script>
+document.getElementById("import-btn").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    <script>
-      function importDB(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const jsonData = JSON.parse(e.target.result);
+      const dbName = jsonData.dbName || "GameDB";
+      const dbVersion = jsonData.version || 1;
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          try {
-            const data = JSON.parse(e.target.result);
-            const request = indexedDB.open("GameDB", 18);
+      const request = indexedDB.open(dbName, dbVersion);
 
-            request.onsuccess = function (event) {
-              const db = event.target.result;
-              const storeNames = Object.keys(data);
-              const tx = db.transaction(storeNames, "readwrite");
+      // ストアがなければ作る
+      request.onupgradeneeded = function (event) {
+        const db = event.target.result;
 
-              storeNames.forEach(storeName => {
-                const store = tx.objectStore(storeName);
-                data[storeName].forEach(item => store.put(item));
+        (jsonData.objectStores || []).forEach(storeDef => {
+          if (!db.objectStoreNames.contains(storeDef.name)) {
+            const store = db.createObjectStore(storeDef.name, {
+              keyPath: storeDef.keyPath,
+              autoIncrement: storeDef.autoIncrement || false,
+            });
+
+            (storeDef.indexes || []).forEach(index => {
+              store.createIndex(index.name, index.keyPath, {
+                unique: index.unique || false,
+                multiEntry: index.multiEntry || false
               });
-
-              tx.oncomplete = function () {
-                alert("インポートが完了しました！");
-              };
-            };
-
-            request.onerror = function () {
-              alert("IndexedDB の読み込みに失敗しました。");
-            };
-          } catch (error) {
-            alert("無効なJSONファイルです。");
+            });
           }
+        });
+      };
+
+      request.onsuccess = function (event) {
+        const db = event.target.result;
+
+        const transaction = db.transaction(
+          jsonData.objectStores.map(s => s.name),
+          "readwrite"
+        );
+
+        jsonData.objectStores.forEach(storeDef => {
+          const store = transaction.objectStore(storeDef.name);
+          (storeDef.data || []).forEach(item => {
+            store.put(item);
+          });
+        });
+
+        transaction.oncomplete = function () {
+          alert("すべてのデータをインポートしました！");
         };
-        reader.readAsText(file);
-      }
+
+        transaction.onerror = function (event) {
+          console.error("トランザクションエラー:", event.target.error);
+          alert("一部データのインポートに失敗しました");
+        };
+      };
+
+      request.onerror = function (event) {
+        console.error("データベースオープン失敗:", event.target.error);
+        alert("データベースのオープンに失敗しました。");
+      };
+
+    } catch (err) {
+      console.error("JSON解析エラー:", err);
+      alert("無効なJSONファイルです。");
+    }
+  };
+
+  reader.readAsText(file);
+});
     </script>
   
 </body>
