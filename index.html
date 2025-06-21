@@ -89,80 +89,47 @@
   <footer>
     &copy; 2025 ワールドサッカー シミュレーション
   </footer>
-<input type="file" id="import-btn" />
+
 <script>
-document.getElementById("import-btn").addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  if (!file) return;
+fetch('db_init.json')
+  .then(res => res.json())
+  .then(data => {
+    const request = indexedDB.open("GameDB", data.version + 1); // 強制バージョンUPでonupgradeneeded発火
 
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    try {
-      const jsonData = JSON.parse(e.target.result);
-      const dbName = jsonData.dbName || "GameDB";
-      const originalVersion = jsonData.version || 1;
-      const newVersion = originalVersion + 1; // ★ バージョンを1つ上げる！
+    request.onupgradeneeded = function (event) {
+      const db = event.target.result;
 
-      const request = indexedDB.open(dbName, newVersion);
-
-      request.onupgradeneeded = function (event) {
-        const db = event.target.result;
-
-        (jsonData.objectStores || []).forEach(storeDef => {
-          if (!db.objectStoreNames.contains(storeDef.name)) {
-            const store = db.createObjectStore(storeDef.name, {
-              keyPath: storeDef.keyPath,
-              autoIncrement: storeDef.autoIncrement || false,
-            });
-
-            (storeDef.indexes || []).forEach(index => {
-              store.createIndex(index.name, index.keyPath, {
-                unique: index.unique || false,
-                multiEntry: index.multiEntry || false
-              });
-            });
-          }
-        });
-      };
-
-      request.onsuccess = function (event) {
-        const db = event.target.result;
-        const tx = db.transaction(
-          jsonData.objectStores.map(s => s.name),
-          "readwrite"
-        );
-
-        jsonData.objectStores.forEach(storeDef => {
-          const store = tx.objectStore(storeDef.name);
-          (storeDef.data || []).forEach(item => {
-            store.put(item);
+      (data.objectStores || []).forEach(storeDef => {
+        if (!db.objectStoreNames.contains(storeDef.name)) {
+          const store = db.createObjectStore(storeDef.name, {
+            keyPath: storeDef.keyPath,
+            autoIncrement: storeDef.autoIncrement || false
           });
-        });
 
-        tx.oncomplete = function () {
-          alert("インポートが完了しました！");
-        };
+          (storeDef.indexes || []).forEach(index => {
+            store.createIndex(index.name, index.keyPath, {
+              unique: index.unique || false,
+              multiEntry: index.multiEntry || false
+            });
+          });
+        }
+      });
+    };
 
-        tx.onerror = function (event) {
-          console.error("インポート中のエラー:", event.target.error);
-          alert("データの書き込みに失敗しました。");
-        };
+    request.onsuccess = function (event) {
+      const db = event.target.result;
+      const tx = db.transaction(data.objectStores.map(s => s.name), "readwrite");
+
+      data.objectStores.forEach(storeDef => {
+        const store = tx.objectStore(storeDef.name);
+        (storeDef.data || []).forEach(item => store.put(item));
+      });
+
+      tx.oncomplete = function () {
+        console.log("初期DBデータを自動登録しました");
       };
-
-      request.onerror = function (event) {
-        console.error("DBオープン失敗:", event.target.error);
-        alert("IndexedDBを開けませんでした。");
-      };
-
-    } catch (err) {
-      console.error("JSON読み込みエラー", err);
-      alert("無効なJSONファイルです。");
-    }
-  };
-
-  reader.readAsText(file);
-});
-
+    };
+  });
     </script>
   
 </body>
