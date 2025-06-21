@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>チーム選択</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      margin: 0;
+      padding: 20px 10px;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 0;
+      font-size: 1.8rem;
+      color: #f9d342;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .team-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .team-box {
+      background-color: #ffffff18;
+      border: 2px solid #f9d342;
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .team-box h3 {
+      text-align: center;
+      margin-top: 0;
+      color: #f9d342;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .confirm-button, .back-button {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 20px auto 0;
+      padding: 15px;
+      font-size: 18px;
+      background-color: #f9d342;
+      color: #203a43;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .confirm-button:hover, .back-button:hover {
+      background-color: #ffe75d;
+    }
+
+    .back-button {
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .team-box {
+        max-width: 100%;
+      }
+
+      .confirm-button, .back-button {
+        font-size: 16px;
+        padding: 12px;
+      }
+
+      .logo {
+        width: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="ロゴ" class="logo" />
+    <h2>対戦チームを選択</h2>
+  </header>
+
+  <div class="team-container">
+    <!-- チーム 赤 -->
+    <div class="team-box">
+      <h3>チーム 赤</h3>
+      <label for="region-red">地域</label>
+      <select id="region-red" onchange="updateCountryOptions('red')">
+        <option value="">-- 地域を選択 --</option>
+        <option value="eu1">欧州１</option>
+        <option value="eu-west">欧州西</option>
+        <option value="eu-east">欧州東</option>
+        <option value="southamerica">南米</option>
+        <option value="africa">アフリカ</option>
+        <option value="northamerica">北中米</option>
+        <option value="asia">アジア</option>
+      </select>
+
+      <label for="country-red">国</label>
+      <select id="country-red">
+        <option value="">-- 国を選択 --</option>
+      </select>
+    </div>
+
+    <!-- チーム 青 -->
+    <div class="team-box">
+      <h3>チーム 青</h3>
+      <label for="region-blue">地域</label>
+      <select id="region-blue" onchange="updateCountryOptions('blue')">
+        <option value="">-- 地域を選択 --</option>
+        <option value="eu1">欧州１</option>
+        <option value="eu-west">欧州西</option>
+        <option value="eu-east">欧州東</option>
+        <option value="southamerica">南米</option>
+        <option value="africa">アフリカ</option>
+        <option value="northamerica">北中米</option>
+        <option value="asia">アジア</option>
+      </select>
+
+      <label for="country-blue">国</label>
+      <select id="country-blue">
+        <option value="">-- 国を選択 --</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 決定ボタン -->
+  <button class="confirm-button" onclick="confirmTeams()">決定 → 試合へ</button>
+
+  <!-- 戻るボタン -->
+  <a href="index.html" class="back-button">← トップページに戻る</a>
+
+  <script>
+    const countryData = {
+      eu1: {
+        england: "イングランド", germany: "ドイツ", netherlands: "オランダ", belgium: "ベルギー",
+        france: "フランス", spain: "スペイン", portugal: "ポルトガル", croatia: "クロアチア", italy: "イタリア"
+      },
+      "eu-west": {
+        iceland: "アイスランド", ireland: "アイルランド", scotland: "スコットランド", wales: "ウェールズ",
+        switzerland: "スイス", norway: "ノルウェー", denmark: "デンマーク", austria: "オーストリア",
+        greece: "ギリシャ", sweden: "スウェーデン", finland: "フィンランド", turkey: "トルコ", israel: "イスラエル"
+      },
+      "eu-east": {
+        slovenia: "スロベニア", montenegro: "モンテネグロ", bosnia: "ボスニア", albania: "アルバニア",
+        czech: "チェコ", slovakia: "スロバキア", hungary: "ハンガリー", serbia: "セルビア",
+        northmacedonia: "北マケドニア", russia: "ロシア", poland: "ポーランド", ukraine: "ウクライナ",
+        romania: "ルーマニア", bulgaria: "ブルガリア", georgia: "ジョージア"
+      },
+      southamerica: {
+        brazil: "ブラジル", argentina: "アルゼンチン", uruguay: "ウルグアイ", paraguay: "パラグアイ",
+        chile: "チリ", colombia: "コロンビア", peru: "ペルー", ecuador: "エクアドル",
+        venezuela: "ベネズエラ", bolivia: "ボリビア"
+      },
+      africa: {
+        egypt: "エジプト", tunisia: "チュニジア", algeria: "アルジェリア", morocco: "モロッコ",
+        mali: "マリ", senegal: "セネガル", ivorycoast: "コートジボワール", ghana: "ガーナ",
+        nigeria: "ナイジェリア", cameroon: "カメルーン", southafrica: "南アフリカ"
+      },
+      northamerica: {
+        mexico: "メキシコ", usa: "米国", australia: "豪州", costarica: "コスタリカ",
+        canada: "カナダ", honduras: "ホンジュラス", jamaica: "ジャマイカ", elsalvador: "エルサルバドル",
+        panama: "パナマ", guatemala: "グアテマラ", newzealand: "ニュージーランド"
+      },
+      asia: {
+        japan: "日本", southkorea: "韓国", iran: "イラン", saudiarabia: "サウジアラビア",
+        northkorea: "北朝鮮", iraq: "イラク", qatar: "カタール", uzbekistan: "ウズベキスタン",
+        uae: "UAE", jordan: "ヨルダン", china: "中国"
+      }
+    };
+
+    function updateCountryOptions(team) {
+      const region = document.getElementById(`region-${team}`).value;
+      const countrySelect = document.getElementById(`country-${team}`);
+      countrySelect.innerHTML = '<option value="">-- 国を選択 --</option>';
+
+      if (countryData[region]) {
+        for (const [code, name] of Object.entries(countryData[region])) {
+          const option = document.createElement("option");
+          option.value = code;
+          option.textContent = name;
+          countrySelect.appendChild(option);
+        }
+      }
+    }
+
+    function confirmTeams() {
+      const regionRed = document.getElementById("region-red").value;
+      const regionBlue = document.getElementById("region-blue").value;
+      const teamRed = document.getElementById("country-red").value;
+      const teamBlue = document.getElementById("country-blue").value;
+
+      if (!teamRed || !teamBlue) {
+        alert("両チームを選択してください。");
+        return;
+      }
+
+      const teamRedJP = countryData[regionRed][teamRed];
+      const teamBlueJP = countryData[regionBlue][teamBlue];
+
+      localStorage.setItem("team-red", teamRed);
+      localStorage.setItem("team-blue", teamBlue);
+      localStorage.setItem("team-red-jp", teamRedJP);
+      localStorage.setItem("team-blue-jp", teamBlueJP);
+
+      localStorage.removeItem("formation_red_atk");
+      localStorage.removeItem("formation_red_mid");
+      localStorage.removeItem("formation_red_def");
+      localStorage.removeItem("formation_blue_atk");
+      localStorage.removeItem("formation_blue_mid");
+      localStorage.removeItem("formation_blue_def");
+      localStorage.removeItem("match_turn");
+      localStorage.removeItem("match_redScore");
+      localStorage.removeItem("match_blueScore");
+      localStorage.removeItem("match_isSecondHalfStarted");
+      localStorage.removeItem("match_isExtension");
+
+      window.location.href = "playmatch.html";
+    }
+  </script>
+</body>
+</html>

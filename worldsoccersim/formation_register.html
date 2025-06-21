@@ -1,0 +1,660 @@
+﻿<!DOCTYPE html><!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>サッカー選手配置</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding-bottom: 100px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f9d342;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      color: #fff;
+    }
+
+    .form-select {
+      background-color: #fff;
+      color: #333;
+    }
+
+    #field {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #81C784;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .line {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .position {
+      width: 65px;
+      height: 100px;
+      margin: 3px;
+      background-color: #2e8b57;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .assigned-player {
+      background-color: #cce5ff !important;
+      color: #004085;
+    }
+
+    #saveDefaultBtn, #returnMatchBtn2 {
+      position: fixed;
+      z-index: 1000;
+      padding: 12px 20px;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 10px;
+      border: none;
+      color: #203a43;
+    }
+
+    #saveDefaultBtn {
+      bottom: 20px;
+      right: 10px;
+      background-color: #f9d342;
+    }
+
+    #saveDefaultBtn:hover {
+      background-color: #ffe75d;
+    }
+
+    #returnMatchBtn2 {
+      bottom: 20px;
+      left: 10px;
+      background-color: #FF6928;
+    }
+
+    #returnMatchBtn2:hover {
+      background-color: #ffa074;
+    }
+
+    #statsBox {
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      background-color: #b71c1c;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      z-index: 1000;
+      font-size: 14px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    #statsBox h5 {
+      margin: 4px 0;
+      font-size: 20px;
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      color: #000;
+      border-radius: 10px;
+    }
+
+    .modal-header {
+      background-color: #f9d342;
+      color: #203a43;
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .btn-close {
+      background-color: transparent;
+    }
+
+    .list-group-item {
+      cursor: pointer;
+    }
+
+    .list-group-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 576px) {
+      .position {
+        width: 60px;
+        height: 90px;
+        font-size: 12px;
+      }
+
+      #statsBox {
+        top: 100;
+        //bottom: 100px;
+        right: 10px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <h2 class="mb-4">フォーメーション登録</h2>
+
+    <div class="countryselect mb-3">
+      <label for="countrySelect" class="form-label">代表チーム選択</label>
+      <select id="countrySelect" class="form-select">
+       <option value="england">イングランド</option>
+<option value="germany">ドイツ</option>
+<option value="netherlands">オランダ</option>
+<option value="belgium">ベルギー</option>
+<option value="france">フランス</option>
+<option value="spain">スペイン</option>
+<option value="portugal">ポルトガル</option>
+<option value="croatia">クロアチア</option>
+<option value="italy">イタリア</option>
+<option value="iceland">アイスランド</option>
+<option value="ireland">アイルランド</option>
+<option value="scotland">スコットランド</option>
+<option value="wales">ウェールズ</option>
+<option value="switzerland">スイス</option>
+<option value="slovenia">スロベニア</option>
+<option value="montenegro">モンテネグロ</option>
+<option value="bosnia">ボスニア</option>
+<option value="albania">アルバニア</option>
+<option value="norway">ノルウェー</option>
+<option value="denmark">デンマーク</option>
+<option value="czech">チェコ</option>
+<option value="slovakia">スロバキア</option>
+<option value="austria">オーストリア</option>
+<option value="hungary">ハンガリー</option>
+<option value="serbia">セルビア</option>
+<option value="northmacedonia">北マケドニア</option>
+<option value="greece">ギリシャ</option>
+<option value="sweden">スウェーデン</option>
+<option value="finland">フィンランド</option>
+<option value="russia">ロシア</option>
+<option value="poland">ポーランド</option>
+<option value="ukraine">ウクライナ</option>
+<option value="romania">ルーマニア</option>
+<option value="bulgaria">ブルガリア</option>
+<option value="georgia">ジョージア</option>
+<option value="turkey">トルコ</option>
+<option value="israel">イスラエル</option>
+
+<option value="brazil">ブラジル</option>
+<option value="argentina">アルゼンチン</option>
+<option value="uruguay">ウルグアイ</option>
+<option value="paraguay">パラグアイ</option>
+<option value="chile">チリ</option>
+<option value="colombia">コロンビア</option>
+<option value="peru">ペルー</option>
+<option value="ecuador">エクアドル</option>
+<option value="venezuela">ベネズエラ</option>
+<option value="bolivia">ボリビア</option>
+
+<option value="egypt">エジプト</option>
+<option value="tunisia">チュニジア</option>
+<option value="algeria">アルジェリア</option>
+<option value="morocco">モロッコ</option>
+<option value="mali">マリ</option>
+<option value="senegal">セネガル</option>
+<option value="ivorycoast">コートジボワール</option>
+<option value="ghana">ガーナ</option>
+<option value="nigeria">ナイジェリア</option>
+<option value="cameroon">カメルーン</option>
+<option value="southafrica">南アフリカ</option>
+
+<option value="mexico">メキシコ</option>
+<option value="usa">米国</option>
+<option value="australia">豪州</option>
+<option value="costarica">コスタリカ</option>
+<option value="canada">カナダ</option>
+<option value="honduras">ホンジュラス</option>
+<option value="jamaica">ジャマイカ</option>
+<option value="elsalvador">エルサルバドル</option>
+<option value="panama">パナマ</option>
+<option value="guatemala">グアテマラ</option>
+<option value="newzealand">ニュージーランド</option>
+
+<option value="japan">日本</option>
+<option value="southkorea">韓国</option>
+<option value="iran">イラン</option>
+<option value="saudiarabia">サウジアラビア</option>
+<option value="northkorea">北朝鮮</option>
+<option value="iraq">イラク</option>
+<option value="qatar">カタール</option>
+<option value="uzbekistan">ウズベキスタン</option>
+<option value="uae">UAE</option>
+<option value="jordan">ヨルダン</option>
+<option value="china">中国</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="formationSelect" class="form-label">フォーメーション選択</label>
+      <select id="formationSelect" class="form-select">
+        <option value="freestyle">フリースタイル</option>
+        <option value="4-4-2">4-4-2</option>
+        <option value="4-3-3">4-3-3</option>
+      </select>
+    </div>
+
+    <div id="field"></div>
+
+    <div id="statsBox">
+      <h5>攻撃力: <span id="atk">0</span></h5>
+      <h5>中盤力: <span id="mid">0</span></h5>
+      <h5>守備力: <span id="def">0</span></h5>
+      <h5>総合力: <span id="total-value">0</span></h5>
+      <h5>配置済: <span id="assigned-count">0</span>人</h5>
+    </div>
+  </div>
+
+  <!-- 選手選択モーダル -->
+  <div id="playerModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">選手を選択</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul id="playerList" class="list-group"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ボタン -->
+  <button id="saveDefaultBtn" class="btn">デフォルト登録</button>
+  <button id="returnMatchBtn2" class="btn">登録しないで戻る</button>
+
+  <!-- JS（Bootstrap用） -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+const formations = {
+  "freestyle": [
+    ["CF", "CF", "CF", "CF"],
+    ["LWG", "ST","CF","RWG"],
+    ["LMF", "OMF", "OMF","RMF"],
+    ["CMF", "CMF", "CMF", "CMF"],
+    ["LSB", "DMF", "DMF", "RSB"],
+    ["CB", "CB", "CB", "CB"],
+    ["GK"]
+  ],
+  "4-4-2": [
+    ["CF","CF"],
+    ["LMF", "CMF", "CMF","RMF"],
+    ["LSB", "CB", "CB", "RSB"],
+    ["GK"]
+  ],
+  "4-3-3": [
+    ["LWG", "CF", "RWG"],
+    ["LMF", "CMF", "RMF"],
+    ["LSB", "CB", "CB", "RSB"],
+    ["GK"]
+  ]
+
+  };
+
+  let allPlayers = [], playerMap = new Map(), usedPlayerIds = new Set();
+  let currentPosElem = null;
+
+  function getPlayersByTeam(teamId, callback) {
+    const request = indexedDB.open("GameDB", 18
+
+);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction("players", "readonly");
+      tx.objectStore("players").getAll().onsuccess = e => {
+        allPlayers = e.target.result;
+        playerMap = new Map(allPlayers.map(p => [String(p.id), p]));
+        callback(allPlayers.filter(p => p.teamId === teamId));
+      };
+    };
+    request.onerror = () => console.error("DB読み込み失敗", request.error);
+  }
+
+  function openModalForPosition(posElem) {
+    currentPosElem = posElem;
+    const ul = document.getElementById("playerList");
+    ul.innerHTML = "";
+
+    allPlayers.forEach(p => {
+  const li = document.createElement("li");
+  li.className = "list-group-item d-flex justify-content-between align-items-center";
+  li.textContent = `${p.position} ${p.name} (${p.rating})`;
+
+  if (usedPlayerIds.has(p.id)) {
+    li.classList.add("assigned-player"); // ← 青色表示のクラスを追加
+    li.classList.add("disabled"); // 選択できないようにする（必要なら）
+  } else {
+    li.style.cursor = "pointer";
+    li.addEventListener("click", () => selectPlayer(p));
+  }
+
+  ul.appendChild(li);
+});
+
+    const removeLi = document.createElement("li");
+    removeLi.className = "list-group-item list-group-item-danger";
+    removeLi.textContent = "外す";
+    removeLi.style.cursor = "pointer";
+    removeLi.addEventListener("click", () => {
+      removePlayerFromPosition(currentPosElem);
+      bootstrap.Modal.getInstance(document.getElementById("playerModal")).hide();
+    });
+    ul.appendChild(removeLi);
+
+    new bootstrap.Modal(document.getElementById("playerModal")).show();
+  }
+
+
+  function selectPlayer(player) {
+    const pos = currentPosElem;
+    if (usedPlayerIds.has(player.id)) return alert("この選手はすでに配置済みです。");
+
+    const prev = pos.dataset.assignedId;
+    if (prev) usedPlayerIds.delete(prev);
+
+    pos.textContent = `${player.position} ${player.name} (${player.rating})`;
+    pos.style.backgroundColor = "#003366";// 濃い青
+    pos.style.color = "white";             // 白文字
+    pos.dataset.assignedId = player.id;
+    usedPlayerIds.add(player.id);
+
+    bootstrap.Modal.getInstance(document.getElementById("playerModal")).hide();
+    calculateTeamStats();
+  }
+
+  function removePlayerFromPosition(pos) {
+    const id = pos.dataset.assignedId;
+    if (!id) return;
+    usedPlayerIds.delete(id);
+    pos.textContent = pos.dataset.pos;
+ 　 pos.style.backgroundColor = getColorByPosition(pos.dataset.pos); // ←ここ
+    pos.style.color = "black"; 
+    delete pos.dataset.assignedId;
+    calculateTeamStats();
+  }
+
+
+
+const similarPositions = {
+  CF: ["ST", "RWG", "LWG", "OMF"],
+  ST: ["CF", "OMF"],
+  OMF: ["CMF", "ST"],
+  CMF: ["OMF", "DMF"],
+  DMF: ["CMF", "CB"],
+  LSB: ["LMF", "CB"],
+  RSB: ["RMF", "CB"],
+  CB: ["DMF", "RSB", "LSB"],
+  LWG: ["LMF", "CF"],
+  RWG: ["RMF", "CF"],
+  LMF: ["LSB", "CMF", "LWG"],
+  RMF: ["RSB", "CMF", "RWG"],
+  GK: []
+};
+
+function getPositionWeights(posName) {
+  const map = {
+    ST:   [0.9, 0.1, 0.0],
+    CF:   [1.0, 0.0, 0.0],
+
+    LWG:  [0.8, 0.2, 0.0],
+    RWG:  [0.8, 0.2, 0.0],
+
+    OMF:  [0.6, 0.4, 0.0],
+    LMF:  [0.3, 0.6, 0.1],
+    RMF:  [0.3, 0.6, 0.1],
+    CMF:  [0.1, 0.8, 0.1],
+    DMF:  [0.0, 0.6, 0.4],
+
+    LSB:  [0.2, 0.3, 0.5],
+    RSB:  [0.2, 0.3, 0.5],
+    CB:   [0.0, 0.3, 0.7],
+
+    GK:   [0.0, 0.0, 1.0]
+  };
+  return map[posName] || [0, 0, 0];
+}
+
+function getPositionCompatibility(base, target) {
+  if (base === target) return 1.0;
+  if (similarPositions[base]?.includes(target)) return 0.95;
+
+  // 準類似（先頭か末尾の文字が一致）
+  if (base[0] === target[0] || base.slice(-1) === target.slice(-1)) return 0.9;
+
+  return 0.5;
+}
+
+
+
+const similarityMap = similarPositions;
+
+const semiSimilarityMap = {};
+for (let pos in similarPositions) {
+  semiSimilarityMap[pos] = [];
+  for (let other in similarPositions) {
+    if (
+      pos !== other &&
+      (pos[0] === other[0] || pos.slice(-1) === other.slice(-1)) &&
+      !similarPositions[pos].includes(other)
+    ) {
+      semiSimilarityMap[pos].push(other);
+    }
+  }
+}
+
+
+
+function calculateTeamStats() {
+  let attack = 0, midfield = 0, defense = 0;
+
+  const positions = document.querySelectorAll(".position");
+  positions.forEach(pos => {
+    const assignedId = pos.dataset.assignedId;
+    if (!assignedId) return;
+
+    const player = playerMap.get(assignedId);
+    if (!player) {
+      console.warn("player not found for ID:", assignedId);
+      return;
+    }
+
+    const actualPos = player.position;
+    const targetPos = pos.dataset.pos;
+
+    // ポジション補正係数
+    let coeff = 0.5;
+    if (actualPos === targetPos) {
+      coeff = 1.0;
+    } else if (similarityMap[actualPos]?.includes(targetPos)) {
+      coeff = 0.95;
+    } else if (semiSimilarityMap[actualPos]?.includes(targetPos)) {
+      coeff = 0.9;
+    }
+
+    const score = player.rating * coeff;
+
+    // ポジションの貢献比率を取得（攻撃・中盤・守備）
+    const [atkRate, midRate, defRate] = getPositionWeights(targetPos);
+
+    attack   += score * atkRate;
+    midfield += score * midRate;
+    defense  += score * defRate;
+
+    console.log(`${player.name} (${actualPos}→${targetPos}) coeff: ${coeff}, score: ${score}, rates: atk ${atkRate}, mid ${midRate}, def ${defRate}`);
+  });
+
+  // 合計値を計算
+  const total = attack + midfield + defense;
+
+  // 小数点1桁で表示
+document.getElementById("atk").textContent = attack.toFixed(1);
+document.getElementById("mid").textContent = midfield.toFixed(1);
+document.getElementById("def").textContent = defense.toFixed(1);
+document.getElementById("total-value").textContent = total.toFixed(1);
+
+// 配置済人数を表示
+document.getElementById("assigned-count").textContent = usedPlayerIds.size;
+
+}
+
+
+  function renderFormation(key) {
+    const field = document.getElementById("field");
+    field.innerHTML = "";
+    usedPlayerIds.clear();
+    const formation = formations[key];
+    if (!formation) return;
+
+    formation.forEach(line => {
+      const lineDiv = document.createElement("div");
+      lineDiv.className = "line";
+      line.forEach(posName => {
+        const div = document.createElement("div");
+        div.className = "position";
+        div.textContent = posName;
+        div.dataset.pos = posName;
+　　　　div.style.backgroundColor = getColorByPosition(posName); 
+        div.addEventListener("click", () => openModalForPosition(div));
+        lineDiv.appendChild(div);
+      });
+      field.appendChild(lineDiv);
+    });
+    calculateTeamStats();
+  }
+
+
+
+ // マップ上のポジション色付け
+function getColorByPosition(posName) {
+  const redPositions = ["CF", "ST", "RWG", "LWG"];
+  const yellowPositions = ["OMF", "CMF", "LMF", "RMF", "DMF"];
+  const bluePositions = ["CB", "LSB", "RSB", "GK"];
+
+  if (redPositions.includes(posName)) return "#f8d7da";    // 薄い赤
+  if (yellowPositions.includes(posName)) return "#fff3cd"; // 薄い黄
+  if (bluePositions.includes(posName)) return "#d1ecf1";   // 薄い青
+  return "#2e8b57"; // デフォルト緑
+}
+
+
+
+
+
+
+  // 初期ロード
+  document.getElementById("formationSelect").addEventListener("change", e => {
+    renderFormation(e.target.value);
+  });
+
+
+
+// 初期フォーメーションを保持
+let currentFormation = document.getElementById("formationSelect").value;
+
+// フォーメーション変更時の処理
+document.getElementById("formationSelect").addEventListener("change", e => {
+  currentFormation = e.target.value;
+  renderFormation(currentFormation);
+});
+
+// 国選択変更時の処理
+document.getElementById("countrySelect").addEventListener("change", e => {
+  const selectedCountry = e.target.value;
+  getPlayersByTeam(selectedCountry, players => {
+    allPlayers = players;
+    renderFormation(currentFormation); // 現在のフォーメーションで再描画
+  });
+});
+
+// 初期読み込み時：デフォルト選択された国の選手を取得
+window.addEventListener("DOMContentLoaded", () => {
+  const defaultCountry = document.getElementById("countrySelect").value;
+  getPlayersByTeam(defaultCountry, players => {
+    allPlayers = players;
+    renderFormation(currentFormation);
+  });
+});
+
+// デフォルト登録
+  document.getElementById("saveDefaultBtn").addEventListener("click", () => {
+    const teamId = document.getElementById("countrySelect").value;
+    const formation = document.getElementById("formationSelect").value;
+    const attack = parseInt(document.getElementById("atk").textContent) || 0;
+    const midfield = parseInt(document.getElementById("mid").textContent) || 0;
+    const defence = parseInt(document.getElementById("def").textContent) || 0;
+    const total = parseInt(document.getElementById("total-value").textContent) || 0;
+
+    const request = indexedDB.open("GameDB", 17);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction("formations", "readwrite");
+      const store = tx.objectStore("formations");
+
+      const data = { teamId, formation, attack, midfield, defence, total};
+
+      const putRequest = store.put(data);
+      putRequest.onsuccess = () => {
+        alert("フォーメーションがデフォルトとして保存されました！");
+      };
+      putRequest.onerror = () => {
+        console.error("保存に失敗しました", putRequest.error);
+        alert("保存に失敗しました");
+      };
+    };
+    request.onerror = () => {
+      console.error("DBオープン失敗", request.error);
+    };
+
+  window.location.href = "index.html";
+
+  });
+
+// 何もしないでインデックスへ戻る
+document.getElementById("returnMatchBtn2").addEventListener("click", () => {
+  // 元の試合画面に戻る
+  window.location.href = "index.html";
+});
+
+
+
+</script>
+
+</body>
+</html>

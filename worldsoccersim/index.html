@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ワールドサッカー サイコロシミュレーション</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #f9d342;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    }
+
+    .menu {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .menu a {
+      display: block;
+      text-decoration: none;
+      background-color: #ffffff22;
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #fff;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: 2px solid #f9d342;
+    }
+
+    .menu a:hover {
+      background-color: #f9d342;
+      color: #203a43;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .menu a {
+        font-size: 1rem;
+        padding: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>ワールドサッカー<br>サイコロシミュレーション</h1>
+
+  <nav class="menu">
+    <a href="team_select.html">⚽ 練習試合</a>
+    <a href="formation_register.html">📋 フォーメーション登録</a>
+    <!-- 今後のメニュー追加用にスペース確保 -->
+  </nav>
+
+  <footer>
+    &copy; 2025 ワールドサッカー シミュレーション
+  </footer>
+</body>
+</html>
