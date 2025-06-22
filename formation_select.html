@@ -300,6 +300,19 @@
 <button id="returnMatchBtn" class="btn">決定して試合へ</button>
 <button id="returnMatchBtn2" class="btn">デフォルトを使用</button>
 
+<!-- 既存HTMLに自動配置用の選択肢とリセットボタンを追加 -->
+<div class="mb-3">
+  <label for="autoAssignSelect" class="form-label">自動配置タイプ</label>
+  <select id="autoAssignSelect" class="form-select">
+    <option value="">（手動配置）</option>
+    <option value="attack">攻撃重視</option>
+    <option value="midfield">中盤重視</option>
+    <option value="defense">守備重視</option>
+    <option value="balanced">バランス型</option>
+  </select>
+</div>
+<button id="resetAssignBtn" class="btn btn-warning mb-3">リセット</button>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
@@ -309,6 +322,17 @@
 
 let anthemPlayed = false; // 1度だけ再生するフラグ
 let attack = 0, midfield = 0, defense = 0;
+
+// 「自動配置 or 手動配置」を判別するフラグ
+let isAutoAssigned = false;
+
+// 戦術別優先配置ポジション（例。25ポジションの中から11人分のみ割当）
+const tacticPriority = {
+  defense: ["CB", "CB", "CB", "CB", "LSB", "RSB", "DMF", "DMF", "CMF", "CMF"],
+  attack: ["CF", "CF", "ST", "RWG", "LWG", "OMF", "LMF", "RMF", "CMF", "CMF"],
+  midfield: ["CMF", "CMF", "LMF", "RMF", "DMF", "DMF", "OMF", "OMF", "OMF", "OMF"],
+  balanced: ["CB", "CB", "CB", "CB", "DMF", "CMF", "LMF", "RMF", "OMF", "CF", "ST"]
+};
 
 
 
@@ -465,13 +489,10 @@ function getPositionWeights(posName) {
   return map[posName] || [0, 0, 0];
 }
 
+
 function getPositionCompatibility(base, target) {
   if (base === target) return 1.0;
   if (similarPositions[base]?.includes(target)) return 0.95;
-
-  // 準類似（先頭か末尾の文字が一致）
-  if (base[0] === target[0] || base.slice(-1) === target.slice(-1)) return 0.9;
-
   return 0.6;
 }
 
@@ -553,6 +574,208 @@ document.getElementById("assigned-count").textContent = usedPlayerIds.size;
 
 
 
+
+
+
+
+
+  // おまかせ配置計算ロジック
+
+// 自動配置用関数
+function autoAssignPlayersFreestyle(tactic) {
+  usedPlayerIds.clear();
+  const allPosElems = Array.from(document.querySelectorAll(".position"));
+  allPosElems.forEach(el => removePlayerFromPosition(el));
+
+  const gkElem = allPosElems.find(el => el.dataset.pos === "GK");
+  const bestGK = allPlayers
+    .filter(p => p.position === "GK")
+    .sort((a, b) => b.rating - a.rating)[0];
+
+  if (gkElem && bestGK) {
+    assignPlayerToPosition(bestGK, gkElem);
+  }
+
+  let groupDefs;
+  switch (tactic) {
+    case "attack":
+      groupDefs = [{ posList: ["CF", "ST", "RWG", "LWG", "OMF", "LMF", "RMF", "CMF"], count: 10 }];
+      break;
+    case "midfield":
+      groupDefs = [{ posList: ["CMF", "LMF", "RMF", "DMF", "OMF"], count: 10 }];
+      break;
+    case "defense":
+      groupDefs = [{ posList: ["CB", "LSB", "RSB", "DMF", "CMF"], count: 10 }];
+      break;
+    case "balanced":
+    default:
+      groupDefs = [
+        { posList: ["CB", "LSB", "RSB"], count: 4 },
+        { posList: ["CMF", "DMF", "LMF", "RMF", "OMF"], count: 3 },
+        { posList: ["CF", "ST", "RWG", "LWG"], count: 3 }
+      ];
+      break;
+  }
+
+  let totalAssigned = 1; // GK済
+
+  for (const group of groupDefs) {
+    const groupCandidates = [];
+
+    // 1. 各ポジションに対応する空きposition要素を収集
+    const groupPosElems = allPosElems.filter(
+      el => group.posList.includes(el.dataset.pos) && !el.dataset.assignedId
+    );
+
+    for (const posElem of groupPosElems) {
+      for (const player of allPlayers) {
+        if (usedPlayerIds.has(player.id)) continue;
+
+        const compat = getPositionCompatibility(player.position, posElem.dataset.pos);
+        if (compat >= 0.95) {
+          const score = (player.rating - 60) * compat;
+          groupCandidates.push({ player, posElem, score });
+        }
+      }
+    }
+
+    groupCandidates.sort((a, b) => b.score - a.score);
+
+    const usedPosElems = new Set();
+
+    let addedInGroup = 0;
+    for (const { player, posElem } of groupCandidates) {
+      if (addedInGroup >= group.count) break;
+      if (usedPlayerIds.has(player.id)) continue;
+      if (usedPosElems.has(posElem)) continue;
+
+      assignPlayerToPosition(player, posElem);
+      usedPlayerIds.add(player.id);
+      usedPosElems.add(posElem);
+      totalAssigned++;
+      addedInGroup++;
+    }
+  }
+
+  // 補完処理（11人未満の場合）
+  if (totalAssigned < 11) {
+    const restPosElems = allPosElems.filter(el => !el.dataset.assignedId);
+    const restPlayers = allPlayers
+      .filter(p => !usedPlayerIds.has(p.id))
+      .sort((a, b) => b.rating - a.rating);
+
+    for (const posElem of restPosElems) {
+      if (totalAssigned >= 11) break;
+
+      const player = restPlayers.find(
+        p => getPositionCompatibility(p.position, posElem.dataset.pos) >= 0.95
+      );
+      if (player) {
+        assignPlayerToPosition(player, posElem);
+        usedPlayerIds.add(player.id);
+        totalAssigned++;
+      }
+    }
+  }
+
+  updateAssignedColors();
+  calculateTeamStats();
+}
+
+
+
+
+
+// ヘルパー関数
+function getTopCompatiblePlayers(posNames, allPosElems, count) {
+  const result = [];
+  const candidates = [];
+
+  for (const player of allPlayers) {
+    if (usedPlayerIds.has(player.id)) continue;
+
+    for (const posName of posNames) {
+      if (getPositionCompatibility(player.position, posName) >= 0.95) {
+        const availablePos = allPosElems.find(
+          el => el.dataset.pos === posName && !usedPlayerIds.has(el.dataset.assignedId)
+        );
+        if (availablePos) {
+          const score = player.rating * getPositionCompatibility(player.position, posName);
+          candidates.push({ player, posElem: availablePos, score });
+          break;
+        }
+      }
+    }
+  }
+
+  // 高スコア順に並び替え
+  candidates.sort((a, b) => b.score - a.score);
+
+  const selectedPositions = new Set();
+
+  for (const { player, posElem } of candidates) {
+    if (result.length >= count) break;
+    if (usedPlayerIds.has(player.id)) continue;
+    if (selectedPositions.has(posElem)) continue;
+
+    result.push({ player, posElem });
+    selectedPositions.add(posElem);
+    usedPlayerIds.add(player.id); // ← ここだけ事前登録OK（重複防止）
+  }
+
+  return result;
+}
+
+
+// 選手を指定ポジションに割当てる補助関数
+function assignPlayerToPosition(player, posElem) {
+  if (!player || !posElem) return;
+
+  const prevId = posElem.dataset.assignedId;
+  if (prevId) usedPlayerIds.delete(prevId); // 古いID解除
+
+  posElem.textContent = `${player.position} ${player.name} (${player.rating})`;
+  posElem.style.backgroundColor = "#003366";
+  posElem.style.color = "white";
+  posElem.dataset.assignedId = player.id;
+
+  usedPlayerIds.add(player.id);
+}
+
+
+// 選手割当を解除（ポジションクリア）
+function removePlayerFromPosition(posElem) {
+  if (!posElem) return;
+  const id = posElem.dataset.assignedId;
+  if (id) usedPlayerIds.delete(id);
+  delete posElem.dataset.assignedId;
+  posElem.textContent = posElem.dataset.pos;
+  posElem.style.backgroundColor = getColorByPosition(posElem.dataset.pos);
+  posElem.style.color = "black";
+}
+
+// 配置済選手を色分け（手動自動共通）
+function updateAssignedColors() {
+  document.querySelectorAll(".position").forEach(pos => {
+    if (pos.dataset.assignedId) {
+      pos.style.backgroundColor = "#003366";
+      pos.style.color = "white";
+    } else {
+      pos.style.backgroundColor = getColorByPosition(pos.dataset.pos);
+      pos.style.color = "black";
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+  // ポジションをクリックして選手リストから選ばさせる関数
 
   function renderFormation(key) {
     const field = document.getElementById("field");
@@ -715,6 +938,33 @@ localStorage.removeItem(`formation_${role}_def`);
 });
 
 
+
+// おまかせ自動計算コンボボックスイベント
+
+// 自動配置選択肢のchangeイベント設定
+document.getElementById("autoAssignSelect").addEventListener("change", e => {
+  const tactic = e.target.value;
+  if (!tactic) {
+    // 手動モード：割当クリアせずそのまま
+    return;
+  }
+  if (currentFormation !== "freestyle") {
+    alert("おまかせ配置はフリースタイルフォーメーションでのみ有効です。");
+    e.target.value = "";
+    return;
+  }
+  autoAssignPlayersFreestyle(tactic);
+});
+
+// リセットボタン（配置クリア＆手動配置に戻す）
+document.getElementById("resetAssignBtn").addEventListener("click", () => {
+  usedPlayerIds.clear();
+  document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+  calculateTeamStats();
+  document.getElementById("autoAssignSelect").value = "";
+});
+
+// 手動クリックで選手選択する従来の挙動はそのまま維持
 
 </script>
 
