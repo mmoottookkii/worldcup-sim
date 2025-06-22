@@ -20,6 +20,16 @@ body {
   color: #f0f0f0; /* デフォルトテキストカラー（薄い白） */
 }
 
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 /* ======= 見出し ======= */
 h1 {
@@ -103,12 +113,12 @@ h1 {
 }
 
 /* ======= コンテナ関連 ======= */
-#game-container {
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  padding: 0 10px;
+#game-container,
+.center-column
+
+ {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .center-column {
@@ -442,6 +452,7 @@ button:hover {
   box-sizing: border-box;
   padding-left: 0px;
   padding-right: 0px;
+
   margin: 10px 0;
   cursor: pointer;
 }
@@ -596,16 +607,14 @@ button:hover {
 @media screen and (max-width: 768px) {
 
   .game-container {
-  width: 100%;
-     overflow-x: visible;
-  
- }
+    width: 100%;
+    overflow-x: hidden;
+  }
 
   .side-column {
     width: 100%;
-      overflow-x: visible;
+    overflow-x: visible;
   }
-
 
 .dice-row {
     //flex-wrap: wrap;
@@ -633,13 +642,11 @@ button:hover {
   }
 
 
-#soccer-field {
-  width: 110vw; /* 画面幅の120%、意図的にオーバー */
-  max-width: none;
-  //margin-left: -10vw; /* 少しはみ出させる */
-  height: 250px;
+  #soccer-field {
+    width: 110vw;
+    max-width: none;
+  }
 }
-
 
 
 
@@ -816,6 +823,7 @@ button:hover {
 
  <script>
 
+
   // グローバル変数宣言
 
    let franceColors = [];
@@ -955,7 +963,7 @@ function playAnthem(teamId) {
 function playBGM() {
   if (isBgmPlaying) return; // ★すでに再生中なら何もしない
 
-  bgmAudio = new Audio('bgm/stadiumcrowd.mp3');
+  bgmAudio = new Audio('bgm/stadiumcrowdcut.mp3');
   bgmAudio.loop = true; // ループ再生（任意）
   bgmAudio.volume = 0.2;
   bgmAudio.muted = isMuted; // ←追加
