@@ -89,14 +89,14 @@
       background-color: #ffe75d;
     }
 
-    #returnMatchBtn2 {
+    #pullDefaultBtn {
       bottom: 20px;
       left: 10px;
       background-color: #FF6928;
       color: #fff;
     }
 
-    #returnMatchBtn2:hover {
+    #pullDefaultBtn:hover {
       background-color: #ffa074;
     }
 
@@ -298,11 +298,11 @@
 
 <!-- ボタン -->
 <button id="returnMatchBtn" class="btn">決定して試合へ</button>
-<button id="returnMatchBtn2" class="btn">デフォルトを使用</button>
+<button id="pullDefaultBtn" class="btn">デフォルトを使用</button>
 
 <!-- 既存HTMLに自動配置用の選択肢とリセットボタンを追加 -->
 <div class="mb-3">
-  <label for="autoAssignSelect" class="form-label">自動配置タイプ</label>
+  <label for="autoAssignSelect" class="form-label">おまかせ配置タイプ</label>
   <select id="autoAssignSelect" class="form-select">
     <option value="">（手動配置）</option>
     <option value="attack">攻撃重視</option>
@@ -365,7 +365,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 19
+    const request = indexedDB.open("GameDB", 21
 );
     request.onsuccess = () => {
       const db = request.result;
@@ -609,12 +609,12 @@ function autoAssignPlayersFreestyle(tactic) {
       break;
     case "balanced":
     default:
-      groupDefs = [
-        { posList: ["CB", "LSB", "RSB"], count: 4 },
-        { posList: ["CMF", "DMF", "LMF", "RMF", "OMF"], count: 3 },
-        { posList: ["CF", "ST", "RWG", "LWG"], count: 3 }
-      ];
-      break;
+  groupDefs = [
+    { posList: ["CB", "LSB", "RSB"], count: 4 },
+    { posList: ["CMF", "DMF", "LMF", "RMF", "OMF"], count: 4 }, // ← 中盤を4人に変更
+    { posList: ["CF", "ST", "RWG", "LWG"], count: 2 }           // ← 攻撃を2人に変更
+  ];
+  break;
   }
 
   let totalAssigned = 1; // GK済
@@ -880,6 +880,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (teamId) {
     countrySelect.value = teamId;
     countrySelect.disabled = true; // ← 操作不可に
+    formationSelect.disabled = true;
     getPlayersByTeam(teamId, players => {
       allPlayers = players;
       renderFormation(currentFormation);
@@ -900,8 +901,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // 能力値を決定して試合へ戻る
 document.getElementById("returnMatchBtn").addEventListener("click", () => {
-
-  calculateTeamStats(); // ← 念のため再計算
+  calculateTeamStats(); // 念のため再計算
 
   const role = localStorage.getItem("formteamRole"); // "red" or "blue"
   if (!role) {
@@ -914,28 +914,95 @@ document.getElementById("returnMatchBtn").addEventListener("click", () => {
   localStorage.setItem(`formation_${role}_mid`, midfield.toFixed(1));
   localStorage.setItem(`formation_${role}_def`, defense.toFixed(1));
 
-  // 元の試合画面に戻る
+  // 現在の配置情報も保存
+  const positionData = Array.from(document.querySelectorAll(".position")).map(pos => ({
+    pos: pos.dataset.pos,
+    playerId: pos.dataset.assignedId || null
+  }));
+  localStorage.setItem(`formation_${role}_positions`, JSON.stringify(positionData));
+
+  // 試合画面に戻る
   window.location.href = "playmatch.html";
 });
 
 
 
-// デフォルトの能力値で試合へ戻る
-document.getElementById("returnMatchBtn2").addEventListener("click", () => {
 
-  const role = localStorage.getItem("formteamRole"); // "red" or "blue"
-  if (!role) {
-    alert("チームの区別ができません。");
+
+
+// デフォルトの選手を配置
+document.getElementById("pullDefaultBtn").addEventListener("click", () => {
+  const teamId = localStorage.getItem("formteamId");
+  if (!teamId) {
+    alert("チームIDが見つかりません。");
     return;
   }
 
-localStorage.removeItem(`formation_${role}_atk`);
-localStorage.removeItem(`formation_${role}_mid`);
-localStorage.removeItem(`formation_${role}_def`);
+  // まずチームの選手を取得
+  getPlayersByTeam(teamId, players => {
+    allPlayers = players; // 念のため更新
+    playerMap = new Map(players.map(p => [String(p.id), p]));
 
-  // 元の試合画面に戻る
-  window.location.href = "playmatch.html";
+    // フォーメーションを再描画してポジション初期化
+    renderFormation(currentFormation);
+
+    // デフォルトポジションをDBから取得
+    const request = indexedDB.open("GameDB", 21);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction("playerpositions", "readonly");
+      const store = tx.objectStore("playerpositions");
+      const getReq = store.get(teamId);
+
+      getReq.onsuccess = () => {
+        const data = getReq.result;
+        if (!data || !data.positions) {
+          alert("保存されたポジション情報が見つかりません。");
+          return;
+        }
+
+        // ポジション反映処理
+        usedPlayerIds.clear();
+        document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+
+
+// ポジション反映処理（修正版）
+usedPlayerIds.clear();
+document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+
+// すべてのポジションDOMを取得（配列に変換して index 指定できるように）
+const posElems = Array.from(document.querySelectorAll(".position"));
+
+// 保存された順に処理
+data.positions.forEach(entry => {
+  const { order, playerId } = entry;
+  if (playerId == null) return;
+
+  const posElem = posElems[order]; // ← これが正しいマップ上の位置
+  const player = allPlayers.find(p => String(p.id) === String(playerId));
+  if (posElem && player) {
+    assignPlayerToPosition(player, posElem);
+  }
 });
+
+
+
+        updateAssignedColors();
+        calculateTeamStats();
+      };
+
+      getReq.onerror = () => {
+        alert("ポジション情報の取得に失敗しました。");
+      };
+    };
+
+    request.onerror = () => {
+      alert("データベース接続に失敗しました。");
+    };
+  });
+});
+
+
 
 
 

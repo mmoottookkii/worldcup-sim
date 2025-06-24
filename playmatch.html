@@ -321,41 +321,98 @@ button:hover {
 }
 
 
-.btn-formred, .btn-formblue {
+.btn-formblue, .btn-changeplayerblue, .btn-formred, .btn-changeplayerred {
+  position: absolute;
   width: 150px;
   height: 30px;
   font-size: 13px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   padding: 1px;
-  margin-top: -175px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
-  z-index: 1000;
+  left: 0;
+  top: 0;
 }
+
+
+#changeblue-button {
+  z-index: 999; /* 背面だが表示される準備はある */
+   width: 30px;
+}
+
+#setformblue-button {
+  z-index: 1000; /* 通常時は前面 */
+}
+
+#changered-button {
+  z-index: 899; /* 背面だが表示される準備はある */
+   width: 30px;
+}
+
+#setformred-button {
+  z-index: 900; /* 通常時は前面 */
+}
+
 
 .btn-formred {
   background-color: #f66; /* 薄めの赤 */
+  opacity: 0.8;
 }
 
 .btn-formblue {
   background-color: #66aaff; /* 薄めの青 */
+  opacity: 0.8;
 }
+
+.btn-changeplayerred {
+  background-color: #f66; /* 薄めの赤 */
+  opacity: 0.8;
+}
+
+.btn-changeplayerblue {
+  background-color: #66aaff; /* 薄めの青 */
+  opacity: 0.8;
+}
+
+
 
 .btn-formred:hover {
   background-color: #ff4d4d; /* ホバー時は少し濃く */
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  opacity: 1;
 }
 
 .btn-formblue:hover {
   background-color: #3399ff; /* ホバー時は少し濃く */
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+   opacity: 1;
 }
+
+.btn-changeplayerred:hover {
+  background-color: #ff4d4d; /* ホバー時は少し濃く */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  opacity: 1;
+}
+
+.btn-changeplayerblue:hover {
+  background-color: #3399ff; /* ホバー時は少し濃く */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+   opacity: 1;
+}
+
+
+
+
+
+
 
 #start-button,
 #manual-start-button,
@@ -399,7 +456,7 @@ button:hover {
   overflow-y: auto;
   width: 100%;
   text-align: center;
-  margin-top: 30px; 
+  margin-top: 160px; 
   color: black;
   z-index: 1;
 }
@@ -490,7 +547,7 @@ button:hover {
 
 .dice-track {
   width: 100%;
-  height: 10px;
+  height: 14px;
   font-size: 14px;
   word-wrap: break-word;
   user-select: none;
@@ -751,11 +808,14 @@ button:hover {
                                 <div class="dice-label">守備力</div>
                                 <div id="red-dice-track-c" class="dice-track"></div>
                             </div>
+                         </div>
+                            <div style=" position: relative; width:155px; margin-top: -170px;">
+  
+                               <button type="setformation" id="changered-button" class="btn-changeplayerred">交</button>
+                               <button type="setformation" id="setformred-button" class="btn-formred">選手・配置変更</button>
+                            </div>
+
                         </div>
-
-                           <button type="setformation" id="setformred-button" class="btn-formred">選手・配置変更</button>
-
-                    </div>
 
                     <!-- 中央（空） -->
                     <div style="text-align: center;"></div>
@@ -792,9 +852,10 @@ button:hover {
                                 <div id="blue-dice-track-c" class="dice-track"></div>
                             </div>
                         </div>
-
-                           <button type="setformation" id="setformblue-button" class="btn-formblue">選手・配置変更</button>
-
+                           <div style="position: relative; width:155px; margin-top: -170px;">
+                             <button type="setformation" id="changeblue-button" class="btn-changeplayerblue">交</button>
+                             <button type="setformation" id="setformblue-button" class="btn-formblue">選手・配置変更</button>
+                           </div>
 
                     </div>               
             </div>
@@ -817,6 +878,14 @@ button:hover {
     <button id="pk-button" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 1000;" onclick="enterPK()">
         PK戦突入
     </button>
+
+<!-- モーダル風div -->
+<div id="changeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999;">
+ 
+  <iframe id="changeFrame" src="" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
+
 </body>
       
 
@@ -855,6 +924,7 @@ button:hover {
     let isBgmPlaying = false;
     let isMuted = false;
     let allSE = []; // 効果音 Audio インスタンスを記録
+    let isPaused = false;  //選手交代フラグ（初期は false）
 
 
 // チームの能力確率の設定
@@ -1230,7 +1300,68 @@ updateTurnCounter();
 
 
 
-// フォーメーションボタンクリックイベント
+
+// 選手交代モーダルウィンドウを開いたとき関数
+
+function openChangeModal(teamRole) {
+  isPaused = true; // 試合を一時停止
+  const teamId = teamRole === "red" ? redTeamId : blueTeamId;
+  localStorage.setItem("formteamId", teamId);
+  localStorage.setItem("formteamRole", teamRole);
+
+  const modal = document.getElementById("changeModal");
+  const iframe = document.getElementById("changeFrame");
+  iframe.src = "change_player.html";  // ← 別ページを埋め込む
+  modal.style.display = "block";
+}
+
+
+// 選手交代モーダルウィンドウを閉じたとき関数
+function closeChangeModal() {
+  document.getElementById("changeModal").style.display = "none";
+
+  // 最新の能力値を読み込み・再代入
+  const redAtk = localStorage.getItem("formation_red_atk");
+  const redMid = localStorage.getItem("formation_red_mid");
+  const redDef = localStorage.getItem("formation_red_def");
+
+  const blueAtk = localStorage.getItem("formation_blue_atk");
+  const blueMid = localStorage.getItem("formation_blue_mid");
+  const blueDef = localStorage.getItem("formation_blue_def");
+
+  if (redAtk && redMid && redDef) {
+    redtrack_a_value = parseFloat(redAtk);
+    redtrack_b_value = parseFloat(redMid);
+    redtrack_c_value = parseFloat(redDef);
+  }
+
+  if (blueAtk && blueMid && blueDef) {
+    bluetrack_a_value = parseFloat(blueAtk);
+    bluetrack_b_value = parseFloat(blueMid);
+    bluetrack_c_value = parseFloat(blueDef);
+  }
+
+  updateProbabilities();       // 再計算
+  renderRedDiceTracks();       // 表示も更新
+  renderBlueDiceTracks();
+
+  isPaused = false;  // 試合を再開
+}
+
+
+
+window.addEventListener("message", event => {
+  if (event.data === "closeChangeModal") {
+    setTimeout(() => {
+      closeChangeModal();  // ← display:none の次のフレームで実行
+    }, 0);
+  }
+});
+
+
+
+
+// 選手配置変更フォーメーション変更ボタンクリックイベント
   document.getElementById("setformred-button").addEventListener("click", function () {
     
     localStorage.setItem("formteamId", redTeamId);
@@ -1244,6 +1375,16 @@ updateTurnCounter();
     localStorage.setItem("formteamRole", "blue"); // ← 追加
     window.location.href = "formation_select.html";
   });
+
+
+// 交代ボタンクリックイベント
+document.getElementById("changered-button").addEventListener("click", function () {
+  openChangeModal("red");
+});
+
+document.getElementById("changeblue-button").addEventListener("click", function () {
+  openChangeModal("blue");
+});
 
 
 
@@ -1261,28 +1402,42 @@ function saveMatchState() {
 
 //試合進行情報の削除関数
 function clearMatchState() {
+  // formation 情報を削除
+  ["red", "blue"].forEach(role => {
+    localStorage.removeItem(`formation_${role}_atk`);
+    localStorage.removeItem(`formation_${role}_mid`);
+    localStorage.removeItem(`formation_${role}_def`);
+    localStorage.removeItem(`formation_${role}_positions`);
+    localStorage.removeItem(`formation_${role}_changeCount`);
+    localStorage.removeItem(`formation_${role}_cumulativeChangeCount`);
+  });
 
-  localStorage.removeItem("formation_red_atk");
-  localStorage.removeItem("formation_red_mid");
-  localStorage.removeItem("formation_red_def");
+  // 試合進行情報を削除
+  [
+    "match_turn",
+    "match_redScore",
+    "match_blueScore",
+    "match_isSecondHalfStarted",
+    "match_isExtension",
+    "match_isFirstHalfEnded",
+    "match_isSideSwapped",
+    "match_logs"
+  ].forEach(key => localStorage.removeItem(key));
 
-  localStorage.removeItem("formation_blue_atk");
-  localStorage.removeItem("formation_blue_mid");
-  localStorage.removeItem("formation_blue_def");
+  // 特定パターン（例: changeCount_）にマッチするキーを削除
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith("changeCount_")) {
+      localStorage.removeItem(key);
+    }
+  });
 
-  localStorage.removeItem("match_turn");
-  localStorage.removeItem("match_redScore");
-  localStorage.removeItem("match_blueScore");
-
-  localStorage.removeItem("match_isSecondHalfStarted");
-  localStorage.removeItem("match_isExtension");
-  localStorage.removeItem("match_isFirstHalfEnded");
-  localStorage.removeItem("match_isSideSwapped");
-
-  localStorage.removeItem("match_logs"); // ← ログも削除
+  // 状態変数の初期化（必要であれば）
   isSecondHalfStarted = false;
-
 }
+
+
+
+
 
 // サイコロカウンター分数宣言
     let redAattempt = 0;  // 試行回数（分母）
@@ -1412,10 +1567,12 @@ function startAutoGame() {
   const baseInterval = 1500;
   const interval = baseInterval / selectedSpeed;
 
-  gameInterval = setInterval(async () => {
-    const continueGame = await playTurn();
-    if (!continueGame) clearInterval(gameInterval);
-  }, interval);
+gameInterval = setInterval(async () => {
+  if (isPaused) return;  // 一時停止中ならスキップ
+
+  const continueGame = await playTurn();
+  if (!continueGame) clearInterval(gameInterval);
+}, interval);
 }
 
 
@@ -1740,13 +1897,25 @@ function renderRedDiceTracks() {
     const barWidthPercent = Math.min((value / maxValue) * 100, 100);
 
     const bar = document.createElement("div");
-    bar.style.height = "10px";
+    bar.style.height = "14px";
     bar.style.width = `${barWidthPercent}%`;
     bar.style.backgroundColor = "red";
     bar.style.border = "1px solid #333";
     bar.style.marginBottom = "5px";
+    bar.style.position = "relative";
     bar.title = `値: ${value}`;
 
+    const text = document.createElement("span");
+    text.textContent = Math.round(value); // ← 四捨五入
+    text.style.position = "absolute";
+    text.style.left = "50%";
+    text.style.top = "50%";
+    text.style.transform = "translate(-50%, -50%)";
+    text.style.color = "white";
+    text.style.fontSize = "10px";
+    text.style.pointerEvents = "none";
+
+    bar.appendChild(text);
     container.appendChild(bar);
   });
 }
@@ -1756,27 +1925,38 @@ function renderRedDiceTracks() {
 function renderBlueDiceTracks() {
   const values = [bluetrack_a_value, bluetrack_b_value, bluetrack_c_value];
   const diceIds = ["blue-dice-track-a", "blue-dice-track-b", "blue-dice-track-c"];
-  const maxValue = 130; // Trackの最大値（適宜調整）
+  const maxValue = 130;
 
   diceIds.forEach((id, index) => {
     const container = document.getElementById(id);
-    container.innerHTML = ""; // クリア
+    container.innerHTML = "";
 
     const value = values[index];
     const barWidthPercent = Math.min((value / maxValue) * 100, 100);
 
     const bar = document.createElement("div");
-    bar.style.height = "10px";
+    bar.style.height = "14px";
     bar.style.width = `${barWidthPercent}%`;
     bar.style.backgroundColor = "blue";
     bar.style.border = "1px solid #333";
     bar.style.marginBottom = "5px";
+    bar.style.position = "relative";
     bar.title = `値: ${value}`;
 
+    const text = document.createElement("span");
+    text.textContent = Math.round(value); // ← 四捨五入
+    text.style.position = "absolute";
+    text.style.left = "50%";
+    text.style.top = "50%";
+    text.style.transform = "translate(-50%, -50%)";
+    text.style.color = "white";
+    text.style.fontSize = "10px";
+    text.style.pointerEvents = "none";
+
+    bar.appendChild(text);
     container.appendChild(bar);
   });
 }
-
 
 
 
@@ -2788,6 +2968,7 @@ if (turn % 2 === 0 && position !== 0) {
   let winner = (position > 0) ? `${redTeamJP}` : `${blueTeamJP}`;
   appendLog(`\n最終結果: ${winner}の勝利`);
    if (!isFastMode) playGamesetYell();
+   clearMatchState(); 
   return false;
 }
 
