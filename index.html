@@ -6,10 +6,7 @@
   <title>ワールドサッカー サイコロシミュレーション</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Noto Sans JP', sans-serif;
@@ -21,21 +18,8 @@
       min-height: 100vh;
       padding: 2rem 1rem;
     }
-
-    h1 {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #f9d342;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-    }
-
-    .logo {
-      width: 120px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-
+    h1 { font-size: 2rem; text-align: center; margin-bottom: 2rem; color: #f9d342; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
+    .logo { width: 120px; height: auto; margin-bottom: 10px; }
     .menu {
       width: 100%;
       max-width: 400px;
@@ -43,8 +27,7 @@
       flex-direction: column;
       gap: 1.5rem;
     }
-
-    .menu a {
+    .menu a, .menu button {
       display: block;
       text-decoration: none;
       background-color: #ffffff22;
@@ -56,13 +39,12 @@
       font-weight: bold;
       transition: all 0.3s ease;
       border: 2px solid #f9d342;
+      cursor: pointer;
     }
-
-    .menu a:hover {
+    .menu a:hover, .menu button:hover {
       background-color: #f9d342;
       color: #203a43;
     }
-
     footer {
       margin-top: auto;
       padding: 1rem;
@@ -70,33 +52,22 @@
       color: #ccc;
       text-align: center;
     }
-
     @media (max-width: 480px) {
-      h1 {
-        font-size: 1.6rem;
-      }
-
-      .menu a {
-        font-size: 1rem;
-        padding: 0.8rem;
-      }
-
-      .logo {
-        width: 90px;
-      }
-
+      h1 { font-size: 1.6rem; }
+      .menu a, .menu button { font-size: 1rem; padding: 0.8rem; }
+      .logo { width: 90px; }
     }
   </style>
 </head>
 <body>
   <h1>ワールドサッカー<br>サイコロシミュレーション</h1>
-     <img src="logo.png" alt="ロゴ" class="logo" />
+  <img src="logo.png" alt="ロゴ" class="logo" />
 
   <nav class="menu">
     <a href="team_select.html">⚽ 親善試合</a>
     <a href="group_draw_ui.html">🏆 ワールドカップ</a>
     <a href="formation_register.html">📋 フォーメーション登録</a>
-    <!-- 今後のメニュー追加用にスペース確保 -->
+    <button id="init-db-btn">🗑️ データ初期化</button>
   </nav>
 
   <footer>
@@ -104,70 +75,76 @@
   </footer>
 
 <script>
-fetch('db_init.json')
-  .then(res => res.json())
-  .then(data => {
-    // 1. 既存DBを削除
-    const deleteRequest = indexedDB.deleteDatabase("GameDB");
+document.getElementById('init-db-btn').addEventListener('click', () => {
+  if (!confirm("本当にDBを初期化してよろしいですか？（元に戻せません）")) return;
 
-    deleteRequest.onsuccess = () => {
-      console.log("旧DBを削除しました。新規作成を開始します。");
+  fetch('db_init.json')
+    .then(res => res.json())
+    .then(data => {
+      const deleteRequest = indexedDB.deleteDatabase("GameDB");
 
-      // 2. 新規DBオープン（バージョンは data.version+1 などでOK）
-      const request = indexedDB.open("GameDB", data.version + 1);
+      deleteRequest.onsuccess = () => {
+        console.log("旧DBを削除しました。新規作成を開始します。");
 
-      request.onupgradeneeded = function(event) {
-        const db = event.target.result;
+        const request = indexedDB.open("GameDB", data.version + 1);
 
-        for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
-          if (!db.objectStoreNames.contains(storeName)) {
-            const store = db.createObjectStore(storeName, {
-              keyPath: storeDef.keyPath,
-              autoIncrement: storeDef.autoIncrement || false
-            });
+        request.onupgradeneeded = function(event) {
+          const db = event.target.result;
 
-            for (const [indexName, indexDef] of Object.entries(storeDef.indexes || {})) {
-              store.createIndex(indexName, indexDef.keyPath, {
-                unique: indexDef.unique || false,
-                multiEntry: indexDef.multiEntry || false
+          for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+            if (!db.objectStoreNames.contains(storeName)) {
+              const store = db.createObjectStore(storeName, {
+                keyPath: storeDef.keyPath,
+                autoIncrement: storeDef.autoIncrement || false
               });
+              for (const [indexName, indexDef] of Object.entries(storeDef.indexes || {})) {
+                store.createIndex(indexName, indexDef.keyPath, {
+                  unique: indexDef.unique || false,
+                  multiEntry: indexDef.multiEntry || false
+                });
+              }
             }
           }
-        }
-      };
-
-      request.onsuccess = function(event) {
-        const db = event.target.result;
-        const tx = db.transaction(Object.keys(data.objectStores), "readwrite");
-
-        for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
-          const store = tx.objectStore(storeName);
-          (storeDef.data || []).forEach(item => store.put(item));
-        }
-
-        tx.oncomplete = () => {
-          console.log("新規DB作成とデータ投入が完了しました。");
-          db.close();
         };
 
-        tx.onerror = (e) => {
-          console.error("トランザクションエラー", e.target.error);
+        request.onsuccess = function(event) {
+          const db = event.target.result;
+          const tx = db.transaction(Object.keys(data.objectStores), "readwrite");
+
+          for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+            const store = tx.objectStore(storeName);
+            (storeDef.data || []).forEach(item => store.put(item));
+          }
+
+          tx.oncomplete = () => {
+            console.log("新規DB作成とデータ投入が完了しました。");
+            db.close();
+            alert("データ初期化が完了しました。ページをリロードしてご利用ください。");
+          };
+
+          tx.onerror = (e) => {
+            console.error("トランザクションエラー", e.target.error);
+            alert("データ初期化中にエラーが発生しました。コンソールを確認してください。");
+          };
+        };
+
+        request.onerror = (e) => {
+          console.error("DBオープンエラー", e.target.error);
+          alert("DBオープンエラーが発生しました。コンソールを確認してください。");
         };
       };
 
-      request.onerror = (e) => {
-        console.error("DBオープンエラー", e.target.error);
+      deleteRequest.onerror = (e) => {
+        console.error("DB削除エラー", e.target.error);
+        alert("DB削除中にエラーが発生しました。コンソールを確認してください。");
       };
-    };
-
-    deleteRequest.onerror = (e) => {
-      console.error("DB削除エラー", e.target.error);
-    };
-  })
-  .catch(e => {
-    console.error("db_init.jsonの読み込みエラー", e);
-  });
+    })
+    .catch(e => {
+      console.error("db_init.jsonの読み込みエラー", e);
+      alert("db_init.jsonの読み込みに失敗しました。");
+    });
+});
 </script>
-  
+
 </body>
 </html>
