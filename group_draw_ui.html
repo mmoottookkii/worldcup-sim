@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>地域予選グループ抽選</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #f9d342;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+
+  .nav button {
+    background-color: #f9d342;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #203a43;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 100px;
+  }
+  #returnMenu {
+  background-color: #FF6928;
+  }
+  
+  
+  .button-area {
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #203a43;
+    background-color: #f9d342;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #ffe066;
+  }
+
+  .region {
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .group {
+    background: #ffffff22;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+  }
+
+  footer {
+    margin-top: auto;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 480px) {
+    .button-area {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .button-area button {
+      flex: 1 1 auto;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <div class="nav">
+    <button id="viewSchedule" onclick="location.href='group_schedule_viewer.html'">試合日程へ進む</button>
+    <button id="returnMenu" onclick="location.href='index.html'">戻る</button>
+  </div>
+
+  <h1>地域予選グループ抽選</h1>
+
+  <div class="button-area">
+    <button onclick="runDraw()">組み合わせ抽選</button>
+    <button onclick="saveGroups()">組み合わせ保存</button>
+  </div>
+
+  <div id="result"></div>
+
+  <footer>&copy; 2025 ワールドサッカー シミュレーション</footer>
+
+
+  <script>
+    const teamNameMap = {
+      england: "イングランド", germany: "ドイツ", france: "フランス", spain: "スペイン", italy: "イタリア",
+      netherlands: "オランダ", portugal: "ポルトガル", croatia: "クロアチア", belgium: "ベルギー", sweden: "スウェーデン",
+      switzerland: "スイス", poland: "ポーランド", austria: "オーストリア", denmark: "デンマーク", norway: "ノルウェー",
+      ukraine: "ウクライナ", serbia: "セルビア", czech: "チェコ", scotland: "スコットランド", wales: "ウェールズ",
+      finland: "フィンランド", ireland: "アイルランド", iceland: "アイスランド", greece: "ギリシャ", slovakia: "スロバキア",
+      slovenia: "スロベニア", hungary: "ハンガリー", turkey: "トルコ", israel: "イスラエル", bulgaria: "ブルガリア",
+      romania: "ルーマニア", georgia: "ジョージア", northmacedonia: "北マケドニア", albania: "アルバニア",
+      bosnia: "ボスニア", montenegro: "モンテネグロ", russia: "ロシア",
+      brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+      paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア",
+      nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+      cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+      ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+      panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+      costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+      japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール",
+      china: "中国", saudiarabia: "サウジアラビア", northkorea: "北朝鮮", uae: "UAE", jordan: "ヨルダン",
+      uzbekistan: "ウズベキスタン"
+    };
+
+const regions = {
+  "ヨーロッパ": {
+    teamIds: [
+      "england", "germany", "france", "spain", "italy",
+      "netherlands", "portugal", "croatia", "belgium", "sweden",
+      "switzerland", "poland", "austria", "denmark", "norway",
+      "ukraine", "serbia", "czech", "scotland", "wales",
+      "finland", "ireland", "iceland", "greece", "slovakia",
+      "slovenia", "hungary", "turkey", "israel", "bulgaria",
+      "romania", "georgia", "northmacedonia", "albania",
+      "bosnia", "montenegro", "russia"
+    ],
+    groupCount: 7
+  },
+  "南米": {
+    teamIds: ["brazil","argentina","colombia","uruguay","chile","paraguay","peru","ecuador","venezuela","bolivia"],
+    groupCount: 2
+  },
+  "アフリカ": {
+    teamIds: ["nigeria","ghana","egypt","morocco","tunisia","cameroon","senegal","algeria","mali","southafrica","ivorycoast"],
+    groupCount: 2
+  },
+  "北中米": {
+    teamIds: ["usa","mexico","canada","jamaica","panama","honduras","guatemala","elsalvador","costarica","australia","newzealand"],
+    groupCount: 2
+  },
+  "アジア": {
+    teamIds: ["japan","southkorea","iran","iraq","qatar","china","saudiarabia","northkorea","uae","jordan","uzbekistan"],
+    groupCount: 2
+  }
+};
+    let latestGroups = {};
+
+    async function getTeamTotal(teamId) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("GameDB", 24);
+        request.onerror = () => reject("DB open error");
+        request.onsuccess = () => {
+          const db = request.result;
+          const tx = db.transaction("formations", "readonly");
+          const store = tx.objectStore("formations");
+          const getReq = store.get(teamId);
+          getReq.onsuccess = () => resolve(getReq.result?.total ?? 0);
+          getReq.onerror = () => resolve(0);
+        };
+      });
+    }
+
+    async function drawRegion(regionName, teamIds, groupCount) {
+      const teams = [];
+      for (const id of teamIds) {
+        const total = await getTeamTotal(id);
+        teams.push({ teamId: id, total });
+      }
+      teams.sort((a, b) => b.total - a.total);
+      const pod1 = teams.slice(0, groupCount).map(t => t.teamId);
+      const remaining = teams.slice(groupCount).map(t => t.teamId).sort(() => Math.random() - 0.5);
+      const groups = Array.from({ length: groupCount }, (_, i) => [pod1[i]]);
+      let g = 0;
+      for (const team of remaining) {
+        groups[g].push(team);
+        g = (g + 1) % groupCount;
+      }
+      return groups;
+    }
+
+    async function runDraw() {
+      const container = document.getElementById("result");
+      container.innerHTML = "";
+      latestGroups = {};
+      for (const regionName in regions) {
+        const { teamIds, groupCount } = regions[regionName];
+        const groups = await drawRegion(regionName, teamIds, groupCount);
+        latestGroups[regionName] = groups;
+        const regionDiv = document.createElement("div");
+        regionDiv.className = "region";
+        const h2 = document.createElement("h2");
+        h2.textContent = regionName;
+        regionDiv.appendChild(h2);
+        groups.forEach((group, i) => {
+          const div = document.createElement("div");
+          div.className = "group";
+          div.innerHTML = `<strong>グループ ${String.fromCharCode(65 + i)}</strong><br>` +
+            group.map(t => `- ${teamNameMap[t] || t}`).join("<br>");
+          regionDiv.appendChild(div);
+        });
+        container.appendChild(regionDiv);
+      }
+    }
+
+     function openDatabase() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open("GameDB", 23);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("regiongroupstats")) {
+          const store = db.createObjectStore("regiongroupstats", { keyPath: "teamId" });
+          store.createIndex("teamId", "teamId", { unique: true });
+        }
+      };
+
+      request.onsuccess = () => {
+        resolve(request.result);
+      };
+
+      request.onerror = () => {
+        reject("Database open error");
+      };
+    });
+  }
+
+  async function saveGroups() {
+    try {
+      const db = await openDatabase();
+      const tx = db.transaction("regiongroupstats", "readwrite");
+      const store = tx.objectStore("regiongroupstats");
+
+      for (const region in latestGroups) {
+        const groups = latestGroups[region];
+        groups.forEach((group, groupIndex) => {
+          const groupSector = String.fromCharCode(65 + groupIndex); // A, B, ...
+          group.forEach(teamId => {
+            const entry = {
+              teamId,
+              regionname: region,
+              groupsector: groupSector,
+              point: 0,
+              matchplayed: 0,
+              win: 0,
+              loss: 0,
+              tie: 0,
+              goalscored: 0,
+              goalallowed: 0,
+              goaldifference: 0
+            };
+            store.put(entry); // 上書き可
+          });
+        });
+      }
+
+      tx.oncomplete = () => {
+        alert("組み合わせを保存しました。");
+        db.close();
+      };
+
+      tx.onerror = () => {
+        alert("保存中にエラーが発生しました。");
+      };
+
+    } catch (error) {
+      alert("DB接続エラー: " + error);
+    }
+  }
+
+
+  </script>
+</body>
+</html>

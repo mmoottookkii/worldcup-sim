@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html><!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>地域予選成績表</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+    }
+    .nav button {
+      background-color: #f9d342;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      color: #203a43;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    #returnMenu {
+    background-color: #FF6928;
+    }
+    
+
+
+    h1 {
+      font-size: 2rem;
+      color: #f9d342;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      background-color: #ffffff22;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #f9d342;
+      color: #203a43;
+      font-weight: bold;
+    }
+
+    td.country-name {
+      font-size: 0.9rem;
+    }
+
+    .region-title {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      color: #ffe066;
+    }
+
+    .divider-top2 {
+      border-top: 2px solid red;
+    }
+
+    footer {
+      margin-top: auto;
+      color: #ccc;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav">
+   <button id="viewSchedule" onclick="location.href='group_schedule_viewer.html'">試合日程</button>
+   <button id="returnMenu" onclick="location.href='index.html'">戻る</button>
+  </div>
+
+  <h1>地域予選成績表</h1>
+  <div id="standings"></div>
+  <footer>
+    &copy; 2025 ワールドサッカー シミュレーション
+  </footer>
+
+  <script>
+    const teamNameMap = {
+      england: "イングランド", germany: "ドイツ", france: "フランス", spain: "スペイン", italy: "イタリア",
+      netherlands: "オランダ", portugal: "ポルトガル", croatia: "クロアチア", belgium: "ベルギー", sweden: "スウェーデン",
+      switzerland: "スイス", poland: "ポーランド", austria: "オーストリア", denmark: "デンマーク", norway: "ノルウェー",
+      ukraine: "ウクライナ", serbia: "セルビア", czech: "チェコ", scotland: "スコットランド", wales: "ウェールズ",
+      finland: "フィンランド", ireland: "アイルランド", iceland: "アイスランド", greece: "ギリシャ", slovakia: "スロバキア",
+      slovenia: "スロベニア", hungary: "ハンガリー", turkey: "トルコ", israel: "イスラエル", bulgaria: "ブルガリア",
+      romania: "ルーマニア", georgia: "ジョージア", northmacedonia: "北マケドニア", albania: "アルバニア",
+      bosnia: "ボスニア", montenegro: "モンテネグロ", russia: "ロシア",
+      brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+      paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア",
+      nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+      cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+      ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+      panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+      costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+      japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール",
+      china: "中国", saudiarabia: "サウジアラビア", northkorea: "北朝鮮", uae: "UAE", jordan: "ヨルダン",
+      uzbekistan: "ウズベキスタン"
+    };
+
+    const REGION_ORDER = ["ヨーロッパ", "南米", "アフリカ", "北中米", "アジア"];
+
+    async function loadGroupStats() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("GameDB", 25);
+        request.onsuccess = () => {
+          const db = request.result;
+          const tx = db.transaction("regiongroupstats", "readonly");
+          const store = tx.objectStore("regiongroupstats");
+          const all = store.getAll();
+          all.onsuccess = () => {
+            const result = {};
+            all.result.forEach(item => {
+              const groupKey = `${item.regionname}_Group_${item.groupsector}`;
+              if (!result[groupKey]) result[groupKey] = [];
+              result[groupKey].push(item);
+            });
+            resolve(result);
+          };
+          request.onerror = () => reject("DB読み込みエラー");
+        };
+        request.onerror = () => reject("DB接続失敗");
+      });
+    }
+
+//matchresults ストアから地域・グループ別に試合結果を取得
+function loadGroupMatchResults() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("GameDB", 25);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction("matchresults", "readonly");
+      const store = tx.objectStore("matchresults");
+      const index = store.index("by_phase");
+      const req = index.getAll("group");
+
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = reject;
+    };
+    request.onerror = reject;
+  });
+}
+
+
+// 地域グループ別にチーム成績を計算する
+function computeStandingsFromResults(results) {
+  const groupMap = {}; // { "eu_Group_1": { teamId: stats } }
+
+  for (const match of results) {
+    const groupKey = `${match.region}_Group_${match.group}`;
+    if (!groupMap[groupKey]) groupMap[groupKey] = {};
+
+    const home = match.home;
+    const away = match.away;
+    const hs = match.redScore;
+    const as = match.blueScore;
+
+    // 初期化
+    for (const team of [home, away]) {
+      if (!groupMap[groupKey][team]) {
+        groupMap[groupKey][team] = {
+          teamId: team,
+          point: 0,
+          win: 0,
+          loss: 0,
+          tie: 0,
+          goaldifference: 0,
+          scored: 0,
+          conceded: 0,
+        };
+      }
+    }
+
+    const homeStats = groupMap[groupKey][home];
+    const awayStats = groupMap[groupKey][away];
+
+    homeStats.scored += hs;
+    homeStats.conceded += as;
+    awayStats.scored += as;
+    awayStats.conceded += hs;
+
+    if (hs > as) {
+      homeStats.win++;
+      homeStats.point += 3;
+      awayStats.loss++;
+    } else if (hs < as) {
+      awayStats.win++;
+      awayStats.point += 3;
+      homeStats.loss++;
+    } else {
+      homeStats.tie++;
+      awayStats.tie++;
+      homeStats.point += 1;
+      awayStats.point += 1;
+    }
+  }
+
+  // 得失点差を追加
+  for (const groupKey in groupMap) {
+    for (const teamId in groupMap[groupKey]) {
+      const t = groupMap[groupKey][teamId];
+      t.goaldifference = t.scored - t.conceded;
+    }
+  }
+
+  return groupMap;
+}
+
+
+//直接対決判定用関数の追加
+function headToHeadResult(teamA, teamB, results, groupKey) {
+  const match = results.find(r =>
+    (r.home === teamA && r.away === teamB || r.home === teamB && r.away === teamA) &&
+    `${r.region}_Group_${r.group}` === groupKey
+  );
+  if (!match) return 0; // 直接対決なし＝引き分け扱い
+
+  const aScore = match.home === teamA ? match.redScore : match.blueScore;
+  const bScore = match.home === teamB ? match.redScore : match.blueScore;
+
+  return bScore - aScore; // b - a でソート時に大きい方が上位
+}
+
+
+
+
+function renderTable(groupKey, teams, matchResults, currentGroupKey) {
+  const container = document.getElementById("standings");
+  const [region, , groupSector] = groupKey.split("_");
+
+  const title = document.createElement("div");
+  title.className = "region-title";
+  title.textContent = `${region} / グループ ${groupSector.toUpperCase()}`;
+  container.appendChild(title);
+
+  teams.sort((a, b) => {
+    return (
+      b.point - a.point ||
+      b.goaldifference - a.goaldifference ||
+      b.scored - a.scored ||
+      headToHeadResult(b.teamId, a.teamId, matchResults, currentGroupKey) ||
+      Math.random() - 0.5
+    );
+  });
+
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  thead.innerHTML = `
+    <tr>
+      <th>順位</th><th>国名</th><th>勝点</th><th>勝</th><th>負</th><th>引</th><th>得差</th>
+    </tr>`;
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  teams.forEach((team, i) => {
+    const row = document.createElement("tr");
+    if (i === 2) row.classList.add("divider-top2");
+    row.innerHTML = `
+      <td>${i + 1}</td>
+      <td class="country-name">${teamNameMap[team.teamId] || team.teamId}</td>
+      <td>${team.point}</td>
+      <td>${team.win}</td>
+      <td>${team.loss}</td>
+      <td>${team.tie}</td>
+      <td>${team.goaldifference}</td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+
+
+async function renderStandings() {
+  const results = await loadGroupMatchResults();
+  const groupMap = computeStandingsFromResults(results);
+
+  const sortedGroups = Object.keys(groupMap).sort((a, b) => {
+    const aRegion = REGION_ORDER.indexOf(a.split("_")[0]);
+    const bRegion = REGION_ORDER.indexOf(b.split("_")[0]);
+    return aRegion - bRegion || a.localeCompare(b);
+  });
+
+  for (const groupKey of sortedGroups) {
+    const teams = Object.values(groupMap[groupKey]);
+    renderTable(groupKey, teams, results, groupKey);
+  }
+}
+
+    renderStandings();
+  </script>
+</body>
+</html>

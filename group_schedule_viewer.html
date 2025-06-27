@@ -1,0 +1,565 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>グループ試合スケジュール</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+    }
+    .nav button {
+      background-color: #f9d342;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      color: #203a43;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #ffe066;
+    }
+    #matchList {
+      width: 100%;
+      max-width: 600px;
+    }
+    .match {
+      background: #ffffff22;
+      margin: 0.5rem 0;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      color: #f9d342;
+    }
+    footer {
+      margin-top: 2rem;
+      color: #ccc;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+
+.match {
+  background: #ffffff22;
+  margin: 0.5rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  font-size: 0.85rem; /* 全体やや小さく */
+  gap: 0.5rem;
+}
+
+.match-text {
+  font-size: 0.8rem;     /* ← 国名テキストだけ小さく */
+  white-space: nowrap;   /* 折り返しを防止 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;               /* 残りの幅を使ってテキストが自動調整される */
+}
+
+.button-group {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.button-group button {
+  background-color: #f9d342;
+  color: #203a43;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.skip-button {
+    background-color: #b8d200!important;!
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .see-button {
+    background-color: #bce2e8!important;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .disabled-button {
+    opacity: 0.1;
+    cursor: not-allowed;
+  }
+
+#iframeOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0; /* ← paddingも0にすることで完全な全画面 */
+}
+
+#iframeOverlay iframe {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#iframeOverlay #closeIframeBtn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: #f9d342;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #203a43;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <button id="prevRound">←</button>
+    <button id="viewStandings" onclick="location.href='group_standings_view.html'">順位表</button>
+    <button id="nextRound">→</button>
+  </div>
+  <h1 id="roundTitle">ラウンド 1</h1>
+  <div id="matchList"></div>
+<!-- 画面全体を覆うオーバーレイ -->
+<div id="iframeOverlay" style="display:none;">
+  <iframe id="playmatch-frame" src="" frameborder="0"></iframe>
+  <button id="closeIframeBtn" aria-label="閉じる">×</button>
+</div>
+
+
+  <footer>
+    &copy; 2025 ワールドサッカー シミュレーション
+  </footer>
+
+  <script>
+    const teamNameMap = {
+      england: "イングランド", germany: "ドイツ", france: "フランス", spain: "スペイン", italy: "イタリア",
+      netherlands: "オランダ", portugal: "ポルトガル", croatia: "クロアチア", belgium: "ベルギー", sweden: "スウェーデン",
+      switzerland: "スイス", poland: "ポーランド", austria: "オーストリア", denmark: "デンマーク", norway: "ノルウェー",
+      ukraine: "ウクライナ", serbia: "セルビア", czech: "チェコ", scotland: "スコットランド", wales: "ウェールズ",
+      finland: "フィンランド", ireland: "アイルランド", iceland: "アイスランド", greece: "ギリシャ", slovakia: "スロバキア",
+      slovenia: "スロベニア", hungary: "ハンガリー", turkey: "トルコ", israel: "イスラエル", bulgaria: "ブルガリア",
+      romania: "ルーマニア", georgia: "ジョージア", northmacedonia: "北マケドニア", albania: "アルバニア",
+      bosnia: "ボスニア", montenegro: "モンテネグロ", russia: "ロシア",
+      brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+      paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア",
+      nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+      cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+      ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+      panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+      costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+      japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール",
+      china: "中国", saudiarabia: "サウジアラビア", northkorea: "北朝鮮", uae: "UAE", jordan: "ヨルダン",
+      uzbekistan: "ウズベキスタン"
+    };
+
+    let currentRound = 0;
+    let fullSchedule = {}; // { groupKey: [[match1, match2...], [round2], ...] }
+
+   
+ // 試合観戦から戻ってきたときの処理
+   window.addEventListener("DOMContentLoaded", () => {
+  const redScore = localStorage.getItem("match_redScore");
+  const blueScore = localStorage.getItem("match_blueScore");
+
+  if (redScore !== null && blueScore !== null) {
+    const home = localStorage.getItem("team-red");
+    const away = localStorage.getItem("team-blue");
+    const redName = localStorage.getItem("team-red-jp");
+    const blueName = localStorage.getItem("team-blue-jp");
+    const group = localStorage.getItem("last-match-group");
+    const [region, groupNum] = group.split("_");
+
+    const matchId = `group_${region}_${groupNum}_${home}_${away}`;
+    const record = {
+      id: matchId,
+      phase: "group",
+      region,
+      group: groupNum,
+      home,
+      away,
+      redScore: parseInt(redScore),
+      blueScore: parseInt(blueScore),
+      timestamp: Date.now()
+    };
+
+    // 保存
+    const dbReq = indexedDB.open("GameDB", 25);
+    dbReq.onsuccess = () => {
+      const db = dbReq.result;
+      const tx = db.transaction("matchresults", "readwrite");
+      const store = tx.objectStore("matchresults");
+      store.put(record);
+    };
+
+  // 🔽 ラウンド番号を復元してから表示
+  const savedRound = localStorage.getItem("last-round");
+  currentRound = savedRound !== null ? parseInt(savedRound) : 0;
+
+    // 描画更新（DOM再構築前提のため、次回 renderRound() 呼び出しに任せる）
+    setTimeout(() => renderRound(currentRound), 300);
+
+  // 🔽 スクロール復帰（マッチ行が描画されるまで少し待つ）
+  const scrollTargetId = localStorage.getItem("last-scroll-id");
+  if (scrollTargetId) {
+    setTimeout(() => {
+      const targetElem = document.getElementById(scrollTargetId);
+      if (targetElem) {
+        targetElem.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      localStorage.removeItem("last-scroll-id");
+      localStorage.removeItem("last-round");
+    }, 500); // 必要に応じて調整
+  }
+
+
+
+    // 後処理
+    localStorage.removeItem("match_redScore");
+    localStorage.removeItem("match_blueScore");
+    localStorage.removeItem("team-red");
+    localStorage.removeItem("team-blue");
+    localStorage.removeItem("team-red-jp");
+    localStorage.removeItem("team-blue-jp");
+    localStorage.removeItem("last-match-text");
+    localStorage.removeItem("last-match-group");
+  }
+});
+   
+   
+    function loadTeamsFromRegionGroupStats() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("GameDB", 25);
+        request.onsuccess = () => {
+          const db = request.result;
+          const tx = db.transaction("regiongroupstats", "readonly");
+          const store = tx.objectStore("regiongroupstats");
+          const all = store.getAll();
+          all.onsuccess = () => resolve(all.result);
+          all.onerror = reject;
+        };
+        request.onerror = reject;
+      });
+    }
+
+    function generateMatchSchedulesByGroup(teams) {
+      const groupMap = {};
+      for (const t of teams) {
+        const key = `${t.regionname}_${t.groupsector}`;
+        if (!groupMap[key]) groupMap[key] = [];
+        groupMap[key].push(t.teamId);
+      }
+
+      const allSchedules = {};
+      for (const group in groupMap) {
+        const teamList = groupMap[group];
+        allSchedules[group] = generateRoundRobin(teamList);
+      }
+      return allSchedules;
+    }
+
+    function generateRoundRobin(teamIds) {
+      const rounds = [];
+      const teams = [...teamIds];
+      if (teams.length % 2 === 1) teams.push(null);
+      const n = teams.length;
+
+      for (let round = 0; round < n - 1; round++) {
+        const matches = [];
+        for (let i = 0; i < n / 2; i++) {
+          const t1 = teams[i];
+          const t2 = teams[n - 1 - i];
+          if (t1 && t2) matches.push([t1, t2]);
+        }
+        rounds.push(matches);
+        teams.splice(1, 0, teams.pop());
+      }
+
+      return rounds;
+    }
+
+
+
+function renderRound(roundNumber) {
+  document.getElementById("roundTitle").textContent = `ラウンド ${roundNumber + 1}`;
+  const container = document.getElementById("matchList");
+  container.innerHTML = "";
+
+  const dbReq = indexedDB.open("GameDB", 25);
+  dbReq.onsuccess = () => {
+    const db = dbReq.result;
+    const tx = db.transaction("matchresults", "readonly");
+    const store = tx.objectStore("matchresults");
+
+    const index = store.index("by_phase");
+    const matchResultsReq = index.getAll("group");
+
+    matchResultsReq.onsuccess = () => {
+      const resultList = matchResultsReq.result;
+
+      for (const group in fullSchedule) {
+        const roundMatches = fullSchedule[group][roundNumber];
+        const groupHeader = document.createElement("h2");
+        groupHeader.textContent = group;
+        container.appendChild(groupHeader);
+
+        const [region, groupNum] = group.split("_");
+
+        for (const [home, away] of roundMatches) {
+
+
+          const matchId = `group_${region}_${groupNum}_${home}_${away}`;
+
+          const matchDiv = document.createElement("div");
+          matchDiv.className = "match";
+          matchDiv.id = `match_${matchId}`; // ← 追加（ユニークID）
+
+          const matchText = document.createElement("div");
+          matchText.className = "match-text";
+
+          const result = resultList.find(r => r.id === matchId);
+
+          if (result) {
+            matchText.textContent = `${teamNameMap[home] || home} ${result.redScore}-${result.blueScore} ${teamNameMap[away] || away}`;
+          } else {
+            matchText.textContent = `${teamNameMap[home] || home} vs ${teamNameMap[away] || away}`;
+          }
+
+          const buttonGroup = document.createElement("div");
+          buttonGroup.className = "button-group";
+
+const seeBtn = document.createElement("button");
+seeBtn.textContent = "観戦";
+seeBtn.className = "see-button";
+if (result) {
+  seeBtn.disabled = true;
+  seeBtn.classList.add("disabled-button");
+} else {
+  seeBtn.onclick = () => {
+    localStorage.setItem("team-red", home);
+    localStorage.setItem("team-blue", away);
+    localStorage.setItem("team-red-jp", teamNameMap[home] || home);
+    localStorage.setItem("team-blue-jp", teamNameMap[away] || away);
+    localStorage.setItem("last-match-group", group);
+    window.lastMatchTextElement = matchText;
+
+
+   localStorage.setItem("last-match-group", group);
+   localStorage.setItem("last-scroll-id", `match_${matchId}`);
+   localStorage.setItem("last-round", currentRound); // ← 追加！
+
+    location.href = "playmatch_watch1.html";
+  };
+}
+
+const skipBtn = document.createElement("button");
+skipBtn.textContent = "高速";
+skipBtn.className = "skip-button";
+if (result) {
+  skipBtn.disabled = true;
+  skipBtn.classList.add("disabled-button");
+} else {
+  skipBtn.onclick = () => {
+    localStorage.setItem("team-red", home);
+    localStorage.setItem("team-blue", away);
+    localStorage.setItem("team-red-jp", teamNameMap[home] || home);
+    localStorage.setItem("team-blue-jp", teamNameMap[away] || away);
+    localStorage.setItem("last-match-group", group);
+    window.lastMatchTextElement = matchText;
+    window.lastMatchRegionGroup = group;
+
+   localStorage.setItem("last-match-group", group);
+   localStorage.setItem("last-scroll-id", `match_${matchId}`);
+   localStorage.setItem("last-round", currentRound); // ← 追加！
+
+    const overlay = document.getElementById("iframeOverlay");
+    const iframe = document.getElementById("playmatch-frame");
+    overlay.style.display = "flex";
+    iframe.src = "playmatch_rapid.html";
+
+    function handleReady(event) {
+      if (event.data?.type === "readyForFastStart") {
+        window.removeEventListener("message", handleReady);
+        iframe.contentWindow.postMessage({ type: "triggerFastStart" }, "*");
+      }
+    }
+    window.addEventListener("message", handleReady);
+  };
+}
+        
+          buttonGroup.appendChild(seeBtn);
+          buttonGroup.appendChild(skipBtn);
+
+          matchDiv.appendChild(matchText);
+          matchDiv.appendChild(buttonGroup);
+          container.appendChild(matchDiv);
+        }
+      }
+    };
+  };
+} 
+
+
+
+
+// 閉じるボタン処理
+document.getElementById("closeIframeBtn").onclick = () => {
+  const overlay = document.getElementById("iframeOverlay");
+  const iframe = document.getElementById("playmatch-frame");
+  overlay.style.display = "none";
+  iframe.src = "";
+
+  // 試合情報取得
+  const regionGroup = window.lastMatchRegionGroup;  // 例: "eu_1"
+  const [region, group] = regionGroup.split("_");
+  const home = localStorage.getItem("team-red");
+  const away = localStorage.getItem("team-blue");
+  const redName = localStorage.getItem("team-red-jp");
+  const blueName = localStorage.getItem("team-blue-jp");
+  const redScore = localStorage.getItem("match_redScore");
+  const blueScore = localStorage.getItem("match_blueScore");
+
+  // 表示更新（スコア付き）
+  if (home && away && redScore !== null && blueScore !== null && window.lastMatchTextElement) {
+    window.lastMatchTextElement.textContent = `${redName} ${redScore}-${blueScore} ${blueName}`;
+  }
+
+  // DB に保存
+  if (home && away && region && group && redScore !== null && blueScore !== null) {
+    const matchId = `group_${region}_${group}_${home}_${away}`;
+    const record = {
+      id: matchId,
+      phase: "group",
+      region,
+      group,
+      home,
+      away,
+      redScore: parseInt(redScore),
+      blueScore: parseInt(blueScore),
+      timestamp: Date.now()
+    };
+
+    const dbReq = indexedDB.open("GameDB", 25);
+    dbReq.onsuccess = () => {
+      const db = dbReq.result;
+      const tx = db.transaction("matchresults", "readwrite");
+      const store = tx.objectStore("matchresults");
+      store.put(record);
+
+
+
+      // 保存完了後に描画 & スクロール
+      tx.oncomplete = () => {
+        renderRound(currentRound);
+
+        // スクロール復帰処理
+        const scrollTargetId = localStorage.getItem("last-scroll-id");
+        if (scrollTargetId) {
+          setTimeout(() => {
+            const targetElem = document.getElementById(scrollTargetId);
+            if (targetElem) {
+              targetElem.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            localStorage.removeItem("last-scroll-id");
+          }, 300); // 描画待ち
+        }
+      };
+    };
+  }
+
+
+
+  // 後処理
+  localStorage.removeItem("match_redScore");
+  localStorage.removeItem("match_blueScore");
+  localStorage.removeItem("team-red");
+  localStorage.removeItem("team-blue");
+  localStorage.removeItem("team-red-jp");
+  localStorage.removeItem("team-blue-jp");
+  window.lastMatchTextElement = null;
+  window.lastMatchRegionGroup = null;
+  
+  
+};
+
+
+
+
+// 背景クリックで閉じる
+document.getElementById("iframeOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "iframeOverlay") {
+    const overlay = e.target;
+    const iframe = document.getElementById("playmatch-frame");
+    iframe.src = "";
+    overlay.style.display = "none";
+  }
+});
+
+    document.getElementById("prevRound").onclick = () => {
+      if (currentRound > 0) {
+        currentRound--;
+        renderRound(currentRound);
+      }
+    };
+    document.getElementById("nextRound").onclick = () => {
+      if (currentRound < 4) {
+        currentRound++;
+        renderRound(currentRound);
+      }
+    };
+
+    (async () => {
+      const teams = await loadTeamsFromRegionGroupStats();
+      fullSchedule = generateMatchSchedulesByGroup(teams);
+      renderRound(currentRound);
+    })();
+  </script>
+</body>
+</html>

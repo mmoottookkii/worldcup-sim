@@ -105,6 +105,7 @@
 
     .back-button {
       margin-top: 30px;
+      background-color:#FF6928;
     }
 
     @media (max-width: 600px) {
@@ -123,6 +124,8 @@
         padding: 12px;
       }
 
+  .hide-on-mobile {
+    display: none;
 
     }
   </style>
@@ -137,7 +140,7 @@
   <div class="team-container">
     <!-- チーム 赤 -->
     <div class="team-box">
-      <h3>チーム 赤</h3>
+      <h3 class="hide-on-mobile">チーム 赤</h3>
       <label for="region-red">地域</label>
       <select id="region-red" onchange="updateCountryOptions('red')">
         <option value="">-- 地域を選択 --</option>
@@ -158,7 +161,7 @@
 
     <!-- チーム 青 -->
     <div class="team-box">
-      <h3>チーム 青</h3>
+      <h3 class="hide-on-mobile">チーム 青</h3>
       <label for="region-blue">地域</label>
       <select id="region-blue" onchange="updateCountryOptions('blue')">
         <option value="">-- 地域を選択 --</option>
@@ -257,17 +260,29 @@
       localStorage.setItem("team-red-jp", teamRedJP);
       localStorage.setItem("team-blue-jp", teamBlueJP);
 
-      localStorage.removeItem("formation_red_atk");
-      localStorage.removeItem("formation_red_mid");
-      localStorage.removeItem("formation_red_def");
-      localStorage.removeItem("formation_blue_atk");
-      localStorage.removeItem("formation_blue_mid");
-      localStorage.removeItem("formation_blue_def");
-      localStorage.removeItem("match_turn");
-      localStorage.removeItem("match_redScore");
-      localStorage.removeItem("match_blueScore");
-      localStorage.removeItem("match_isSecondHalfStarted");
-      localStorage.removeItem("match_isExtension");
+
+  localStorage.removeItem("formation_red_atk");
+  localStorage.removeItem("formation_red_mid");
+  localStorage.removeItem("formation_red_def");
+
+  localStorage.removeItem("formation_blue_atk");
+  localStorage.removeItem("formation_blue_mid");
+  localStorage.removeItem("formation_blue_def");
+
+  localStorage.removeItem("formation_red_positions");  // ← 追加
+  localStorage.removeItem("formation_blue_positions"); //
+
+  localStorage.removeItem("match_turn");
+  localStorage.removeItem("match_redScore");
+  localStorage.removeItem("match_blueScore");
+
+  localStorage.removeItem("match_isSecondHalfStarted");
+  localStorage.removeItem("match_isExtension");
+  localStorage.removeItem("match_isFirstHalfEnded");
+  localStorage.removeItem("match_isSideSwapped");
+
+  localStorage.removeItem("match_logs"); // ← ログも削除
+  isSecondHalfStarted = false;
 
       window.location.href = "playmatch.html";
     }

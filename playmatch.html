@@ -885,6 +885,10 @@ button:hover {
   <iframe id="changeFrame" src="" style="width:100%; height:100%; border:none;"></iframe>
 </div>
 
+<div id="changeModal2" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999;">
+ 
+  <iframe id="changeFrame2" src="" style="width:100%; height:100%; border:none;"></iframe>
+</div>
 
 </body>
       
@@ -1311,7 +1315,26 @@ function openChangeModal(teamRole) {
 
   const modal = document.getElementById("changeModal");
   const iframe = document.getElementById("changeFrame");
-  iframe.src = "change_player.html";  // ← 別ページを埋め込む
+
+  // 延長戦フラグ isExtension（親側で既に定義済み）を使用
+  iframe.onload = () => {
+    iframe.contentWindow.postMessage({ type: "extensionFlag", isExtension: isExtension }, "*");
+  };
+
+  iframe.src = "change_player.html"; // ページを再読み込み（onload を確実に発火させるため）
+  modal.style.display = "block";
+}
+
+
+// 選手配置変更モーダルウィンドウを開いたとき関数
+function openChangeModal2(teamRole) {
+  const teamId = teamRole === "red" ? redTeamId : blueTeamId;
+  localStorage.setItem("formteamId", teamId);
+  localStorage.setItem("formteamRole", teamRole);
+
+  const modal = document.getElementById("changeModal2");
+  const iframe = document.getElementById("changeFrame2");
+  iframe.src = "formation_select1.html";  // ← 別ページを埋め込む
   modal.style.display = "block";
 }
 
@@ -1348,6 +1371,36 @@ function closeChangeModal() {
   isPaused = false;  // 試合を再開
 }
 
+// 選手配置変更モーダルウィンドウを閉じたとき関数
+function closeChangeModal2() {
+  document.getElementById("changeModal2").style.display = "none";
+
+  // 最新の能力値を読み込み・再代入
+  const redAtk = localStorage.getItem("formation_red_atk");
+  const redMid = localStorage.getItem("formation_red_mid");
+  const redDef = localStorage.getItem("formation_red_def");
+
+  const blueAtk = localStorage.getItem("formation_blue_atk");
+  const blueMid = localStorage.getItem("formation_blue_mid");
+  const blueDef = localStorage.getItem("formation_blue_def");
+
+  if (redAtk && redMid && redDef) {
+    redtrack_a_value = parseFloat(redAtk);
+    redtrack_b_value = parseFloat(redMid);
+    redtrack_c_value = parseFloat(redDef);
+  }
+
+  if (blueAtk && blueMid && blueDef) {
+    bluetrack_a_value = parseFloat(blueAtk);
+    bluetrack_b_value = parseFloat(blueMid);
+    bluetrack_c_value = parseFloat(blueDef);
+  }
+
+  updateProbabilities();       // 再計算
+  renderRedDiceTracks();       // 表示も更新
+  renderBlueDiceTracks();
+
+}
 
 
 window.addEventListener("message", event => {
@@ -1358,7 +1411,13 @@ window.addEventListener("message", event => {
   }
 });
 
-
+window.addEventListener("message", event => {
+  if (event.data === "closeChangeModal2") {
+    setTimeout(() => {
+      closeChangeModal2();  // ← display:none の次のフレームで実行
+    }, 0);
+  }
+});
 
 
 // 選手配置変更フォーメーション変更ボタンクリックイベント
@@ -1366,14 +1425,14 @@ window.addEventListener("message", event => {
     
     localStorage.setItem("formteamId", redTeamId);
     localStorage.setItem("formteamRole", "red"); // ← 追加
-    window.location.href = "formation_select.html";
+    openChangeModal2("red");
   });
 
   document.getElementById("setformblue-button").addEventListener("click", function () {
     
     localStorage.setItem("formteamId", blueTeamId);
     localStorage.setItem("formteamRole", "blue"); // ← 追加
-    window.location.href = "formation_select.html";
+    openChangeModal2("blue");
   });
 
 
