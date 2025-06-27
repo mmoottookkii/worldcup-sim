@@ -112,38 +112,38 @@ fetch('db_init.json')
     request.onupgradeneeded = function (event) {
       const db = event.target.result;
 
-      (data.objectStores || []).forEach(storeDef => {
-        if (!db.objectStoreNames.contains(storeDef.name)) {
-          const store = db.createObjectStore(storeDef.name, {
+      for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+        if (!db.objectStoreNames.contains(storeName)) {
+          const store = db.createObjectStore(storeName, {
             keyPath: storeDef.keyPath,
             autoIncrement: storeDef.autoIncrement || false
           });
 
-          (storeDef.indexes || []).forEach(index => {
-            store.createIndex(index.name, index.keyPath, {
-              unique: index.unique || false,
-              multiEntry: index.multiEntry || false
+          for (const [indexName, indexDef] of Object.entries(storeDef.indexes || {})) {
+            store.createIndex(indexName, indexDef.keyPath, {
+              unique: indexDef.unique || false,
+              multiEntry: indexDef.multiEntry || false
             });
-          });
+          }
         }
-      });
+      }
     };
 
     request.onsuccess = function (event) {
       const db = event.target.result;
-      const tx = db.transaction(data.objectStores.map(s => s.name), "readwrite");
+      const tx = db.transaction(Object.keys(data.objectStores), "readwrite");
 
-      data.objectStores.forEach(storeDef => {
-        const store = tx.objectStore(storeDef.name);
+      for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+        const store = tx.objectStore(storeName);
         (storeDef.data || []).forEach(item => store.put(item));
-      });
+      }
 
       tx.oncomplete = function () {
         console.log("初期DBデータを自動登録しました");
       };
     };
   });
-    </script>
+</script>
   
 </body>
 </html>
