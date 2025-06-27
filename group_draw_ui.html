@@ -190,7 +190,7 @@ const regions = {
 
     async function getTeamTotal(teamId) {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("GameDB", 24);
+        const request = indexedDB.open("GameDB", 26);
         request.onerror = () => reject("DB open error");
         request.onsuccess = () => {
           const db = request.result;
@@ -247,7 +247,7 @@ const regions = {
 
      function openDatabase() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open("GameDB", 23);
+      const request = indexedDB.open("GameDB", 26);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;

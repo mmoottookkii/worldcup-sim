@@ -231,7 +231,7 @@
     };
 
     // 保存
-    const dbReq = indexedDB.open("GameDB", 25);
+    const dbReq = indexedDB.open("GameDB", 26);
     dbReq.onsuccess = () => {
       const db = dbReq.result;
       const tx = db.transaction("matchresults", "readwrite");
@@ -276,7 +276,7 @@
    
     function loadTeamsFromRegionGroupStats() {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("GameDB", 25);
+        const request = indexedDB.open("GameDB", 26);
         request.onsuccess = () => {
           const db = request.result;
           const tx = db.transaction("regiongroupstats", "readonly");
@@ -332,7 +332,7 @@ function renderRound(roundNumber) {
   const container = document.getElementById("matchList");
   container.innerHTML = "";
 
-  const dbReq = indexedDB.open("GameDB", 25);
+  const dbReq = indexedDB.open("GameDB", 26);
   dbReq.onsuccess = () => {
     const db = dbReq.result;
     const tx = db.transaction("matchresults", "readonly");
@@ -486,7 +486,7 @@ document.getElementById("closeIframeBtn").onclick = () => {
       timestamp: Date.now()
     };
 
-    const dbReq = indexedDB.open("GameDB", 25);
+    const dbReq = indexedDB.open("GameDB", 26);
     dbReq.onsuccess = () => {
       const db = dbReq.result;
       const tx = db.transaction("matchresults", "readwrite");

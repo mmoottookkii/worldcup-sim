@@ -365,7 +365,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 25
+    const request = indexedDB.open("GameDB", 26
 );
     request.onsuccess = () => {
       const db = request.result;
@@ -931,7 +931,7 @@ document.getElementById("pullDefaultBtn").addEventListener("click", () => {
     renderFormation(currentFormation);
 
     // デフォルトポジションをDBから取得
-    const request = indexedDB.open("GameDB", 25);
+    const request = indexedDB.open("GameDB", 26);
     request.onsuccess = () => {
       const db = request.result;
       const tx = db.transaction("playerpositions", "readonly");

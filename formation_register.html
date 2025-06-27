@@ -332,7 +332,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 25
+    const request = indexedDB.open("GameDB", 26
 
 );
     request.onsuccess = () => {
@@ -620,7 +620,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const total = parseInt(document.getElementById("total-value").textContent) || 0;
 
   // ★バージョンを上げて、onupgradeneededを追加する
-  const request = indexedDB.open("GameDB", 25);
+  const request = indexedDB.open("GameDB", 26);
 
   request.onupgradeneeded = function(e) {
     const db = e.target.result;

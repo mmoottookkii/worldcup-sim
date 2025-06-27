@@ -361,7 +361,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 25
+    const request = indexedDB.open("GameDB", 26
 
 );
     request.onsuccess = () => {
@@ -736,7 +736,7 @@ originalPositions = Array.from(document.querySelectorAll(".position")).map(pos =
   }
 
   // 2. localStorageが無ければ IndexedDB から配置情報を取得
-  const request = indexedDB.open("GameDB", 25);
+  const request = indexedDB.open("GameDB", 26);
   request.onsuccess = () => {
     const db = request.result;
     const tx = db.transaction("playerpositions", "readonly");
