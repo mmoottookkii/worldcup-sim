@@ -107,41 +107,65 @@
 fetch('db_init.json')
   .then(res => res.json())
   .then(data => {
-    const request = indexedDB.open("GameDB", data.version + 1); // 強制バージョンUPでonupgradeneeded発火
+    // 1. 既存DBを削除
+    const deleteRequest = indexedDB.deleteDatabase("GameDB");
 
-    request.onupgradeneeded = function (event) {
-      const db = event.target.result;
+    deleteRequest.onsuccess = () => {
+      console.log("旧DBを削除しました。新規作成を開始します。");
 
-      for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
-        if (!db.objectStoreNames.contains(storeName)) {
-          const store = db.createObjectStore(storeName, {
-            keyPath: storeDef.keyPath,
-            autoIncrement: storeDef.autoIncrement || false
-          });
+      // 2. 新規DBオープン（バージョンは data.version+1 などでOK）
+      const request = indexedDB.open("GameDB", data.version + 1);
 
-          for (const [indexName, indexDef] of Object.entries(storeDef.indexes || {})) {
-            store.createIndex(indexName, indexDef.keyPath, {
-              unique: indexDef.unique || false,
-              multiEntry: indexDef.multiEntry || false
+      request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+
+        for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+          if (!db.objectStoreNames.contains(storeName)) {
+            const store = db.createObjectStore(storeName, {
+              keyPath: storeDef.keyPath,
+              autoIncrement: storeDef.autoIncrement || false
             });
+
+            for (const [indexName, indexDef] of Object.entries(storeDef.indexes || {})) {
+              store.createIndex(indexName, indexDef.keyPath, {
+                unique: indexDef.unique || false,
+                multiEntry: indexDef.multiEntry || false
+              });
+            }
           }
         }
-      }
-    };
+      };
 
-    request.onsuccess = function (event) {
-      const db = event.target.result;
-      const tx = db.transaction(Object.keys(data.objectStores), "readwrite");
+      request.onsuccess = function(event) {
+        const db = event.target.result;
+        const tx = db.transaction(Object.keys(data.objectStores), "readwrite");
 
-      for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
-        const store = tx.objectStore(storeName);
-        (storeDef.data || []).forEach(item => store.put(item));
-      }
+        for (const [storeName, storeDef] of Object.entries(data.objectStores)) {
+          const store = tx.objectStore(storeName);
+          (storeDef.data || []).forEach(item => store.put(item));
+        }
 
-      tx.oncomplete = function () {
-        console.log("初期DBデータを自動登録しました");
+        tx.oncomplete = () => {
+          console.log("新規DB作成とデータ投入が完了しました。");
+          db.close();
+        };
+
+        tx.onerror = (e) => {
+          console.error("トランザクションエラー", e.target.error);
+        };
+      };
+
+      request.onerror = (e) => {
+        console.error("DBオープンエラー", e.target.error);
       };
     };
+
+    deleteRequest.onerror = (e) => {
+      console.error("DB削除エラー", e.target.error);
+    };
+  })
+  .catch(e => {
+    console.error("db_init.jsonの読み込みエラー", e);
   });
 </script>
   
