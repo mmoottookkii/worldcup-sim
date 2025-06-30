@@ -2892,10 +2892,10 @@ if (isPlaying) return;  // 追加: 実行中なら即リターン
     if (!isFastMode) await showGoal(position);
     if (position >= 3) {
       redScore++;
-      appendLog("${redTeamJP}に1点。位置リセット。\n");
+      appendLog(`${redTeamJP}に1点。位置リセット。\n`);
     } else {
       blueScore++;
-      appendLog("${blueTeamJP}に1点。位置リセット。\n");
+      appendLog(`${blueTeamJP}に1点。位置リセット。\n`);
     }
     position = 0;
     backattackMode = null;
