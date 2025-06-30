@@ -336,7 +336,6 @@ function updateNextKnockoutFromResult(finishedMatchId, finishedWinner) {
 
 
 // ページロード時にスコアが残っている場合の処理
-// ページロード時にスコアが残っている場合の処理
 document.addEventListener("DOMContentLoaded", () => {
     const redScore = localStorage.getItem("match_redScore");
     const blueScore = localStorage.getItem("match_blueScore");
@@ -473,16 +472,36 @@ function renderKnockout() {
                         // 上段: 国名A vs 国名B
     const namesDiv = document.createElement("div");
     namesDiv.className = "team-names";
-    const nameA = document.createElement("span");
-    nameA.textContent = teamNameMap[match.home] || match.home || "未決定";
-    const nameB = document.createElement("span");
-    nameB.textContent = teamNameMap[match.away] || match.away || "未決定";
-    const vs = document.createElement("span");
-    vs.textContent = match.winner ? `${match.homeScore} - ${match.awayScore}` : "vs";
-    vs.className = "vs";
-    namesDiv.appendChild(nameA);
-    namesDiv.appendChild(vs);
-    namesDiv.appendChild(nameB);
+
+let homeName = teamNameMap[match.home] || match.home || "未決定";
+let awayName = teamNameMap[match.away] || match.away || "未決定";
+
+// ☆マーク付加処理
+if (
+    typeof match.homeScore === "number" &&
+    typeof match.awayScore === "number" &&
+    match.homeScore === match.awayScore &&
+    match.winner
+) {
+    if (match.winner === match.home) {
+        homeName += "☆";
+    } else if (match.winner === match.away) {
+        awayName += "☆";
+    }
+}
+    
+const nameA = document.createElement("span");
+nameA.textContent = homeName;
+const nameB = document.createElement("span");
+nameB.textContent = awayName;
+
+const vs = document.createElement("span");
+vs.textContent = match.winner ? `${match.homeScore} - ${match.awayScore}` : "vs";
+vs.className = "vs";
+
+namesDiv.appendChild(nameA);
+namesDiv.appendChild(vs);
+namesDiv.appendChild(nameB);
 
     // 下段: 国旗A [観戦] 国旗B
     const flagsDiv = document.createElement("div");
@@ -528,8 +547,6 @@ function renderKnockout() {
 
 
 renderKnockout();
-
-
 
 
 // 決勝勝者表示＋クリックで国歌再生処理
