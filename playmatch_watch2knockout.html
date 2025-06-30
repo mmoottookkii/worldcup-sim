@@ -314,6 +314,19 @@ button:hover {
   white-space: nowrap;
 }
 
+
+#reset-button {
+      background-color: #f9d342;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      color: #203a43;
+      border-radius: 5px;
+      cursor: pointer;
+ display:none;
+}
+
+
 /* ラベルも文字サイズ調整 */
 .top-controls label {
   font-size: 13px;
@@ -732,7 +745,7 @@ button:hover {
     
     <!-- 赤チーム -->
     <div class="flag-container">
-      <img id="red-flag-icon" class="flag-img" alt="Red Flag">
+      <img id="red-flag-icon" src="flagpng/franceicon.png" class="flag-img" alt="Red Flag">
       <img src="flagpng/frame.png" class="flag-frame">
     </div>
 
@@ -748,7 +761,7 @@ button:hover {
     <!-- 青チーム -->
     <div class="flag-container">
       <img src="flagpng/frame.png" class="flag-frame">
-      <img id="blue-flag-icon"  class="flag-img" alt="Blue Flag">
+      <img id="blue-flag-icon" src="flagpng/brazilicon.png" class="flag-img" alt="Blue Flag">
     </div>
   </div>
 </div>
@@ -885,6 +898,10 @@ button:hover {
   <iframe id="changeFrame" src="" style="width:100%; height:100%; border:none;"></iframe>
 </div>
 
+<div id="changeModal2" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999;">
+ 
+  <iframe id="changeFrame2" src="" style="width:100%; height:100%; border:none;"></iframe>
+</div>
 
 </body>
       
@@ -965,44 +982,6 @@ button:hover {
   redDiceProbabilities = [RedAP, RedBP, RedCP];
   blueDiceProbabilities = [BlueAP, BlueBP, BlueCP];
 }
-
-
-// indexedDBやlocalstorageからデータを取得)
-async function initializeFormationAndStats() {
-  try {
-
-
-
-
-  } catch (e) {
-    console.error("初期化失敗:", e);
-  }
-
-  updateTurnCounter();
-}
-
-// ここで実行（必要なタイミングで）
-initializeFormationAndStats();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   // 国名を左・右のデータバーラベルに表示
@@ -1222,8 +1201,7 @@ window.addEventListener("DOMContentLoaded", async () => {
      logBox.scrollTop = logBox.scrollHeight;
       }
 
-
-      const savedFirstHalfEnded = localStorage.getItem("match_isFirstHalfEnded");
+    const savedFirstHalfEnded = localStorage.getItem("match_isFirstHalfEnded");
     if (savedFirstHalfEnded !== null) isFirstHalfEnded = savedFirstHalfEnded === "true";
     const savedSideSwapped = localStorage.getItem("match_isSideSwapped");
     if (savedSideSwapped !== null) isSideSwapped = savedSideSwapped === "true";
@@ -1250,7 +1228,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     applyColors(blueTeamId, brazilIndex);
 
 
-  
     // 能力データ読み込み
 
 let redFormation = await loadFormationValues(redTeamId);
@@ -1286,16 +1263,19 @@ if (blueAtkLS !== null && blueMidLS !== null && blueDefLS !== null) {
     bluetrack_c_value = blueFormation.defence;
 
 
+// フォーメーション変更による一時的な能力値の削除(保留中)
+//localStorage.removeItem("formation_red_atk");
+//localStorage.removeItem("formation_red_mid");
+//localStorage.removeItem("formation_red_def");
+
+//localStorage.removeItem("formation_blue_atk");
+//localStorage.removeItem("formation_blue_mid");
+//localStorage.removeItem("formation_blue_def");
+
+
+
     // 頻度再計算
     updateProbabilities();
-
-
-
-
-    updateProbabilities();
-  
-  
-  
 
     // 確率データバー表示
     renderRedDiceTracks();
@@ -1327,29 +1307,16 @@ if (blueAtkLS !== null && blueMidLS !== null && blueDefLS !== null) {
       });
     });
 
-
   } catch (e) {
     console.error("初期化失敗:", e);
   }
 
-
 updateTurnCounter(); 
-window.parent.postMessage({ type: "readyForFastStart" }, "*");
 
 });
 
 
-// 親から命令を受けて実行するトリガー！
-window.addEventListener("message", (event) => {
-  if (event.data?.type === "triggerFastStart") {
-    triggerFastStart();
-  }
-});
 
-function triggerFastStart() {
-  const fastBtn = document.getElementById("fast-start-button");
-  if (fastBtn) fastBtn.click();
-}
 
 // 選手交代モーダルウィンドウを開いたとき関数
 
@@ -1361,7 +1328,25 @@ function openChangeModal(teamRole) {
 
   const modal = document.getElementById("changeModal");
   const iframe = document.getElementById("changeFrame");
-  iframe.src = "change_player.html";  // ← 別ページを埋め込む
+
+  // 延長戦フラグ isExtension（親側で既に定義済み）を使用
+  iframe.onload = () => {
+    iframe.contentWindow.postMessage({ type: "extensionFlag", isExtension: isExtension }, "*");
+  };
+
+  iframe.src = "change_player.html"; // ページを再読み込み（onload を確実に発火させるため）
+  modal.style.display = "block";
+}
+
+// 選手配置変更モーダルウィンドウを開いたとき関数
+function openChangeModal2(teamRole) {
+  const teamId = teamRole === "red" ? redTeamId : blueTeamId;
+  localStorage.setItem("formteamId", teamId);
+  localStorage.setItem("formteamRole", teamRole);
+
+  const modal = document.getElementById("changeModal2");
+  const iframe = document.getElementById("changeFrame2");
+  iframe.src = "formation_select1.html";  // ← 別ページを埋め込む
   modal.style.display = "block";
 }
 
@@ -1398,6 +1383,36 @@ function closeChangeModal() {
   isPaused = false;  // 試合を再開
 }
 
+// 選手配置変更モーダルウィンドウを閉じたとき関数
+function closeChangeModal2() {
+  document.getElementById("changeModal2").style.display = "none";
+
+  // 最新の能力値を読み込み・再代入
+  const redAtk = localStorage.getItem("formation_red_atk");
+  const redMid = localStorage.getItem("formation_red_mid");
+  const redDef = localStorage.getItem("formation_red_def");
+
+  const blueAtk = localStorage.getItem("formation_blue_atk");
+  const blueMid = localStorage.getItem("formation_blue_mid");
+  const blueDef = localStorage.getItem("formation_blue_def");
+
+  if (redAtk && redMid && redDef) {
+    redtrack_a_value = parseFloat(redAtk);
+    redtrack_b_value = parseFloat(redMid);
+    redtrack_c_value = parseFloat(redDef);
+  }
+
+  if (blueAtk && blueMid && blueDef) {
+    bluetrack_a_value = parseFloat(blueAtk);
+    bluetrack_b_value = parseFloat(blueMid);
+    bluetrack_c_value = parseFloat(blueDef);
+  }
+
+  updateProbabilities();       // 再計算
+  renderRedDiceTracks();       // 表示も更新
+  renderBlueDiceTracks();
+
+}
 
 
 window.addEventListener("message", event => {
@@ -1408,7 +1423,13 @@ window.addEventListener("message", event => {
   }
 });
 
-
+window.addEventListener("message", event => {
+  if (event.data === "closeChangeModal2") {
+    setTimeout(() => {
+      closeChangeModal2();  // ← display:none の次のフレームで実行
+    }, 0);
+  }
+});
 
 
 // 選手配置変更フォーメーション変更ボタンクリックイベント
@@ -1416,14 +1437,14 @@ window.addEventListener("message", event => {
     
     localStorage.setItem("formteamId", redTeamId);
     localStorage.setItem("formteamRole", "red"); // ← 追加
-    window.location.href = "formation_select.html";
+    openChangeModal2("red");
   });
 
   document.getElementById("setformblue-button").addEventListener("click", function () {
     
     localStorage.setItem("formteamId", blueTeamId);
     localStorage.setItem("formteamRole", "blue"); // ← 追加
-    window.location.href = "formation_select.html";
+    openChangeModal2("blue");
   });
 
 
@@ -1485,6 +1506,10 @@ function clearMatchState() {
   isSecondHalfStarted = false;
 }
 
+
+
+
+
 // サイコロカウンター分数宣言
     let redAattempt = 0;  // 試行回数（分母）
     let redAarise = 0; // 成功回数（分子）
@@ -1516,14 +1541,14 @@ const blueDiceDivs = [
 ];
 
 
-// 対戦相手選択画面に戻るボタンイベント
+// 決勝トーナメント画面に戻るボタンイベント
 document.getElementById('reset-button').addEventListener('click', () => {
   
 //location.reload(); // ページをリロード（新規読み込み）
 
   clearMatchState(); 
 
-　window.location.href = "team_select.html";
+　window.location.href = "knockout_schedule_viewer.html";
 
 });
 
@@ -1573,6 +1598,7 @@ document.getElementById('manual-start-button').addEventListener('click', () => {
     document.getElementById('setformblue-button').style.display = 'none';
   }
 });
+
 
 // 高速モードスタートイベント
 document.getElementById('fast-start-button').addEventListener('click', () => {
@@ -1699,6 +1725,7 @@ function appendLog(text) {
 }
 
 
+
 // ラジオボックス色の更新関数
 function updateRadioColors() {
 document.querySelectorAll('input[name="position"]').forEach(radio => {
@@ -1756,11 +1783,11 @@ function updateDiceDots(diceResults, diceDivs) {
 
 // 自動手動高速モードボタンの表示関数
 function showModeButtons() {
-  //document.getElementById('start-button').style.display = 'inline-block';
-  //document.getElementById('manual-start-button').style.display = 'inline-block';
-  //document.getElementById('fast-start-button').style.display = 'inline-block'; 
-  //document.getElementById('setformred-button').style.display = 'inline-block'; 
-  //document.getElementById('setformblue-button').style.display = 'inline-block'; 
+  document.getElementById('start-button').style.display = 'inline-block';
+  document.getElementById('manual-start-button').style.display = 'inline-block';
+  document.getElementById('fast-start-button').style.display = 'inline-block'; 
+  document.getElementById('setformred-button').style.display = 'inline-block'; 
+  document.getElementById('setformblue-button').style.display = 'inline-block'; 
 }
 
 // 自動手動高速モードボタンの非表示関数
@@ -1769,12 +1796,7 @@ function hideModeButtons() {
   document.getElementById('manual-start-button').style.display = 'none';
   document.getElementById('fast-start-button').style.display = 'none'; 
   document.getElementById('setformred-button').style.display = 'none'; 
-  document.getElementById('setformblue-button').style.display = 'none';
-
-  document.getElementById('changered-button').style.display = 'none';
-  document.getElementById('changeblue-button').style.display = 'none';
-
-    document.getElementById('reset-button').style.display = 'none'; 
+  document.getElementById('setformblue-button').style.display = 'none'; 
 }
 
 
@@ -1868,6 +1890,10 @@ function resetGame() {
 }
 
 
+
+
+
+
 // ゴールメッセージ表示関数非同期
 async function showGoal(pos) {
   const redMsg = document.getElementById('red-goal-message');
@@ -1889,6 +1915,7 @@ async function showGoal(pos) {
     blueMsg.style.display = 'none';
   }
 }
+
 
 
 // サイコロアニメーションリセット関数
@@ -2003,6 +2030,8 @@ function renderBlueDiceTracks() {
 }
 
 
+
+
 //ハーフタイム陣地入れ替え関数
 
 function swapSideColumnsAndReorderDice() {
@@ -2057,6 +2086,9 @@ function reversePositionRadios() {
 }
 
 
+
+
+
 //メインプレーループ実行機能非同期
 
 async function playTurn() {
@@ -2076,27 +2108,36 @@ async function playTurn() {
     isFirstHalfEnded = true; // ← これで再実行を防ぐ！
     isSideSwapped = true; // ← ここでセット
 
-    //saveMatchState(); // 試合の状態情報を保存
+    saveMatchState(); // 試合の状態情報を保存
     return false;
   }
 
   if (turn > maxTurns) {
-    
+    if (!isExtension && !isPK && checkExtensionCondition()) {
+      showExtensionButton();
+    } else if (isExtension && checkExtensionCondition()) {
+      showPKButton();
+    } else {
       if (!isFastMode) playGamesetYell();
       showGameOverMessage(
         isPK
           ? "PK戦終了！"
           : isExtension
-            ? "試合終了！"
-            : "試合終了！"  );
+            ? "延長戦終了！"
+            : "試合終了！"
+      );
 
        clearMatchState(); 
-
-  localStorage.setItem("match_redScore", redScore);
-  localStorage.setItem("match_blueScore", blueScore);
-  parent.postMessage({ type: "fastMatchFinished" }, "*");
+       
+    let winner = (redScore > blueScore) ? redTeamId : blueTeamId;
+ 
+    localStorage.setItem("match_redScore", redScore);
+    localStorage.setItem("match_blueScore", blueScore);
+    localStorage.setItem("match_winner", winner);
     
-
+    document.getElementById("reset-button").style.display = "block";
+    
+    }
     return false;
   }
 
@@ -3004,10 +3045,19 @@ fractions.forEach(({ selector, arise, attempt }) => {
   
 if (turn % 2 === 0 && position !== 0) {
   showGameOverMessage("PK戦終了！");
-  let winner = (position > 0) ? `${redTeamJP}` : `${blueTeamJP}`;
-  appendLog(`\n最終結果: ${winner}の勝利`);
+  let winner = (position > 0) ? `${redTeamId}` : `${blueTeamId}`;
+  let winnerJP = (position > 0) ? `${redTeamIdJP}` : `${blueTeamIdJP}`;
+
+  appendLog(`\n最終結果: ${winnerJP}の勝利`);
    if (!isFastMode) playGamesetYell();
    clearMatchState(); 
+   
+    localStorage.setItem("match_redScore", redScore);
+    localStorage.setItem("match_blueScore", blueScore);
+    localStorage.setItem("match_winner", winner);
+   
+   document.getElementById("reset-button").style.display = "block";
+   
   return false;
 }
 

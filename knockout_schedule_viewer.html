@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>決勝トーナメント表</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+body {
+    margin: 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    color: #ffe066;
+}
+#matchList {
+    width: 100%;
+    max-width: 420px;
+}
+.match {
+    background: #ffffff22;
+    margin: 0.5rem 0;
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.team-names {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.3rem;
+    flex-wrap: nowrap;
+}
+
+.team-names .vs {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.team-flags {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.8rem;
+    margin-top: 0.5rem;
+}
+
+.team-flags img {
+    width: 42px;
+    height: 30px;
+}
+
+.watch-button {
+    background-color: #bce2e8;
+    color: #203a43;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.watch-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+footer {
+    margin-top: 2rem;
+    color: #ccc;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* タブ関連の調整 */
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 4px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    background: #ffffff;
+    border: 2px solid #007acc;
+    //border-radius: 9999px;
+    color: #007acc;
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tab-btn:hover {
+    background: #007acc;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.tab-btn.active {
+    background: #007acc;
+    color: white;
+    font-weight: bold;
+}
+
+.tab-btn.back-btn {
+    background: #FF6928;
+    border-color: #FF6928;
+    color: white;
+}
+
+.tab-btn.back-btn:hover {
+    background: #d32f2f;
+    border-color: #d32f2f;
+}
+
+@media (max-width: 400px) {
+    .team-names {
+        font-size: 1.0rem;
+    }
+    .team-names .vs {
+        font-size: 1.0rem;
+    }
+    .team-flags img {
+        width: 42px;
+        height: 30px;
+    }
+    .watch-button {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.7rem;
+       
+    }
+
+    .tab-btn {
+        font-size: 0.9rem;
+        padding: 3px 8px;
+    }
+}
+
+
+</style>
+</head>
+<body>
+<div id="knockoutNav"></div>
+<h1 id="roundTitle">ラウンド16</h1>
+<div id="matchList"></div>
+<footer>
+  &copy; 2025 ワールドサッカー シミュレーション
+</footer>
+<script>
+    const teamNameMap = {
+      england: "イングランド", germany: "ドイツ", france: "フランス", spain: "スペイン", italy: "イタリア",
+      netherlands: "オランダ", portugal: "ポルトガル", croatia: "クロアチア", belgium: "ベルギー", sweden: "スウェーデン",
+      switzerland: "スイス", poland: "ポーランド", austria: "オーストリア", denmark: "デンマーク", norway: "ノルウェー",
+      ukraine: "ウクライナ", serbia: "セルビア", czech: "チェコ", scotland: "スコットランド", wales: "ウェールズ",
+      finland: "フィンランド", ireland: "アイルランド", iceland: "アイスランド", greece: "ギリシャ", slovakia: "スロバキア",
+      slovenia: "スロベニア", hungary: "ハンガリー", turkey: "トルコ", israel: "イスラエル", bulgaria: "ブルガリア",
+      romania: "ルーマニア", georgia: "ジョージア", northmacedonia: "北マケドニア", albania: "アルバニア",
+      bosnia: "ボスニア", montenegro: "モンテネグロ", russia: "ロシア",
+      brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+      paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア",
+      nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+      cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+      ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+      panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+      costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+      japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール",
+      china: "中国", saudiarabia: "サウジアラビア", northkorea: "北朝鮮", uae: "UAE", jordan: "ヨルダン",
+      uzbekistan: "ウズベキスタン"
+    };
+
+const KNOCKOUT_ROUNDS = ["R16", "QF", "SF", "F/3rd"];
+const roundTitleMap = {
+    "R16": "16強",
+    "QF": "8強",
+    "SF": "4強",
+    "F/3rd": "決勝"
+};
+
+const roundTitleDisplayMap = {
+    "R16": "ラウンド16",
+    "QF": "準々決勝",
+    "SF": "準決勝",
+    "F/3rd": "3位決定 & 決勝"
+};
+
+const currentKnockoutRound = localStorage.getItem("currentKnockoutRound") || "R16"; // ★★★ 追加
+
+function setupKnockoutNav() {
+    const nav = document.getElementById("knockoutNav");
+    nav.innerHTML = "";
+    nav.className = "tab-nav";
+
+    KNOCKOUT_ROUNDS.forEach(round => {
+        const btn = document.createElement("button");
+        btn.textContent = roundTitleMap[round] || round;
+        btn.className = "tab-btn";
+        if (round === currentKnockoutRound) {
+            btn.classList.add("active");
+        }
+        btn.onclick = () => {
+            localStorage.setItem("currentKnockoutRound", round);
+            location.reload();
+        };
+        nav.appendChild(btn);
+    });
+
+    // 戻るボタン
+    const backBtn = document.createElement("button");
+    backBtn.textContent = "戻る";
+    backBtn.className = "tab-btn back-btn";
+    backBtn.onclick = () => {
+        location.href = "worldcup_index.html";
+    };
+    nav.appendChild(backBtn);
+}
+
+function navigateKnockout(offset) {
+    let current = localStorage.getItem("currentKnockoutRound") || "R16";
+    let idx = KNOCKOUT_ROUNDS.indexOf(current);
+    idx = Math.max(0, Math.min(KNOCKOUT_ROUNDS.length - 1, idx + offset));
+    localStorage.setItem("currentKnockoutRound", KNOCKOUT_ROUNDS[idx]);
+    location.reload();
+}
+
+setupKnockoutNav();
+
+
+
+function idbGet(store, key) {
+    return new Promise((resolve) => {
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+    });
+}
+
+
+function updateNextKnockoutFromResult(finishedMatchId, finishedWinner) {
+    const dbRequest = indexedDB.open("GameDB", 27);
+    dbRequest.onsuccess = () => {
+        const db = dbRequest.result;
+        const tx = db.transaction(["knockout", "matchresultsknockout"], "readwrite");
+        const knockoutStore = tx.objectStore("knockout");
+        const resultStore = tx.objectStore("matchresultsknockout");
+
+        if (finishedMatchId.startsWith("SF")) {
+
+            Promise.all([
+                idbGet(resultStore, "SF_1"),
+                idbGet(resultStore, "SF_2"),
+                idbGet(knockoutStore, "SF_1"),
+                idbGet(knockoutStore, "SF_2")
+            ]).then(([sf1Result, sf2Result, sf1Match, sf2Match]) => {
+                const sf1Winner = sf1Result ? sf1Result.winner : null;
+                const sf2Winner = sf2Result ? sf2Result.winner : null;
+
+                const sf1Loser = sf1Match ? (sf1Winner === sf1Match.home ? sf1Match.away : sf1Match.home) : null;
+                const sf2Loser = sf2Match ? (sf2Winner === sf2Match.home ? sf2Match.away : sf2Match.home) : null;
+
+                // F
+                const finalMatch = {
+                    matchId: "F",
+                    round: "F/3rd",
+                    home: sf1Winner,
+                    away: sf2Winner
+                };
+                knockoutStore.put(finalMatch);
+
+                // 3RD
+                const thirdMatch = {
+                    matchId: "3RD",
+                    round: "F/3rd",
+                    home: sf1Loser,
+                    away: sf2Loser
+                };
+                knockoutStore.put(thirdMatch);
+
+                console.log("✅ 決勝・3位決定戦カード確定", finalMatch, thirdMatch);
+                renderKnockout();
+            });
+
+        } else {
+            // R16 / QF
+            const mapping = [
+                { from: "R16_1", target: "QF_1", side: "home" },
+                { from: "R16_2", target: "QF_1", side: "away" },
+                { from: "R16_3", target: "QF_2", side: "home" },
+                { from: "R16_4", target: "QF_2", side: "away" },
+                { from: "R16_5", target: "QF_3", side: "home" },
+                { from: "R16_6", target: "QF_3", side: "away" },
+                { from: "R16_7", target: "QF_4", side: "home" },
+                { from: "R16_8", target: "QF_4", side: "away" },
+                { from: "QF_1", target: "SF_1", side: "home" },
+                { from: "QF_2", target: "SF_1", side: "away" },
+                { from: "QF_3", target: "SF_2", side: "home" },
+                { from: "QF_4", target: "SF_2", side: "away" }
+            ];
+
+            const related = mapping.filter(m => m.from === finishedMatchId);
+            related.forEach(m => {
+                const req = knockoutStore.get(m.target);
+                req.onsuccess = () => {
+                    let match = req.result || {
+                        matchId: m.target,
+                        round: m.target.startsWith("QF") ? "QF" : "SF"
+                    };
+
+                    if (m.side === "home") match.home = finishedWinner;
+                    if (m.side === "away") match.away = finishedWinner;
+                    knockoutStore.put(match);
+                };
+            });
+        }
+    };
+}
+
+
+
+// ページロード時にスコアが残っている場合の処理
+// ページロード時にスコアが残っている場合の処理
+document.addEventListener("DOMContentLoaded", () => {
+    const redScore = localStorage.getItem("match_redScore");
+    const blueScore = localStorage.getItem("match_blueScore");
+    const winner = localStorage.getItem("match_winner");
+    const matchId = localStorage.getItem("last-match-knockout-id");
+    const round = localStorage.getItem("currentKnockoutRound") || "R16";
+
+    if (redScore !== null && blueScore !== null && winner && matchId) {
+        // 保存用オブジェクト作成
+        const record = {
+            id: matchId,
+            matchId: matchId,
+            round: round,
+            homeScore: parseInt(redScore),
+            awayScore: parseInt(blueScore),
+            winner: winner,
+            timestamp: Date.now()
+        };
+
+        // ストアへ保存
+        const dbRequest = indexedDB.open("GameDB", 27);
+        dbRequest.onsuccess = () => {
+            const db = dbRequest.result;
+            const tx = db.transaction("matchresultsknockout", "readwrite");
+            const store = tx.objectStore("matchresultsknockout");
+            store.put(record);
+
+            tx.oncomplete = () => {
+                console.log("✅ knockout試合結果保存完了");
+
+                // 試合情報をKnockoutストアから取得して敗者を計算
+                const dbRequest2 = indexedDB.open("GameDB", 27);
+                dbRequest2.onsuccess = () => {
+                    const db2 = dbRequest2.result;
+                    const tx2 = db2.transaction("knockout", "readonly");
+                    const store2 = tx2.objectStore("knockout");
+                    const getReq = store2.get(matchId);
+                    getReq.onsuccess = () => {
+                        const matchRecord = getReq.result;
+                        if (round === "SF" && matchRecord) {
+                            const loser = winner === matchRecord.home ? matchRecord.away : matchRecord.home;
+                            localStorage.setItem("lastMatchLoser", loser);
+                            console.log("💾 3位決定戦用 Loser 保存:", loser);
+                        }
+
+                        // 次ラウンド更新処理
+                        if (round === "R16" || round === "QF" || round === "SF") {
+                            updateNextKnockoutFromResult(matchId, winner);
+                        }
+
+                        // 再描画
+                        renderKnockout();
+
+ 
+
+
+// 決勝後のトロフィー表示実行
+if (currentRound === "F/3rd") {
+    displayChampionIfFinalFinished();
+}
+
+
+
+                        // localStorageの掃除
+                        localStorage.removeItem("match_redScore");
+                        localStorage.removeItem("match_blueScore");
+                        localStorage.removeItem("match_winner");
+                        localStorage.removeItem("last-match-knockout-id");
+                    };
+                };
+            };
+        };
+    }
+});
+
+//const teamNameMap = JSON.parse(localStorage.getItem("teamNameMap")) || {}; // { teamId: "日本" }
+const currentRound = localStorage.getItem("currentKnockoutRound") || "R16";
+//document.getElementById("roundTitle").textContent = roundTitleMap[currentRound] || currentRound;
+document.getElementById("roundTitle").textContent = roundTitleDisplayMap[currentRound] || currentRound;
+
+function renderKnockout() {
+    const currentKnockoutRound = localStorage.getItem("currentKnockoutRound") || "R16";
+
+    const request = indexedDB.open("GameDB", 27);
+    request.onsuccess = () => {
+        const db = request.result;
+        const tx = db.transaction(["knockout", "matchresultsknockout"], "readonly");
+        const store = tx.objectStore("knockout");
+        const resultStore = tx.objectStore("matchresultsknockout");
+
+        const index = store.index("by_round");
+        const req = index.getAll(currentKnockoutRound);
+
+        req.onsuccess = () => {
+            const matches = req.result;
+
+            // 追加: matchresultsknockout から結果を取得して結合
+            const resultReq = resultStore.getAll();
+            resultReq.onsuccess = () => {
+                const results = resultReq.result;
+
+                matches.forEach(match => {
+                    const result = results.find(r => r.matchId === match.matchId);
+                    if (result) {
+                        match.homeScore = result.homeScore;
+                        match.awayScore = result.awayScore;
+                        match.winner = result.winner;
+                    }
+                }); 
+
+                const container = document.getElementById("matchList");
+                container.innerHTML = "";
+
+                if (matches.length === 0) {
+                    // 試合カード未生成時の仮表示（最大4試合想定）
+                    for (let i = 0; i < (currentKnockoutRound === "SF" ? 2 : 4); i++) {
+                        const matchDiv = document.createElement("div");
+                        matchDiv.className = "match";
+
+                        const teamsDiv = document.createElement("div");
+                        teamsDiv.className = "teams";
+                        teamsDiv.textContent = "未決定 vs 未決定";
+
+                        matchDiv.appendChild(teamsDiv);
+                        container.appendChild(matchDiv);
+                    }
+                    return;
+                }
+
+                matches.forEach(match => {
+                    const matchDiv = document.createElement("div");
+                    matchDiv.className = "match";
+
+                        // 上段: 国名A vs 国名B
+    const namesDiv = document.createElement("div");
+    namesDiv.className = "team-names";
+    const nameA = document.createElement("span");
+    nameA.textContent = teamNameMap[match.home] || match.home || "未決定";
+    const nameB = document.createElement("span");
+    nameB.textContent = teamNameMap[match.away] || match.away || "未決定";
+    const vs = document.createElement("span");
+    vs.textContent = match.winner ? `${match.homeScore} - ${match.awayScore}` : "vs";
+    vs.className = "vs";
+    namesDiv.appendChild(nameA);
+    namesDiv.appendChild(vs);
+    namesDiv.appendChild(nameB);
+
+    // 下段: 国旗A [観戦] 国旗B
+    const flagsDiv = document.createElement("div");
+    flagsDiv.className = "team-flags";
+    const flagA = document.createElement("img");
+    flagA.src = `flags/${match.home || "unknown"}.png`;
+    flagA.alt = match.home || "未決定";
+    const flagB = document.createElement("img");
+    flagB.src = `flags/${match.away || "unknown"}.png`;
+    flagB.alt = match.away || "未決定";
+
+    const watchBtn = document.createElement("button");
+    watchBtn.textContent = "観戦";
+    watchBtn.className = "watch-button";
+    if (match.winner) {
+        watchBtn.disabled = true;
+    } else if (match.home && match.away) {
+        watchBtn.onclick = () => {
+            localStorage.setItem("team-red", match.home);
+            localStorage.setItem("team-blue", match.away);
+            localStorage.setItem("team-red-jp", teamNameMap[match.home] || match.home);
+            localStorage.setItem("team-blue-jp", teamNameMap[match.away] || match.away);
+            localStorage.setItem("last-match-knockout-id", match.matchId);
+            location.href = "playmatch_watch2knockout.html";
+        };
+    } else {
+        watchBtn.disabled = true;
+    }
+
+    flagsDiv.appendChild(flagA);
+    flagsDiv.appendChild(watchBtn);
+    flagsDiv.appendChild(flagB);
+
+    matchDiv.appendChild(namesDiv);
+    matchDiv.appendChild(flagsDiv);
+    container.appendChild(matchDiv);
+});
+            };
+        };
+    };
+}
+
+
+
+renderKnockout();
+
+
+
+
+// 決勝勝者表示＋クリックで国歌再生処理
+function displayChampionIfFinalFinished() {
+    const dbRequest = indexedDB.open("GameDB", 27);
+    dbRequest.onsuccess = () => {
+        const db = dbRequest.result;
+        const tx = db.transaction(["knockout", "matchresultsknockout"], "readonly");
+        const knockoutStore = tx.objectStore("knockout");
+        const resultStore = tx.objectStore("matchresultsknockout");
+
+        const getFinalMatch = knockoutStore.get("F");
+        getFinalMatch.onsuccess = () => {
+            const finalMatch = getFinalMatch.result;
+            if (!finalMatch || !finalMatch.matchId) return;
+
+            const getResult = resultStore.get("F");
+            getResult.onsuccess = () => {
+                const result = getResult.result;
+                if (result && result.winner) {
+                    const winnerId = result.winner;
+                    const winnerName = teamNameMap[winnerId] || winnerId;
+
+                    let championContainer = document.getElementById("championContainer");
+                    if (!championContainer) {
+                        championContainer = document.createElement("div");
+                        championContainer.id = "championContainer";
+                        championContainer.style.textAlign = "center";
+                        championContainer.style.margin = "20px 0";
+                        const footer = document.querySelector("footer");
+                        footer.parentNode.insertBefore(championContainer, footer);
+                    }
+
+                    // cup画像にクリック再生機能を付与
+                    championContainer.innerHTML = `
+                        <img id="championCup" src="cup.png" alt="Champion Cup" style="width:100px; cursor: pointer;"><br>
+                        <span style="font-size: 1.5em; font-weight: bold;">優勝国 ${winnerName}</span>
+                        <div style="font-size:0.9em; color:#555;">※クリックで国歌再生</div>
+                    `;
+
+                    const cupImg = document.getElementById("championCup");
+                    const audio = new Audio(`anthem/${winnerId}.mp3`);
+
+                    cupImg.addEventListener("click", () => {
+                        audio.play().catch(err => {
+                            alert("再生できませんでした。別のブラウザで試してください。");
+                            console.log(err);
+                        });
+                    });
+                }
+            };
+        };
+    };
+}
+
+
+if (currentRound === "F/3rd") {
+    displayChampionIfFinalFinished();
+}
+
+</script>
+</body>
+</html>

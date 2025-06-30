@@ -314,6 +314,19 @@ button:hover {
   white-space: nowrap;
 }
 
+
+#reset-button {
+      background-color: #f9d342;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      color: #203a43;
+      border-radius: 5px;
+      cursor: pointer;
+ display:none;
+}
+
+
 /* ラベルも文字サイズ調整 */
 .top-controls label {
   font-size: 13px;
@@ -1528,14 +1541,14 @@ const blueDiceDivs = [
 ];
 
 
-// 対戦相手選択画面に戻るボタンイベント
+// プレーオフ画面に戻るボタンイベント
 document.getElementById('reset-button').addEventListener('click', () => {
   
 //location.reload(); // ページをリロード（新規読み込み）
 
   clearMatchState(); 
 
-　window.location.href = "team_select.html";
+　window.location.href = "playoff_schedule_viewer.html";
 
 });
 
@@ -2115,6 +2128,15 @@ async function playTurn() {
       );
 
        clearMatchState(); 
+       
+    let winner = (redScore > blueScore) ? redTeamId : blueTeamId;
+ 
+    localStorage.setItem("match_redScore", redScore);
+    localStorage.setItem("match_blueScore", blueScore);
+    localStorage.setItem("match_winner", winner);
+    
+    document.getElementById("reset-button").style.display = "block";
+    
     }
     return false;
   }
@@ -3023,10 +3045,19 @@ fractions.forEach(({ selector, arise, attempt }) => {
   
 if (turn % 2 === 0 && position !== 0) {
   showGameOverMessage("PK戦終了！");
-  let winner = (position > 0) ? `${redTeamJP}` : `${blueTeamJP}`;
-  appendLog(`\n最終結果: ${winner}の勝利`);
+  let winner = (position > 0) ? `${redTeamId}` : `${blueTeamId}`;
+  let winnerJP = (position > 0) ? `${redTeamIdJP}` : `${blueTeamIdJP}`;
+
+  appendLog(`\n最終結果: ${winnerJP}の勝利`);
    if (!isFastMode) playGamesetYell();
    clearMatchState(); 
+   
+    localStorage.setItem("match_redScore", redScore);
+    localStorage.setItem("match_blueScore", blueScore);
+    localStorage.setItem("match_winner", winner);
+   
+   document.getElementById("reset-button").style.display = "block";
+   
   return false;
 }
 

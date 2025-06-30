@@ -1,11 +1,27 @@
 {
   "dbName": "GameDB",
-  "version": 25,
+  "version": 27,
   "objectStores": {
-    "finalgroups": {
-      "keyPath": "groupId",
+    "finalgroupstats": {
+      "keyPath": "groupid",
       "autoIncrement": false,
-      "indexes": {},
+      "indexes": {
+        "groupsector": {
+          "keyPath": "groupsector",
+          "multiEntry": false,
+          "unique": false
+        },
+        "regionname": {
+          "keyPath": "regionname",
+          "multiEntry": false,
+          "unique": false
+        },
+        "teamId": {
+          "keyPath": "teamId",
+          "multiEntry": false,
+          "unique": false
+        }
+      },
       "data": []
     },
     "finalists": {
@@ -184,10 +200,10 @@
         {
           "teamId": "costarica",
           "formation": "freestyle",
-          "attack": 30,
-          "midfield": 41,
-          "defence": 76,
-          "total": 147
+          "attack": 39,
+          "midfield": 39,
+          "defence": 74,
+          "total": 152
         },
         {
           "teamId": "croatia",
@@ -248,10 +264,10 @@
         {
           "teamId": "finland",
           "formation": "freestyle",
-          "attack": 45,
-          "midfield": 49,
-          "defence": 67,
-          "total": 163
+          "attack": 50,
+          "midfield": 47,
+          "defence": 59,
+          "total": 158
         },
         {
           "teamId": "france",
@@ -320,10 +336,10 @@
         {
           "teamId": "iceland",
           "formation": "freestyle",
-          "attack": 66,
-          "midfield": 46,
-          "defence": 54,
-          "total": 167
+          "attack": 64,
+          "midfield": 48,
+          "defence": 48,
+          "total": 161
         },
         {
           "teamId": "iran",
@@ -392,8 +408,8 @@
         {
           "teamId": "jordan",
           "formation": "freestyle",
-          "attack": 55,
-          "midfield": 19,
+          "attack": 50,
+          "midfield": 23,
           "defence": 19,
           "total": 94
         },
@@ -440,10 +456,10 @@
         {
           "teamId": "newzealand",
           "formation": "freestyle",
-          "attack": 41,
-          "midfield": 34,
-          "defence": 45,
-          "total": 121
+          "attack": 37,
+          "midfield": 37,
+          "defence": 46,
+          "total": 120
         },
         {
           "teamId": "nigeria",
@@ -504,9 +520,9 @@
         {
           "teamId": "poland",
           "formation": "freestyle",
-          "attack": 89,
-          "midfield": 62,
-          "defence": 81,
+          "attack": 98,
+          "midfield": 60,
+          "defence": 73,
           "total": 233
         },
         {
@@ -520,18 +536,18 @@
         {
           "teamId": "qatar",
           "formation": "freestyle",
-          "attack": 54,
-          "midfield": 37,
-          "defence": 49,
+          "attack": 47,
+          "midfield": 40,
+          "defence": 53,
           "total": 141
         },
         {
           "teamId": "romania",
           "formation": "freestyle",
           "attack": 51,
-          "midfield": 52,
+          "midfield": 51,
           "defence": 59,
-          "total": 163
+          "total": 161
         },
         {
           "teamId": "russia",
@@ -600,8 +616,8 @@
         {
           "teamId": "southkorea",
           "formation": "freestyle",
-          "attack": 58,
-          "midfield": 55,
+          "attack": 56,
+          "midfield": 57,
           "defence": 40,
           "total": 154
         },
@@ -755,1554 +771,205 @@
           "unique": false
         }
       },
-      "data": [
-        {
-          "id": "group_アジア_A_china_japan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "china",
-          "away": "japan",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945555890
-        },
-        {
-          "id": "group_アジア_A_china_jordan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "china",
-          "away": "jordan",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945206343
-        },
-        {
-          "id": "group_アジア_A_china_northkorea",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "china",
-          "away": "northkorea",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935281430
-        },
-        {
-          "id": "group_アジア_A_china_southkorea",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "china",
-          "away": "southkorea",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750857522012
-        },
-        {
-          "id": "group_アジア_A_iraq_japan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "iraq",
-          "away": "japan",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935291174
-        },
-        {
-          "id": "group_アジア_A_iraq_northkorea",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "iraq",
-          "away": "northkorea",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750857102013
-        },
-        {
-          "id": "group_アジア_A_japan_jordan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "japan",
-          "away": "jordan",
-          "redScore": 0,
-          "blueScore": 2,
-          "timestamp": 1750857540450
-        },
-        {
-          "id": "group_アジア_A_jordan_iraq",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "jordan",
-          "away": "iraq",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945562979
-        },
-        {
-          "id": "group_アジア_A_northkorea_japan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "northkorea",
-          "away": "japan",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945211328
-        },
-        {
-          "id": "group_アジア_A_northkorea_southkorea",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "northkorea",
-          "away": "southkorea",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945569075
-        },
-        {
-          "id": "group_アジア_A_southkorea_iraq",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "southkorea",
-          "away": "iraq",
-          "redScore": 4,
-          "blueScore": 1,
-          "timestamp": 1750945217351
-        },
-        {
-          "id": "group_アジア_A_southkorea_jordan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "A",
-          "home": "southkorea",
-          "away": "jordan",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750935286318
-        },
-        {
-          "id": "group_アジア_B_iran_saudiarabia",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "iran",
-          "away": "saudiarabia",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945610179
-        },
-        {
-          "id": "group_アジア_B_iran_uae",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "iran",
-          "away": "uae",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945256535
-        },
-        {
-          "id": "group_アジア_B_iran_uzbekistan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "iran",
-          "away": "uzbekistan",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935342087
-        },
-        {
-          "id": "group_アジア_B_qatar_saudiarabia",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "qatar",
-          "away": "saudiarabia",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935353991
-        },
-        {
-          "id": "group_アジア_B_qatar_uzbekistan",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "qatar",
-          "away": "uzbekistan",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750860039263
-        },
-        {
-          "id": "group_アジア_B_saudiarabia_uae",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "saudiarabia",
-          "away": "uae",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750860048653
-        },
-        {
-          "id": "group_アジア_B_uae_qatar",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "uae",
-          "away": "qatar",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945614851
-        },
-        {
-          "id": "group_アジア_B_uzbekistan_saudiarabia",
-          "phase": "group",
-          "region": "アジア",
-          "group": "B",
-          "home": "uzbekistan",
-          "away": "saudiarabia",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750945262544
-        },
-        {
-          "id": "group_アフリカ_A_ivorycoast_nigeria",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "ivorycoast",
-          "away": "nigeria",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945619571
-        },
-        {
-          "id": "group_アフリカ_A_ivorycoast_senegal",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "ivorycoast",
-          "away": "senegal",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945267264
-        },
-        {
-          "id": "group_アフリカ_A_ivorycoast_southafrica",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "ivorycoast",
-          "away": "southafrica",
-          "redScore": 4,
-          "blueScore": 0,
-          "timestamp": 1750935359207
-        },
-        {
-          "id": "group_アフリカ_A_ivorycoast_tunisia",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "ivorycoast",
-          "away": "tunisia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935058932
-        },
-        {
-          "id": "group_アフリカ_A_morocco_nigeria",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "morocco",
-          "away": "nigeria",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935370535
-        },
-        {
-          "id": "group_アフリカ_A_morocco_southafrica",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "morocco",
-          "away": "southafrica",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935064164
-        },
-        {
-          "id": "group_アフリカ_A_nigeria_senegal",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "nigeria",
-          "away": "senegal",
-          "redScore": 0,
-          "blueScore": 4,
-          "timestamp": 1750935069315
-        },
-        {
-          "id": "group_アフリカ_A_senegal_morocco",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "senegal",
-          "away": "morocco",
-          "redScore": 3,
-          "blueScore": 1,
-          "timestamp": 1750945624083
-        },
-        {
-          "id": "group_アフリカ_A_southafrica_nigeria",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "southafrica",
-          "away": "nigeria",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750945272127
-        },
-        {
-          "id": "group_アフリカ_A_southafrica_tunisia",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "southafrica",
-          "away": "tunisia",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945629379
-        },
-        {
-          "id": "group_アフリカ_A_tunisia_morocco",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "tunisia",
-          "away": "morocco",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945277119
-        },
-        {
-          "id": "group_アフリカ_A_tunisia_senegal",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "A",
-          "home": "tunisia",
-          "away": "senegal",
-          "redScore": 0,
-          "blueScore": 5,
-          "timestamp": 1750935364487
-        },
-        {
-          "id": "group_アフリカ_B_algeria_egypt",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "algeria",
-          "away": "egypt",
-          "redScore": 2,
-          "blueScore": 2,
-          "timestamp": 1750945454569
-        },
-        {
-          "id": "group_アフリカ_B_algeria_ghana",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "algeria",
-          "away": "ghana",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945097447
-        },
-        {
-          "id": "group_アフリカ_B_algeria_mali",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "algeria",
-          "away": "mali",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750898351367
-        },
-        {
-          "id": "group_アフリカ_B_cameroon_egypt",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "cameroon",
-          "away": "egypt",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750898369204
-        },
-        {
-          "id": "group_アフリカ_B_cameroon_mali",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "cameroon",
-          "away": "mali",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750845387482
-        },
-        {
-          "id": "group_アフリカ_B_egypt_ghana",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "egypt",
-          "away": "ghana",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750845402218
-        },
-        {
-          "id": "group_アフリカ_B_ghana_cameroon",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "ghana",
-          "away": "cameroon",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945460146
-        },
-        {
-          "id": "group_アフリカ_B_mali_egypt",
-          "phase": "group",
-          "region": "アフリカ",
-          "group": "B",
-          "home": "mali",
-          "away": "egypt",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945101743
-        },
-        {
-          "id": "group_ヨーロッパ_A_bulgaria_greece",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "bulgaria",
-          "away": "greece",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945529842
-        },
-        {
-          "id": "group_ヨーロッパ_A_bulgaria_norway",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "bulgaria",
-          "away": "norway",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750945177414
-        },
-        {
-          "id": "group_ヨーロッパ_A_bulgaria_slovenia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "bulgaria",
-          "away": "slovenia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750929317704
-        },
-        {
-          "id": "group_ヨーロッパ_A_bulgaria_turkey",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "bulgaria",
-          "away": "turkey",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750856712725
-        },
-        {
-          "id": "group_ヨーロッパ_A_france_greece",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "france",
-          "away": "greece",
-          "redScore": 3,
-          "blueScore": 0,
-          "timestamp": 1750935256893
-        },
-        {
-          "id": "group_ヨーロッパ_A_france_slovenia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "france",
-          "away": "slovenia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750856722461
-        },
-        {
-          "id": "group_ヨーロッパ_A_greece_norway",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "greece",
-          "away": "norway",
-          "redScore": 4,
-          "blueScore": 1,
-          "timestamp": 1750857248109
-        },
-        {
-          "id": "group_ヨーロッパ_A_norway_france",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "norway",
-          "away": "france",
-          "redScore": 0,
-          "blueScore": 5,
-          "timestamp": 1750945534513
-        },
-        {
-          "id": "group_ヨーロッパ_A_slovenia_greece",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "slovenia",
-          "away": "greece",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945181478
-        },
-        {
-          "id": "group_ヨーロッパ_A_slovenia_turkey",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "slovenia",
-          "away": "turkey",
-          "redScore": 2,
-          "blueScore": 3,
-          "timestamp": 1750945539130
-        },
-        {
-          "id": "group_ヨーロッパ_A_turkey_france",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "turkey",
-          "away": "france",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945187527
-        },
-        {
-          "id": "group_ヨーロッパ_A_turkey_norway",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "A",
-          "home": "turkey",
-          "away": "norway",
-          "redScore": 3,
-          "blueScore": 3,
-          "timestamp": 1750929326570
-        },
-        {
-          "id": "group_ヨーロッパ_B_austria_finland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "austria",
-          "away": "finland",
-          "redScore": 1,
-          "blueScore": 2,
-          "timestamp": 1750945493778
-        },
-        {
-          "id": "group_ヨーロッパ_B_austria_northmacedonia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "austria",
-          "away": "northmacedonia",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750945143904
-        },
-        {
-          "id": "group_ヨーロッパ_B_austria_russia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "austria",
-          "away": "russia",
-          "redScore": 2,
-          "blueScore": 4,
-          "timestamp": 1750935205152
-        },
-        {
-          "id": "group_ヨーロッパ_B_austria_spain",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "austria",
-          "away": "spain",
-          "redScore": 1,
-          "blueScore": 2,
-          "timestamp": 1750854415240
-        },
-        {
-          "id": "group_ヨーロッパ_B_bosnia_finland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "bosnia",
-          "away": "finland",
-          "redScore": 3,
-          "blueScore": 0,
-          "timestamp": 1750935226734
-        },
-        {
-          "id": "group_ヨーロッパ_B_bosnia_russia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "bosnia",
-          "away": "russia",
-          "redScore": 2,
-          "blueScore": 4,
-          "timestamp": 1750854512592
-        },
-        {
-          "id": "group_ヨーロッパ_B_finland_northmacedonia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "finland",
-          "away": "northmacedonia",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750855324142
-        },
-        {
-          "id": "group_ヨーロッパ_B_northmacedonia_bosnia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "northmacedonia",
-          "away": "bosnia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750945499266
-        },
-        {
-          "id": "group_ヨーロッパ_B_russia_finland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "russia",
-          "away": "finland",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945148352
-        },
-        {
-          "id": "group_ヨーロッパ_B_russia_spain",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "russia",
-          "away": "spain",
-          "redScore": 1,
-          "blueScore": 2,
-          "timestamp": 1750945505170
-        },
-        {
-          "id": "group_ヨーロッパ_B_spain_bosnia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "spain",
-          "away": "bosnia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750945153368
-        },
-        {
-          "id": "group_ヨーロッパ_B_spain_northmacedonia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "B",
-          "home": "spain",
-          "away": "northmacedonia",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935221758
-        },
-        {
-          "id": "group_ヨーロッパ_C_germany_scotland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "germany",
-          "away": "scotland",
-          "redScore": 2,
-          "blueScore": 2,
-          "timestamp": 1750945600619
-        },
-        {
-          "id": "group_ヨーロッパ_C_germany_serbia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "germany",
-          "away": "serbia",
-          "redScore": 4,
-          "blueScore": 1,
-          "timestamp": 1750945244232
-        },
-        {
-          "id": "group_ヨーロッパ_C_germany_slovakia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "germany",
-          "away": "slovakia",
-          "redScore": 1,
-          "blueScore": 4,
-          "timestamp": 1750935330471
-        },
-        {
-          "id": "group_ヨーロッパ_C_hungary_scotland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "hungary",
-          "away": "scotland",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935335639
-        },
-        {
-          "id": "group_ヨーロッパ_C_hungary_slovakia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "hungary",
-          "away": "slovakia",
-          "redScore": 2,
-          "blueScore": 2,
-          "timestamp": 1750859374025
-        },
-        {
-          "id": "group_ヨーロッパ_C_scotland_serbia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "scotland",
-          "away": "serbia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750859384462
-        },
-        {
-          "id": "group_ヨーロッパ_C_serbia_hungary",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "serbia",
-          "away": "hungary",
-          "redScore": 3,
-          "blueScore": 1,
-          "timestamp": 1750945605626
-        },
-        {
-          "id": "group_ヨーロッパ_C_slovakia_scotland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "C",
-          "home": "slovakia",
-          "away": "scotland",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750945251375
-        },
-        {
-          "id": "group_ヨーロッパ_D_belgium_georgia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "belgium",
-          "away": "georgia",
-          "redScore": 3,
-          "blueScore": 1,
-          "timestamp": 1750945510562
-        },
-        {
-          "id": "group_ヨーロッパ_D_belgium_ireland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "belgium",
-          "away": "ireland",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945158935
-        },
-        {
-          "id": "group_ヨーロッパ_D_belgium_switzerland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "belgium",
-          "away": "switzerland",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750935232678
-        },
-        {
-          "id": "group_ヨーロッパ_D_croatia_georgia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "croatia",
-          "away": "georgia",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935237254
-        },
-        {
-          "id": "group_ヨーロッパ_D_croatia_switzerland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "croatia",
-          "away": "switzerland",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750845445058
-        },
-        {
-          "id": "group_ヨーロッパ_D_georgia_ireland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "georgia",
-          "away": "ireland",
-          "redScore": 3,
-          "blueScore": 1,
-          "timestamp": 1750855147437
-        },
-        {
-          "id": "group_ヨーロッパ_D_ireland_croatia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "ireland",
-          "away": "croatia",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945515074
-        },
-        {
-          "id": "group_ヨーロッパ_D_switzerland_georgia",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "D",
-          "home": "switzerland",
-          "away": "georgia",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945163512
-        },
-        {
-          "id": "group_ヨーロッパ_E_czech_italy",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "czech",
-          "away": "italy",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945574603
-        },
-        {
-          "id": "group_ヨーロッパ_E_czech_portugal",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "czech",
-          "away": "portugal",
-          "redScore": 1,
-          "blueScore": 4,
-          "timestamp": 1750945222311
-        },
-        {
-          "id": "group_ヨーロッパ_E_czech_wales",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "czech",
-          "away": "wales",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750935296215
-        },
-        {
-          "id": "group_ヨーロッパ_E_iceland_italy",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "iceland",
-          "away": "italy",
-          "redScore": 0,
-          "blueScore": 2,
-          "timestamp": 1750935301855
-        },
-        {
-          "id": "group_ヨーロッパ_E_iceland_wales",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "iceland",
-          "away": "wales",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750857553149
-        },
-        {
-          "id": "group_ヨーロッパ_E_italy_portugal",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "italy",
-          "away": "portugal",
-          "redScore": 3,
-          "blueScore": 1,
-          "timestamp": 1750857563276
-        },
-        {
-          "id": "group_ヨーロッパ_E_portugal_iceland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "portugal",
-          "away": "iceland",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945580202
-        },
-        {
-          "id": "group_ヨーロッパ_E_wales_italy",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "E",
-          "home": "wales",
-          "away": "italy",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750945227136
-        },
-        {
-          "id": "group_ヨーロッパ_F_denmark_montenegro",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "denmark",
-          "away": "montenegro",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750945585539
-        },
-        {
-          "id": "group_ヨーロッパ_F_denmark_poland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "denmark",
-          "away": "poland",
-          "redScore": 1,
-          "blueScore": 4,
-          "timestamp": 1750945232919
-        },
-        {
-          "id": "group_ヨーロッパ_F_denmark_ukraine",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "denmark",
-          "away": "ukraine",
-          "redScore": 3,
-          "blueScore": 0,
-          "timestamp": 1750935308462
-        },
-        {
-          "id": "group_ヨーロッパ_F_england_montenegro",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "england",
-          "away": "montenegro",
-          "redScore": 3,
-          "blueScore": 0,
-          "timestamp": 1750935316743
-        },
-        {
-          "id": "group_ヨーロッパ_F_england_ukraine",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "england",
-          "away": "ukraine",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750857700821
-        },
-        {
-          "id": "group_ヨーロッパ_F_montenegro_poland",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "montenegro",
-          "away": "poland",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750857713806
-        },
-        {
-          "id": "group_ヨーロッパ_F_poland_england",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "poland",
-          "away": "england",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945590755
-        },
-        {
-          "id": "group_ヨーロッパ_F_ukraine_montenegro",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "F",
-          "home": "ukraine",
-          "away": "montenegro",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945237903
-        },
-        {
-          "id": "group_ヨーロッパ_G_albania_netherlands",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "albania",
-          "away": "netherlands",
-          "redScore": 1,
-          "blueScore": 2,
-          "timestamp": 1750945443618
-        },
-        {
-          "id": "group_ヨーロッパ_G_albania_romania",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "albania",
-          "away": "romania",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945085047
-        },
-        {
-          "id": "group_ヨーロッパ_G_albania_sweden",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "albania",
-          "away": "sweden",
-          "redScore": 0,
-          "blueScore": 2,
-          "timestamp": 1750860223519
-        },
-        {
-          "id": "group_ヨーロッパ_G_israel_netherlands",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "israel",
-          "away": "netherlands",
-          "redScore": 0,
-          "blueScore": 6,
-          "timestamp": 1750860430548
-        },
-        {
-          "id": "group_ヨーロッパ_G_israel_sweden",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "israel",
-          "away": "sweden",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750840501974
-        },
-        {
-          "id": "group_ヨーロッパ_G_netherlands_romania",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "netherlands",
-          "away": "romania",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750841191391
-        },
-        {
-          "id": "group_ヨーロッパ_G_romania_israel",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "romania",
-          "away": "israel",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945449354
-        },
-        {
-          "id": "group_ヨーロッパ_G_sweden_netherlands",
-          "phase": "group",
-          "region": "ヨーロッパ",
-          "group": "G",
-          "home": "sweden",
-          "away": "netherlands",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945092743
-        },
-        {
-          "id": "group_北中米_A_australia_elsalvador",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "australia",
-          "away": "elsalvador",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945477033
-        },
-        {
-          "id": "group_北中米_A_australia_honduras",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "australia",
-          "away": "honduras",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945122375
-        },
-        {
-          "id": "group_北中米_A_australia_jamaica",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "australia",
-          "away": "jamaica",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750935138820
-        },
-        {
-          "id": "group_北中米_A_australia_mexico",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "australia",
-          "away": "mexico",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750853847546
-        },
-        {
-          "id": "group_北中米_A_costarica_elsalvador",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "costarica",
-          "away": "elsalvador",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750935151213
-        },
-        {
-          "id": "group_北中米_A_costarica_jamaica",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "costarica",
-          "away": "jamaica",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750854398627
-        },
-        {
-          "id": "group_北中米_A_elsalvador_honduras",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "elsalvador",
-          "away": "honduras",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750854441563
-        },
-        {
-          "id": "group_北中米_A_honduras_costarica",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "honduras",
-          "away": "costarica",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945481537
-        },
-        {
-          "id": "group_北中米_A_jamaica_elsalvador",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "jamaica",
-          "away": "elsalvador",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750945126783
-        },
-        {
-          "id": "group_北中米_A_jamaica_mexico",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "jamaica",
-          "away": "mexico",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945486873
-        },
-        {
-          "id": "group_北中米_A_mexico_costarica",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "mexico",
-          "away": "costarica",
-          "redScore": 0,
-          "blueScore": 0,
-          "timestamp": 1750945132079
-        },
-        {
-          "id": "group_北中米_A_mexico_honduras",
-          "phase": "group",
-          "region": "北中米",
-          "group": "A",
-          "home": "mexico",
-          "away": "honduras",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750935144364
-        },
-        {
-          "id": "group_北中米_B_canada_newzealand",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "canada",
-          "away": "newzealand",
-          "redScore": 2,
-          "blueScore": 2,
-          "timestamp": 1750945545770
-        },
-        {
-          "id": "group_北中米_B_canada_panama",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "canada",
-          "away": "panama",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750945192703
-        },
-        {
-          "id": "group_北中米_B_canada_usa",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "canada",
-          "away": "usa",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750935271510
-        },
-        {
-          "id": "group_北中米_B_guatemala_newzealand",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "guatemala",
-          "away": "newzealand",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750935276670
-        },
-        {
-          "id": "group_北中米_B_guatemala_usa",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "guatemala",
-          "away": "usa",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750856905428
-        },
-        {
-          "id": "group_北中米_B_newzealand_panama",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "newzealand",
-          "away": "panama",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750856987196
-        },
-        {
-          "id": "group_北中米_B_panama_guatemala",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "panama",
-          "away": "guatemala",
-          "redScore": 0,
-          "blueScore": 2,
-          "timestamp": 1750945550618
-        },
-        {
-          "id": "group_北中米_B_usa_newzealand",
-          "phase": "group",
-          "region": "北中米",
-          "group": "B",
-          "home": "usa",
-          "away": "newzealand",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750945200423
-        },
-        {
-          "id": "group_南米_A_bolivia_ecuador",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "bolivia",
-          "away": "ecuador",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750945520682
-        },
-        {
-          "id": "group_南米_A_bolivia_paraguay",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "bolivia",
-          "away": "paraguay",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750945168264
-        },
-        {
-          "id": "group_南米_A_bolivia_uruguay",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "bolivia",
-          "away": "uruguay",
-          "redScore": 1,
-          "blueScore": 6,
-          "timestamp": 1750935244062
-        },
-        {
-          "id": "group_南米_A_brazil_ecuador",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "brazil",
-          "away": "ecuador",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750935250142
-        },
-        {
-          "id": "group_南米_A_brazil_uruguay",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "brazil",
-          "away": "uruguay",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750855207220
-        },
-        {
-          "id": "group_南米_A_ecuador_paraguay",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "ecuador",
-          "away": "paraguay",
-          "redScore": 0,
-          "blueScore": 1,
-          "timestamp": 1750855429358
-        },
-        {
-          "id": "group_南米_A_paraguay_brazil",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "paraguay",
-          "away": "brazil",
-          "redScore": 0,
-          "blueScore": 2,
-          "timestamp": 1750945525082
-        },
-        {
-          "id": "group_南米_A_uruguay_ecuador",
-          "phase": "group",
-          "region": "南米",
-          "group": "A",
-          "home": "uruguay",
-          "away": "ecuador",
-          "redScore": 3,
-          "blueScore": 0,
-          "timestamp": 1750945172344
-        },
-        {
-          "id": "group_南米_B_argentina_colombia",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "argentina",
-          "away": "colombia",
-          "redScore": 1,
-          "blueScore": 3,
-          "timestamp": 1750945465978
-        },
-        {
-          "id": "group_南米_B_argentina_peru",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "argentina",
-          "away": "peru",
-          "redScore": 2,
-          "blueScore": 0,
-          "timestamp": 1750945106447
-        },
-        {
-          "id": "group_南米_B_argentina_venezuela",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "argentina",
-          "away": "venezuela",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750935127805
-        },
-        {
-          "id": "group_南米_B_chile_colombia",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "chile",
-          "away": "colombia",
-          "redScore": 0,
-          "blueScore": 3,
-          "timestamp": 1750935133117
-        },
-        {
-          "id": "group_南米_B_chile_venezuela",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "chile",
-          "away": "venezuela",
-          "redScore": 1,
-          "blueScore": 1,
-          "timestamp": 1750845713093
-        },
-        {
-          "id": "group_南米_B_colombia_peru",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "colombia",
-          "away": "peru",
-          "redScore": 1,
-          "blueScore": 0,
-          "timestamp": 1750846660227
-        },
-        {
-          "id": "group_南米_B_peru_chile",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "peru",
-          "away": "chile",
-          "redScore": 1,
-          "blueScore": 2,
-          "timestamp": 1750945471858
-        },
-        {
-          "id": "group_南米_B_venezuela_colombia",
-          "phase": "group",
-          "region": "南米",
-          "group": "B",
-          "home": "venezuela",
-          "away": "colombia",
-          "redScore": 2,
-          "blueScore": 1,
-          "timestamp": 1750945111648
+      "data": []
+    },
+    "matchresultsknockout": {
+      "keyPath": "id",
+      "autoIncrement": false,
+      "indexes": {
+        "by_round": {
+          "keyPath": "round",
+          "multiEntry": false,
+          "unique": false
+        },
+        "by_timestamp": {
+          "keyPath": "timestamp",
+          "multiEntry": false,
+          "unique": false
         }
-      ]
+      },
+      "data": []
+    },
+    "matchresultsplayoff": {
+      "keyPath": "id",
+      "autoIncrement": false,
+      "indexes": {
+        "by_phase": {
+          "keyPath": "phase",
+          "multiEntry": false,
+          "unique": false
+        },
+        "by_region": {
+          "keyPath": "region",
+          "multiEntry": false,
+          "unique": false
+        },
+        "by_timestamp": {
+          "keyPath": "timestamp",
+          "multiEntry": false,
+          "unique": false
+        }
+      },
+      "data": []
+    },
+    "matchresultsworldcup": {
+      "keyPath": "id",
+      "autoIncrement": false,
+      "indexes": {
+        "by_group": {
+          "keyPath": "group",
+          "multiEntry": false,
+          "unique": false
+        },
+        "by_phase": {
+          "keyPath": "phase",
+          "multiEntry": false,
+          "unique": false
+        },
+        "by_timestamp": {
+          "keyPath": "timestamp",
+          "multiEntry": false,
+          "unique": false
+        }
+      },
+      "data": []
     },
     "playerpositions": {
       "keyPath": "teamId",
       "autoIncrement": false,
       "indexes": {},
       "data": [
+        {
+          "teamId": "albania",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "albania_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "albania_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "albania_12"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "albania_11"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "albania_15"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "albania_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "albania_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "albania_06"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "albania_09"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "albania_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "albania_01"
+            }
+          ]
+        },
         {
           "teamId": "algeria",
           "formation": "freestyle",
@@ -2562,6 +1229,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "argentina_01"
+            }
+          ]
+        },
+        {
+          "teamId": "australia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "australia_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "australia_17"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "australia_11"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "australia_13"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "australia_12"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "australia_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "australia_09"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "australia_16"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "australia_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "australia_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "australia_03"
             }
           ]
         },
@@ -2959,6 +1757,268 @@
           ]
         },
         {
+          "teamId": "bosnia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "bosnia_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "bosnia_11"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "bosnia_10"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "bosnia_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "bosnia_08"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "bosnia_17"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "bosnia_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "bosnia_07"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "bosnia_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "bosnia_04"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "bosnia_03"
+            }
+          ]
+        },
+        {
+          "teamId": "brazil",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "brazil_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "brazil_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "brazil_12"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "brazil_14"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "brazil_13"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "brazil_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "brazil_16"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "brazil_15"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "brazil_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "brazil_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "brazil_02"
+            }
+          ]
+        },
+        {
           "teamId": "bulgaria",
           "formation": "freestyle",
           "positions": [
@@ -3352,6 +2412,137 @@
           ]
         },
         {
+          "teamId": "china",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "china_22"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "china_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "china_19"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "china_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "china_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "china_09"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "china_18"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "china_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "china_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "china_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "china_01"
+            }
+          ]
+        },
+        {
           "teamId": "colombia",
           "formation": "freestyle",
           "positions": [
@@ -3479,6 +2670,268 @@
               "order": 24,
               "pos": "GK",
               "playerId": "colombia_01"
+            }
+          ]
+        },
+        {
+          "teamId": "costarica",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "costarica_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "costarica_18"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "costarica_17"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "costarica_15"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "costarica_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "costarica_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "costarica_09"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "costarica_07"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "costarica_06"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "costarica_08"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "costarica_02"
+            }
+          ]
+        },
+        {
+          "teamId": "croatia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "croatia_21"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "croatia_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "croatia_18"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "croatia_17"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "croatia_13"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": "croatia_16"
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "croatia_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "croatia_08"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "croatia_07"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "croatia_06"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "croatia_01"
             }
           ]
         },
@@ -4138,6 +3591,137 @@
           ]
         },
         {
+          "teamId": "finland",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "finland_22"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "finland_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "finland_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "finland_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "finland_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "finland_09"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "finland_16"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "finland_17"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "finland_06"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "finland_05"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "finland_01"
+            }
+          ]
+        },
+        {
           "teamId": "france",
           "formation": "freestyle",
           "positions": [
@@ -4265,6 +3849,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "france_03"
+            }
+          ]
+        },
+        {
+          "teamId": "georgia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "georgia_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "georgia_20"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "georgia_14"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "georgia_15"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "georgia_16"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "georgia_18"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "georgia_09"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "georgia_07"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "georgia_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "georgia_05"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "georgia_03"
             }
           ]
         },
@@ -4793,6 +4508,399 @@
           ]
         },
         {
+          "teamId": "hungary",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "hungary_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "hungary_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "hungary_11"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "hungary_10"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "hungary_13"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "hungary_09"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "hungary_14"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "hungary_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "hungary_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "hungary_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "hungary_03"
+            }
+          ]
+        },
+        {
+          "teamId": "iceland",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "iceland_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "iceland_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "iceland_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "iceland_17"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "iceland_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "iceland_11"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "iceland_10"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "iceland_09"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "iceland_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "iceland_05"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "iceland_01"
+            }
+          ]
+        },
+        {
+          "teamId": "iran",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": "iran_20"
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": "iran_19"
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "iran_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "iran_18"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "iran_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "iran_11"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "iran_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "iran_17"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "iran_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "iran_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "iran_01"
+            }
+          ]
+        },
+        {
           "teamId": "iraq",
           "formation": "freestyle",
           "positions": [
@@ -4920,6 +5028,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "iraq_01"
+            }
+          ]
+        },
+        {
+          "teamId": "ireland",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "ireland_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "ireland_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "ireland_18"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "ireland_11"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "ireland_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "ireland_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "ireland_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "ireland_09"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "ireland_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "ireland_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "ireland_02"
             }
           ]
         },
@@ -5317,6 +5556,137 @@
           ]
         },
         {
+          "teamId": "jamaica",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "jamaica_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "jamaica_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "jamaica_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "jamaica_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "jamaica_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "jamaica_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "jamaica_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "jamaica_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "jamaica_09"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "jamaica_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "jamaica_01"
+            }
+          ]
+        },
+        {
           "teamId": "japan",
           "formation": "freestyle",
           "positions": [
@@ -5444,6 +5814,268 @@
               "order": 24,
               "pos": "GK",
               "playerId": "japan_01"
+            }
+          ]
+        },
+        {
+          "teamId": "jordan",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": "jordan_19"
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "jordan_20"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "jordan_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "jordan_18"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "jordan_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "jordan_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "jordan_11"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "jordan_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "jordan_07"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "jordan_06"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "jordan_01"
+            }
+          ]
+        },
+        {
+          "teamId": "mali",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "mali_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": "mali_21"
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "mali_19"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "mali_18"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "mali_16"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "mali_11"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "mali_13"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "mali_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "mali_14"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "mali_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "mali_01"
             }
           ]
         },
@@ -5710,6 +6342,137 @@
           ]
         },
         {
+          "teamId": "morocco",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": "morocco_22"
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "morocco_21"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "morocco_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "morocco_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "morocco_11"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "morocco_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "morocco_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "morocco_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "morocco_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "morocco_07"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "morocco_02"
+            }
+          ]
+        },
+        {
           "teamId": "netherlands",
           "formation": "freestyle",
           "positions": [
@@ -5837,6 +6600,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "netherlands_01"
+            }
+          ]
+        },
+        {
+          "teamId": "newzealand",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "newzealand_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "newzealand_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "newzealand_22"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "newzealand_13"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "newzealand_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "newzealand_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "newzealand_09"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "newzealand_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "newzealand_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "newzealand_06"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "newzealand_01"
             }
           ]
         },
@@ -6234,6 +7128,137 @@
           ]
         },
         {
+          "teamId": "norway",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": "norway_21"
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "norway_20"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "norway_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "norway_18"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "norway_11"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "norway_15"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "norway_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "norway_17"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "norway_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "norway_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "norway_03"
+            }
+          ]
+        },
+        {
           "teamId": "panama",
           "formation": "freestyle",
           "positions": [
@@ -6496,6 +7521,268 @@
           ]
         },
         {
+          "teamId": "peru",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "peru_22"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "peru_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "peru_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "peru_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "peru_13"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "peru_14"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "peru_17"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "peru_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "peru_09"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "peru_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "peru_03"
+            }
+          ]
+        },
+        {
+          "teamId": "poland",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "poland_22"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": "poland_21"
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "poland_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "poland_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "poland_12"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "poland_13"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "poland_16"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "poland_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "poland_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "poland_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "poland_02"
+            }
+          ]
+        },
+        {
           "teamId": "portugal",
           "formation": "freestyle",
           "positions": [
@@ -6627,6 +7914,399 @@
           ]
         },
         {
+          "teamId": "qatar",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "qatar_20"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "qatar_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "qatar_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "qatar_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "qatar_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "qatar_17"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "qatar_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "qatar_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "qatar_06"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": "qatar_07"
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "qatar_01"
+            }
+          ]
+        },
+        {
+          "teamId": "romania",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "romania_22"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "romania_19"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "romania_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "romania_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "romania_16"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "romania_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "romania_14"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "romania_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "romania_05"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "romania_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "romania_03"
+            }
+          ]
+        },
+        {
+          "teamId": "russia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "russia_23"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "russia_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "russia_14"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "russia_13"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "russia_18"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "russia_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "russia_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": "russia_17"
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "russia_04"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "russia_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "russia_01"
+            }
+          ]
+        },
+        {
           "teamId": "saudiarabia",
           "formation": "freestyle",
           "positions": [
@@ -6754,6 +8434,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "saudiarabia_01"
+            }
+          ]
+        },
+        {
+          "teamId": "scotland",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": null
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "scotland_22"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "scotland_20"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "scotland_14"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "scotland_11"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "scotland_18"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "scotland_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "scotland_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": "scotland_17"
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "scotland_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "scotland_05"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "scotland_01"
             }
           ]
         },
@@ -7020,6 +8831,268 @@
           ]
         },
         {
+          "teamId": "slovakia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "slovakia_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "slovakia_22"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "slovakia_10"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "slovakia_13"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": "slovakia_17"
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "slovakia_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "slovakia_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "slovakia_18"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "slovakia_09"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "slovakia_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "slovakia_02"
+            }
+          ]
+        },
+        {
+          "teamId": "slovenia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": "slovenia_18"
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "slovenia_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "slovenia_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": "slovenia_22"
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "slovenia_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "slovenia_14"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "slovenia_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "slovenia_16"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": "slovenia_17"
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "slovenia_09"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "slovenia_02"
+            }
+          ]
+        },
+        {
           "teamId": "southafrica",
           "formation": "freestyle",
           "positions": [
@@ -7147,6 +9220,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "southafrica_01"
+            }
+          ]
+        },
+        {
+          "teamId": "southkorea",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "southkorea_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "southkorea_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": "southkorea_17"
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "southkorea_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "southkorea_12"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "southkorea_11"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "southkorea_16"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "southkorea_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "southkorea_06"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "southkorea_08"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "southkorea_01"
             }
           ]
         },
@@ -7544,6 +9748,137 @@
           ]
         },
         {
+          "teamId": "tunisia",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "tunisia_22"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "tunisia_21"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "tunisia_19"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": "tunisia_13"
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "tunisia_14"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "tunisia_16"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "tunisia_10"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": "tunisia_18"
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": null
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "tunisia_08"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "tunisia_06"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "tunisia_02"
+            }
+          ]
+        },
+        {
           "teamId": "turkey",
           "formation": "freestyle",
           "positions": [
@@ -7671,6 +10006,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "turkey_01"
+            }
+          ]
+        },
+        {
+          "teamId": "uae",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "uae_19"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "uae_23"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "uae_20"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": "uae_18"
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": "uae_14"
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": null
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "uae_16"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "uae_15"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": "uae_12"
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "uae_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "uae_07"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "uae_01"
             }
           ]
         },
@@ -7933,6 +10399,137 @@
               "order": 24,
               "pos": "GK",
               "playerId": "uruguay_01"
+            }
+          ]
+        },
+        {
+          "teamId": "usa",
+          "formation": "freestyle",
+          "positions": [
+            {
+              "order": 0,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 1,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 2,
+              "pos": "CF",
+              "playerId": "usa_18"
+            },
+            {
+              "order": 3,
+              "pos": "CF",
+              "playerId": null
+            },
+            {
+              "order": 4,
+              "pos": "LWG",
+              "playerId": "usa_22"
+            },
+            {
+              "order": 5,
+              "pos": "ST",
+              "playerId": null
+            },
+            {
+              "order": 6,
+              "pos": "CF",
+              "playerId": "usa_19"
+            },
+            {
+              "order": 7,
+              "pos": "RWG",
+              "playerId": null
+            },
+            {
+              "order": 8,
+              "pos": "LMF",
+              "playerId": null
+            },
+            {
+              "order": 9,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 10,
+              "pos": "OMF",
+              "playerId": null
+            },
+            {
+              "order": 11,
+              "pos": "RMF",
+              "playerId": "usa_12"
+            },
+            {
+              "order": 12,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 13,
+              "pos": "CMF",
+              "playerId": "usa_15"
+            },
+            {
+              "order": 14,
+              "pos": "CMF",
+              "playerId": "usa_14"
+            },
+            {
+              "order": 15,
+              "pos": "CMF",
+              "playerId": null
+            },
+            {
+              "order": 16,
+              "pos": "LSB",
+              "playerId": null
+            },
+            {
+              "order": 17,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 18,
+              "pos": "DMF",
+              "playerId": null
+            },
+            {
+              "order": 19,
+              "pos": "RSB",
+              "playerId": "usa_05"
+            },
+            {
+              "order": 20,
+              "pos": "CB",
+              "playerId": "usa_08"
+            },
+            {
+              "order": 21,
+              "pos": "CB",
+              "playerId": "usa_07"
+            },
+            {
+              "order": 22,
+              "pos": "CB",
+              "playerId": "usa_09"
+            },
+            {
+              "order": 23,
+              "pos": "CB",
+              "playerId": null
+            },
+            {
+              "order": 24,
+              "pos": "GK",
+              "playerId": "usa_01"
             }
           ]
         },
@@ -20762,1048 +23359,7 @@
           "unique": true
         }
       },
-      "data": [
-        {
-          "teamId": "albania",
-          "regionname": "ヨーロッパ",
-          "groupsector": "G",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "algeria",
-          "regionname": "アフリカ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "argentina",
-          "regionname": "南米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "australia",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "austria",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "belgium",
-          "regionname": "ヨーロッパ",
-          "groupsector": "D",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "bolivia",
-          "regionname": "南米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "bosnia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "brazil",
-          "regionname": "南米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "bulgaria",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "cameroon",
-          "regionname": "アフリカ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "canada",
-          "regionname": "北中米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "chile",
-          "regionname": "南米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "china",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "colombia",
-          "regionname": "南米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "costarica",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "croatia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "D",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "czech",
-          "regionname": "ヨーロッパ",
-          "groupsector": "E",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "denmark",
-          "regionname": "ヨーロッパ",
-          "groupsector": "F",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "ecuador",
-          "regionname": "南米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "egypt",
-          "regionname": "アフリカ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "elsalvador",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "england",
-          "regionname": "ヨーロッパ",
-          "groupsector": "F",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "finland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "france",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "georgia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "D",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "germany",
-          "regionname": "ヨーロッパ",
-          "groupsector": "C",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "ghana",
-          "regionname": "アフリカ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "greece",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "guatemala",
-          "regionname": "北中米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "honduras",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "hungary",
-          "regionname": "ヨーロッパ",
-          "groupsector": "C",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "iceland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "E",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "iran",
-          "regionname": "アジア",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "iraq",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "ireland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "D",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "israel",
-          "regionname": "ヨーロッパ",
-          "groupsector": "G",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "italy",
-          "regionname": "ヨーロッパ",
-          "groupsector": "E",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "ivorycoast",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "jamaica",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "japan",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "jordan",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "mali",
-          "regionname": "アフリカ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "mexico",
-          "regionname": "北中米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "montenegro",
-          "regionname": "ヨーロッパ",
-          "groupsector": "F",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "morocco",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "netherlands",
-          "regionname": "ヨーロッパ",
-          "groupsector": "G",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "newzealand",
-          "regionname": "北中米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "nigeria",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "northkorea",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "northmacedonia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "norway",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "panama",
-          "regionname": "北中米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "paraguay",
-          "regionname": "南米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "peru",
-          "regionname": "南米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "poland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "F",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "portugal",
-          "regionname": "ヨーロッパ",
-          "groupsector": "E",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "qatar",
-          "regionname": "アジア",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "romania",
-          "regionname": "ヨーロッパ",
-          "groupsector": "G",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "russia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "saudiarabia",
-          "regionname": "アジア",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "scotland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "C",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "senegal",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "serbia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "C",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "slovakia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "C",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "slovenia",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "southafrica",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "southkorea",
-          "regionname": "アジア",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "spain",
-          "regionname": "ヨーロッパ",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "sweden",
-          "regionname": "ヨーロッパ",
-          "groupsector": "G",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "switzerland",
-          "regionname": "ヨーロッパ",
-          "groupsector": "D",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "tunisia",
-          "regionname": "アフリカ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "turkey",
-          "regionname": "ヨーロッパ",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "uae",
-          "regionname": "アジア",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "ukraine",
-          "regionname": "ヨーロッパ",
-          "groupsector": "F",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "uruguay",
-          "regionname": "南米",
-          "groupsector": "A",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "usa",
-          "regionname": "北中米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "uzbekistan",
-          "regionname": "アジア",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "venezuela",
-          "regionname": "南米",
-          "groupsector": "B",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        },
-        {
-          "teamId": "wales",
-          "regionname": "ヨーロッパ",
-          "groupsector": "E",
-          "point": 0,
-          "matchplayed": 0,
-          "win": 0,
-          "loss": 0,
-          "tie": 0,
-          "goalscored": 0,
-          "goalallowed": 0,
-          "goaldifference": 0
-        }
-      ]
+      "data": []
     },
     "teamcolor": {
       "keyPath": null,

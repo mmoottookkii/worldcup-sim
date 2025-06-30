@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>地域予選成績表</title>
+  <title>ワールドカップ成績表</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -38,7 +38,7 @@
     background-color: #FF6928;
     }
     
-#proceedToPlayoffBtn {
+#proceedToKnockoutBtn {
   background-color: #28a745;
   color: #fff;
   font-weight: bold;
@@ -49,7 +49,7 @@
   transition: opacity 0.3s, filter 0.3s;
 }
 
-#proceedToPlayoffBtn:disabled {
+#proceedToKnockoutBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(40%);
@@ -113,12 +113,12 @@
 <body>
 
   <div class="nav">
-   <button id="viewSchedule" onclick="location.href='group_schedule_viewer.html'">試合日程</button>
-   <button id="proceedToPlayoffBtn" disabled>プレーオフへ進む</button>
+   <button id="viewSchedule" onclick="location.href='finalgroup_schedule_viewer.html'">試合日程</button>
+   <button id="proceedToKnockoutBtn" disabled>決勝Tへ進む</button>
    <button id="returnMenu" onclick="location.href='worldcup_index.html'">戻る</button>
   </div>
 
-  <h1>地域予選 順位表</h1>
+  <h1>グループ順位表</h1>
   <div id="standings"></div>
   <footer>
     &copy; 2025 ワールドサッカー シミュレーション
@@ -153,13 +153,13 @@
         const request = indexedDB.open("GameDB", 27);
         request.onsuccess = () => {
           const db = request.result;
-          const tx = db.transaction("regiongroupstats", "readonly");
-          const store = tx.objectStore("regiongroupstats");
+          const tx = db.transaction("finalgroupstats", "readonly");
+          const store = tx.objectStore("finalgroupstats");
           const all = store.getAll();
           all.onsuccess = () => {
             const result = {};
             all.result.forEach(item => {
-              const groupKey = `${item.regionname}_Group_${item.groupsector}`;
+              const groupKey = `Group_${item.groupsector}`;
               if (!result[groupKey]) result[groupKey] = [];
               result[groupKey].push(item);
             });
@@ -177,10 +177,10 @@ function loadGroupMatchResults() {
     const request = indexedDB.open("GameDB", 27);
     request.onsuccess = () => {
       const db = request.result;
-      const tx = db.transaction("matchresults", "readonly");
-      const store = tx.objectStore("matchresults");
+      const tx = db.transaction("matchresultsworldcup", "readonly");
+      const store = tx.objectStore("matchresultsworldcup");
       const index = store.index("by_phase");
-      const req = index.getAll("group");
+      const req = index.getAll("finalgroup");
 
       req.onsuccess = () => resolve(req.result);
       req.onerror = reject;
@@ -195,7 +195,7 @@ function computeStandingsFromResults(results) {
   const groupMap = {}; // { "eu_Group_1": { teamId: stats } }
 
   for (const match of results) {
-    const groupKey = `${match.region}_Group_${match.group}`;
+    const groupKey = match.group;
     if (!groupMap[groupKey]) groupMap[groupKey] = {};
 
     const home = match.home;
@@ -259,7 +259,7 @@ function computeStandingsFromResults(results) {
 function headToHeadResult(teamA, teamB, results, groupKey) {
   const match = results.find(r =>
     (r.home === teamA && r.away === teamB || r.home === teamB && r.away === teamA) &&
-    `${r.region}_Group_${r.group}` === groupKey
+    r.group === groupKey
   );
   if (!match) return 0; // 直接対決なし＝引き分け扱い
 
@@ -274,11 +274,11 @@ function headToHeadResult(teamA, teamB, results, groupKey) {
 
 function renderTable(groupKey, teams, matchResults, currentGroupKey) {
   const container = document.getElementById("standings");
-  const [region, , groupSector] = groupKey.split("_");
+  const groupSector = groupKey.replace("Group_", ""); // "GroupA"
 
   const title = document.createElement("div");
   title.className = "region-title";
-  title.textContent = `${region} / グループ ${groupSector.toUpperCase()}`;
+  title.textContent = `${groupSector}`;
   container.appendChild(title);
 
   teams.sort((a, b) => {
@@ -326,9 +326,10 @@ async function renderStandings() {
   const groupMap = computeStandingsFromResults(results);
 
   const sortedGroups = Object.keys(groupMap).sort((a, b) => {
-    const aRegion = REGION_ORDER.indexOf(a.split("_")[0]);
-    const bRegion = REGION_ORDER.indexOf(b.split("_")[0]);
-    return aRegion - bRegion || a.localeCompare(b);
+    //const aRegion = REGION_ORDER.indexOf(a.split("_")[0]);
+    //const bRegion = REGION_ORDER.indexOf(b.split("_")[0]);
+    //return aRegion - bRegion || a.localeCompare(b);
+    return a.localeCompare(b);
   });
 
   for (const groupKey of sortedGroups) {
@@ -342,7 +343,6 @@ async function renderStandings() {
 renderStandings();
 
 
-
 async function openDB() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open("GameDB", 27);
@@ -350,10 +350,9 @@ async function openDB() {
     req.onerror = () => reject(req.error);
   });
 }
-
     
 document.addEventListener("DOMContentLoaded", async () => {
-    const proceedBtn = document.getElementById("proceedToPlayoffBtn");
+    const proceedBtn = document.getElementById("proceedToKnockoutBtn");
 
     const [groupStats, matchResults] = await Promise.all([
         loadGroupStats(),
@@ -367,9 +366,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const n = teams.length;
         const totalMatches = n * (n - 1) / 2;
 
-        const [regionName, , groupSector] = groupKey.split("_");
-        const playedMatches = matchResults.filter(m => 
-            m.region === regionName && m.group === groupSector
+        const groupSector = groupKey.replace("Group_", "");
+        const playedMatches = matchResults.filter(m =>
+            m.group === groupSector
         ).length;
 
         if (playedMatches < totalMatches) {
@@ -379,116 +378,110 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (!allFinished) {
-        console.log("地域予選全試合が終了していないため proceedBtn は無効のままです。");
+        console.log("グループ全試合未終了のため proceedBtn は無効のままです。");
         return;
     }
 
-    // playoffs ストアに 1 件以上存在する場合は proceedBtn を無効のままにする
+    // knockout ストアに 1 件以上存在する場合は proceedBtn を無効のままにする
     const db = await openDB();
-    const tx = db.transaction("playoffs", "readonly");
-    const store = tx.objectStore("playoffs");
+    const tx = db.transaction("knockout", "readonly");
+    const store = tx.objectStore("knockout");
     const countReq = store.count();
 
     countReq.onsuccess = () => {
-        const hasPlayoffData = countReq.result > 0;
-        if (hasPlayoffData) {
-            console.log("playoffs にデータが存在するため proceedBtn は無効のままにします。");
-            proceedBtn.disabled = true; // 保険で明示
+        const hasKnockoutData = countReq.result > 0;
+
+        if (hasKnockoutData) {
+            console.log("knockout にデータが存在するため proceedBtn は無効のままにします。");
+            proceedBtn.disabled = true; // 保険で明示しておく
         } else {
             proceedBtn.disabled = false;
             proceedBtn.style.opacity = "1";
-            console.log("地域予選全試合終了 && playoffs データなしのため proceedBtn を有効化しました。");
+            console.log("グループ全試合終了 && knockout データなしのため proceedBtn を有効化しました。");
         }
     };
 
     countReq.onerror = () => {
-        console.error("playoffs ストアの件数取得でエラーが発生しました。proceedBtn は無効のままにします。");
+        console.error("knockout ストアの件数取得でエラーが発生しました。proceedBtn は無効のままにします。");
         proceedBtn.disabled = true;
     };
 
 
-    //プレーオフへ進むのボタンクリックイベント
+    //決勝トーナメントへ進むのボタンクリックイベント
 proceedBtn.addEventListener("click", async () => {
-    const dbRequest = indexedDB.open("GameDB", 27);
-    dbRequest.onsuccess = () => {
-        const db = dbRequest.result;
-        const tx = db.transaction(["finalists", "playoffs", "matchresultsplayoff"], "readwrite");
-        const finalistsStore = tx.objectStore("finalists");
-        const playoffsStore = tx.objectStore("playoffs");
-        const matchresultsPlayoffStore = tx.objectStore("matchresultsplayoff");
+  const results = await loadGroupMatchResults();
+  const groupMap = computeStandingsFromResults(results);
 
-        const computedStandings = computeStandingsFromResults(matchResults);
-        const playoffTeams = [];
+  const knockoutMatches = [];
+const groupPairs = [
+  ["GroupA", "GroupB"],
+  ["GroupC", "GroupD"],
+  ["GroupE", "GroupF"],
+  ["GroupG", "GroupH"],
+  ["GroupB", "GroupA"],
+  ["GroupD", "GroupC"],
+  ["GroupF", "GroupE"],
+  ["GroupH", "GroupG"],
+];
 
-        Object.keys(computedStandings).forEach(groupKey => {
-            const [regionName, , groupSector] = groupKey.split("_");
-            const teams = Object.values(computedStandings[groupKey]);
-            const sorted = teams.sort((a, b) =>
-                b.point - a.point ||
-                b.goaldifference - a.goaldifference ||
-                b.scored - a.scored ||
-                headToHeadResult(b.teamId, a.teamId, matchResults, groupKey) ||
-                Math.random() - 0.5
-            );
+  let matchCounter = 1;
 
-            for (let i = 0; i < 2; i++) {
-                const finalistData = {
-                    id: `${regionName}_${groupSector}_${sorted[i].teamId}`,
-                    teamId: sorted[i].teamId,
-                    source: "group_top2",
-                    region: regionName,
-                    groupSector: groupSector,
-                    finalGroup: "",
-                    seed: i + 1
-                };
-                finalistsStore.put(finalistData);
-            }
+  const dbRequest = indexedDB.open("GameDB", 27);
+  dbRequest.onsuccess = () => {
+    const db = dbRequest.result;
+    const tx = db.transaction("knockout", "readwrite");
+    const store = tx.objectStore("knockout");
 
-            if (["アフリカ", "北中米", "アジア"].includes(regionName)) {
-                const playoffData = {
-                    id: `${regionName}_${groupSector}_${sorted[2].teamId}`,
-                    teamId: sorted[2].teamId,
-                    region: regionName,
-                    groupSector: groupSector,
-                    seed: 3
-                };
-                playoffsStore.put(playoffData);
-                playoffTeams.push(playoffData);
-            }
-        });
+    groupPairs.forEach(pair => {
+      const [group1, group2] = pair;
+      const teams1 = Object.values(groupMap[group1]).sort((a, b) =>
+        b.point - a.point ||
+        b.goaldifference - a.goaldifference ||
+        b.scored - a.scored ||
+        headToHeadResult(b.teamId, a.teamId, results, group1) ||
+        Math.random() - 0.5
+      );
+      const teams2 = Object.values(groupMap[group2]).sort((a, b) =>
+        b.point - a.point ||
+        b.goaldifference - a.goaldifference ||
+        b.scored - a.scored ||
+        headToHeadResult(b.teamId, a.teamId, results, group2) ||
+        Math.random() - 0.5
+      );
 
-        // プレーオフ試合カードをmatchresultsplayoffに登録
-        playoffTeams.sort(() => Math.random() - 0.5);
-        const [team1, team2, team3, team4, team5, team6] = playoffTeams.map(t => t.teamId);
+      const home = teams1[0].teamId; // 1位
+      const away = teams2[1].teamId; // 2位
 
-        const r1Matches = [
-            { id: "playoff_r1_1", round: 1, home: team1, away: team2, homeScore: 0, awayScore: 0, winner: "", timestamp: Date.now() },
-            { id: "playoff_r1_2", round: 1, home: team3, away: team4, homeScore: 0, awayScore: 0, winner: "", timestamp: Date.now() }
-        ];
+      const matchRecord = {
+        matchId: `R16_${matchCounter}`,
+        round: "R16",
+        home: home,
+        away: away,
+        homeScore: 0,
+        awayScore: 0,
+        winner: "",
+        timestamp: Date.now()
+      };
 
-        r1Matches.forEach(match => matchresultsPlayoffStore.put(match));
+      store.put(matchRecord);
+      matchCounter++;
+    });
 
-        // ラウンド2（ホーム未定・残りの2チーム vs ラウンド1勝者）
-        const r2Matches = [
-            { id: "playoff_r2_1", round: 2, home: null, away: team5, homeScore: 0, awayScore: 0, winner: "", timestamp: Date.now() },
-            { id: "playoff_r2_2", round: 2, home: null, away: team6, homeScore: 0, awayScore: 0, winner: "", timestamp: Date.now() }
-        ];
-
-        r2Matches.forEach(match => matchresultsPlayoffStore.put(match));
-
-        tx.oncomplete = () => {
-            console.log("=== finalists / playoffs / matchresultsplayoff 登録完了 ===");
-            location.href = "playoff_schedule_viewer.html";
-        };
-        tx.onerror = e => {
-            console.error("登録エラー", e.target.error);
-        };
+    tx.oncomplete = () => {
+      console.log("=== R16 対戦カード登録完了 ===");
+      location.href = "knockout_schedule_viewer.html";
     };
-    dbRequest.onerror = () => {
-        console.error("IndexedDB接続失敗");
+
+    tx.onerror = e => {
+      console.error("knockout ストア登録エラー", e.target.error);
     };
+  };
+
+  dbRequest.onerror = () => {
+    console.error("IndexedDB接続失敗");
+  };
 });
-
+    
 });
     
   </script>

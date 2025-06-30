@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>プレーオフスケジュール</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    margin: 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  h1 {
+    font-size: 1.5rem;
+    color: #f9d342;
+    margin: 1rem 0 0.5rem 0;
+    text-align: center;
+  }
+  
+      .nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+    }
+    .nav button {
+      background-color: #f9d342;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      color: #203a43;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    #returnMenu {
+    background-color: #FF6928;
+    }
+  
+  
+  #proceedBtn {
+    background-color: #4CAF50;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  #proceedBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .match-card {
+    background: #ffffff22;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin: 0.5rem;
+    width: 95%;
+    max-width: 400px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .match-info {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    word-break: break-all;
+  }
+  button.match-btn {
+    background-color: #bce2e8;;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #203a43;
+    font-size: 0.95rem;
+  }
+  button.match-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+  
+</style>
+</head>
+<body>
+  <div class="nav">
+   <button id="proceedBtn" disabled>本大会抽選へ進む</button>
+   <button id="returnMenu" onclick="location.href='worldcup_index.html'">戻る</button>
+  </div>
+
+<h1>プレーオフスケジュール</h1>
+<div id="matchesContainer"></div>
+
+<script>
+// 国名変換
+const teamNameMap = {
+  japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール", china: "中国",
+  saudiarabia: "サウジアラビア", uae: "UAE", jordan: "ヨルダン", uzbekistan: "ウズベキスタン",
+  nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+  cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+  ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+  panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+  costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+  brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+  paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア"
+};
+
+function getJPName(teamId) {
+  return teamNameMap[teamId] || teamId || "未定";
+}
+
+async function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open("GameDB", 27);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function loadMatches() {
+  const db = await openDB();
+  const tx = db.transaction("matchresultsplayoff", "readonly");
+  const store = tx.objectStore("matchresultsplayoff");
+  return new Promise((resolve) => {
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result);
+  });
+}
+
+async function saveMatchResult(matchId, homeScore, blueScore, winner) {
+  const db = await openDB();
+  const tx = db.transaction(["matchresultsplayoff", "finalists"], "readwrite");
+  const store = tx.objectStore("matchresultsplayoff");
+  const finalistStore = tx.objectStore("finalists");
+
+  const getReq = store.get(matchId);
+  getReq.onsuccess = () => {
+    const match = getReq.result;
+    match.homeScore = homeScore;
+    match.awayScore = blueScore;
+    match.winner = winner;
+    store.put(match);
+
+    if (match.round === 2 && winner) {
+      const finalistData = {
+        id: `playoffwinner_${winner}`,
+        teamId: winner,
+        source: "playoff_win",
+        region: "",
+        groupSector: "",
+        finalGroup: "",
+        seed: ""
+      };
+      finalistStore.put(finalistData);
+      console.log("Finalist登録:", finalistData);
+      checkFinalistsCount();
+    }
+  };
+}
+
+async function updateRound2MatchWithWinner(winnerTeamId) {
+  const db = await openDB();
+  const tx = db.transaction("matchresultsplayoff", "readwrite");
+  const store = tx.objectStore("matchresultsplayoff");
+
+  const getReq = store.getAll();
+  getReq.onsuccess = () => {
+    const matches = getReq.result.filter(match => match.round === 2);
+    for (const match of matches) {
+      if (!match.home) {
+        match.home = winnerTeamId;
+        store.put(match);
+        console.log("ラウンド2対戦更新:", match);
+        break;
+      }
+    }
+    setTimeout(renderMatches, 300);
+  };
+}
+
+async function renderMatches() {
+  const container = document.getElementById("matchesContainer");
+  container.innerHTML = "";
+  const matches = await loadMatches();
+  matches.sort((a, b) => a.round - b.round);
+
+  matches.forEach(match => {
+    const card = document.createElement("div");
+    card.className = "match-card";
+
+    // 結果ありの場合は色をつける（任意）
+    const matchInfo = document.createElement("div");
+    matchInfo.className = "match-info";
+    if (match.winner) {
+      matchInfo.style.fontWeight = "bold";
+      matchInfo.style.color = "gray";
+    }
+
+    matchInfo.textContent = `${match.round}回戦：${getJPName(match.home)} vs ${getJPName(match.away)} (${match.homeScore ?? "-"} - ${match.awayScore ?? "-"})`;
+
+    const btn = document.createElement("button");
+    btn.className = "match-btn";
+    btn.textContent = "観戦";
+
+    // ❌ 観戦ボタン無効化条件
+    btn.disabled = !!match.winner || !match.home || !match.away;
+    if (btn.disabled) {
+      btn.style.opacity = "0.5";
+      btn.style.cursor = "not-allowed";
+    }
+
+    // ✅ 観戦クリック時動作
+    btn.addEventListener("click", () => {
+      localStorage.setItem("team-red", match.home);
+      localStorage.setItem("team-blue", match.away);
+      localStorage.setItem("team-red-jp", getJPName(match.home));
+      localStorage.setItem("team-blue-jp", getJPName(match.away));
+      localStorage.setItem("current-playoff-match-id", match.id);
+      window.location.href = "playmatch_watch2.html";
+    });
+
+    card.appendChild(matchInfo);
+    card.appendChild(btn);
+    container.appendChild(card);
+  });
+}
+
+async function checkMatchResultOnReturn() {
+  const matchId = localStorage.getItem("current-playoff-match-id");
+  if (!matchId) return;
+
+  const homeScore = parseInt(localStorage.getItem("match_redScore"));
+  const blueScore = parseInt(localStorage.getItem("match_blueScore"));
+  const winner = localStorage.getItem("match_winner");
+
+  if (!isNaN(homeScore) && !isNaN(blueScore) && winner) {
+    await saveMatchResult(matchId, homeScore, blueScore, winner);
+    await updateRound2MatchWithWinner(winner);
+
+    localStorage.removeItem("match_redScore");
+    localStorage.removeItem("match_blueScore");
+    localStorage.removeItem("match_winner");
+    localStorage.removeItem("current-playoff-match-id");
+  }
+}
+
+async function checkFinalistsCount() {
+  const db = await openDB();
+
+  // finalgroupstats にデータがあるか確認
+  const txGroupStats = db.transaction("finalgroupstats", "readonly");
+  const storeGroupStats = txGroupStats.objectStore("finalgroupstats");
+  const countReq = storeGroupStats.count();
+
+  countReq.onsuccess = async () => {
+    const hasFinalGroupStats = countReq.result > 0;
+
+    if (hasFinalGroupStats) {
+      // 既に抽選後であれば proceedBtn は無効のまま
+      console.log("finalgroupstats にデータが存在するため proceedBtn は無効のままにします");
+      return;
+    }
+
+    // finalists 件数チェック
+    const txFinalists = db.transaction("finalists", "readonly");
+    const storeFinalists = txFinalists.objectStore("finalists");
+    const getAllReq = storeFinalists.getAll();
+
+    getAllReq.onsuccess = () => {
+      if (getAllReq.result.length >= 32) {
+        const proceedBtn = document.getElementById("proceedBtn");
+        proceedBtn.disabled = false;
+        proceedBtn.style.opacity = "1";
+        console.log("finalists が 32 件以上のため proceedBtn を有効化しました");
+      }
+    };
+  };
+}
+
+document.getElementById("proceedBtn").addEventListener("click", () => {
+  window.location.href = "finalgroup_draw.html";
+});
+
+window.addEventListener("DOMContentLoaded", async () => {
+  await checkMatchResultOnReturn();
+  await renderMatches();
+  await checkFinalistsCount();
+});
+</script>
+</body>
+</html>

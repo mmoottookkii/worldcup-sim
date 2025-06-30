@@ -332,7 +332,7 @@ const formations = {
   let currentPosElem = null;
 
   function getPlayersByTeam(teamId, callback) {
-    const request = indexedDB.open("GameDB", 26
+    const request = indexedDB.open("GameDB", 27
 
 );
     request.onsuccess = () => {
@@ -611,66 +611,87 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // デフォルト登録
- document.getElementById("saveDefaultBtn").addEventListener("click", () => {
-  const teamId = document.getElementById("countrySelect").value;
-  const formation = document.getElementById("formationSelect").value;
-  const attack = parseInt(document.getElementById("atk").textContent) || 0;
-  const midfield = parseInt(document.getElementById("mid").textContent) || 0;
-  const defence = parseInt(document.getElementById("def").textContent) || 0;
-  const total = parseInt(document.getElementById("total-value").textContent) || 0;
 
-  // ★バージョンを上げて、onupgradeneededを追加する
-  const request = indexedDB.open("GameDB", 26);
+document.getElementById("saveDefaultBtn").addEventListener("click", () => {
+    const teamId = document.getElementById("countrySelect").value;
+    const formation = document.getElementById("formationSelect").value;
+    const attack = parseInt(document.getElementById("atk").textContent) || 0;
+    const midfield = parseInt(document.getElementById("mid").textContent) || 0;
+    const defence = parseInt(document.getElementById("def").textContent) || 0;
+    const total = parseInt(document.getElementById("total-value").textContent) || 0;
 
-  request.onupgradeneeded = function(e) {
-    const db = e.target.result;
-    if (!db.objectStoreNames.contains("playerpositions")) {
-      db.createObjectStore("playerpositions", { keyPath: "teamId" });
-      console.log("playerpositions ストアを作成しました");
-    }
-  };
+    const request = indexedDB.open("GameDB", 27);
 
-  request.onsuccess = () => {
-    const db = request.result;
-
-    // formationsストアへ登録
-    const tx1 = db.transaction("formations", "readwrite");
-    const store1 = tx1.objectStore("formations");
-    const data = { teamId, formation, attack, midfield, defence, total };
-    store1.put(data);
-
-    // playerpositionsストアへ登録
-    const tx2 = db.transaction("playerpositions", "readwrite");
-    const store2 = tx2.objectStore("playerpositions");
-
-    const positionElements = document.querySelectorAll(".position");
-    const positions = [];
-
-    positionElements.forEach((elem, index) => {
-      const posName = elem.dataset.pos;
-      const playerId = elem.dataset.assignedId || null;
-      positions.push({
-        order: index,
-        pos: posName,
-        playerId: playerId ? String(playerId) : null
-      });
-    });
-
-    const posData = {
-      teamId,
-      formation,
-      positions
+    request.onupgradeneeded = function (e) {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains("playerpositions")) {
+            db.createObjectStore("playerpositions", { keyPath: "teamId" });
+            console.log("playerpositions ストアを新規作成しました");
+        }
     };
 
-    store2.put(posData);
+    request.onsuccess = () => {
+        const db = request.result;
 
-    alert("フォーメーションと選手配置が保存されました！");
-    window.location.href = "index.html";
-  };
+        // formations ストアへ登録
+        const tx1 = db.transaction("formations", "readwrite");
+        const store1 = tx1.objectStore("formations");
+        const data = { teamId, formation, attack, midfield, defence, total };
 
-  request.onerror = () => {
-    console.error("DBオープン失敗", request.error);
-  };
+        const formationPut = store1.put(data);
+
+        formationPut.onerror = (e) => {
+            console.error("formations 保存失敗:", e.target.error);
+            alert("フォーメーションの保存に失敗しました。コンソールを確認してください。");
+        };
+
+        formationPut.onsuccess = () => {
+            console.log("formations 保存成功:", data);
+        };
+
+        // playerpositions ストアへ登録
+        let positions = [];
+        const positionElements = document.querySelectorAll(".position");
+        positionElements.forEach((elem, index) => {
+            const posName = elem.dataset.pos;
+            const playerId = elem.dataset.assignedId || null;
+            positions.push({
+                order: index,
+                pos: posName,
+                playerId: playerId ? String(playerId) : null,
+            });
+        });
+
+        const posData = { teamId, formation, positions };
+
+        let tx2;
+        try {
+            tx2 = db.transaction("playerpositions", "readwrite");
+        } catch (err) {
+            console.error("playerpositions ストアへのトランザクション開始失敗:", err);
+            alert("選手配置の保存に失敗しました（playerpositions ストアが存在しません）。DB削除後に再試行してください。");
+            return;
+        }
+
+        const store2 = tx2.objectStore("playerpositions");
+        const posPut = store2.put(posData);
+
+        posPut.onerror = (e) => {
+            console.error("playerpositions 保存失敗:", e.target.error, posData);
+            alert("選手配置の保存に失敗しました。コンソールを確認してください。");
+        };
+
+        posPut.onsuccess = () => {
+            console.log("playerpositions 保存成功:", posData);
+            alert("フォーメーションと選手配置が保存されました！");
+            window.location.href = "index.html";
+        };
+    };
+
+    request.onerror = () => {
+        console.error("IndexedDB オープン失敗:", request.error);
+        alert("DBオープンに失敗しました。コンソールを確認してください。");
+    };
 });
 
 

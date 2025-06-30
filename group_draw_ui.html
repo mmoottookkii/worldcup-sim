@@ -118,7 +118,7 @@
 <body>
   <div class="nav">
     <button id="viewSchedule" onclick="location.href='group_schedule_viewer.html'">試合日程へ進む</button>
-    <button id="returnMenu" onclick="location.href='index.html'">戻る</button>
+    <button id="returnMenu" onclick="location.href='worldcup_index.html'">戻る</button>
   </div>
 
   <h1>地域予選グループ抽選</h1>
@@ -190,7 +190,7 @@ const regions = {
 
     async function getTeamTotal(teamId) {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("GameDB", 26);
+        const request = indexedDB.open("GameDB", 27);
         request.onerror = () => reject("DB open error");
         request.onsuccess = () => {
           const db = request.result;
@@ -247,7 +247,7 @@ const regions = {
 
      function openDatabase() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open("GameDB", 26);
+      const request = indexedDB.open("GameDB", 27);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
@@ -267,48 +267,91 @@ const regions = {
     });
   }
 
-  async function saveGroups() {
-    try {
-      const db = await openDatabase();
-      const tx = db.transaction("regiongroupstats", "readwrite");
-      const store = tx.objectStore("regiongroupstats");
-
-      for (const region in latestGroups) {
-        const groups = latestGroups[region];
-        groups.forEach((group, groupIndex) => {
-          const groupSector = String.fromCharCode(65 + groupIndex); // A, B, ...
-          group.forEach(teamId => {
-            const entry = {
-              teamId,
-              regionname: region,
-              groupsector: groupSector,
-              point: 0,
-              matchplayed: 0,
-              win: 0,
-              loss: 0,
-              tie: 0,
-              goalscored: 0,
-              goalallowed: 0,
-              goaldifference: 0
-            };
-            store.put(entry); // 上書き可
-          });
-        });
-      }
-
-      tx.oncomplete = () => {
-        alert("組み合わせを保存しました。");
-        db.close();
-      };
-
-      tx.onerror = () => {
-        alert("保存中にエラーが発生しました。");
-      };
-
-    } catch (error) {
-      alert("DB接続エラー: " + error);
-    }
+async function saveGroups() {
+  // 確認ダイアログ
+  const confirmResult = confirm("今までの試合データを削除して新規の大会を始めていいですか？");
+  if (!confirmResult) {
+    return; // キャンセル時は何もしないで終了
   }
+
+  try {
+    const db = await openDatabase();
+
+    // 削除対象のストア一覧（合計9ストア）
+    const storesToClear = [
+      "regiongroupstats",
+      "matchresults",
+      "matchresultsplayoff",
+      "matchresultsworldcup",
+      "matchresultsknockout",
+      "playoffs",
+      "finalists",
+      "finalgroupstats",
+      "knockout"
+    ];
+
+    // 各ストアの全削除処理
+    for (const storeName of storesToClear) {
+      if (db.objectStoreNames.contains(storeName)) {
+        const txDelete = db.transaction(storeName, "readwrite");
+        const storeDelete = txDelete.objectStore(storeName);
+        const clearRequest = storeDelete.clear();
+
+        clearRequest.onsuccess = () => {
+          console.log(`${storeName} ストアのデータを全削除しました。`);
+        };
+
+        clearRequest.onerror = (e) => {
+          console.error(`${storeName} ストア全削除エラー:`, e.target.error);
+          alert(`${storeName} ストアのデータ削除時にエラーが発生しました。コンソールを確認してください。`);
+        };
+      } else {
+        console.warn(`${storeName} ストアが存在しません。削除スキップします。`);
+      }
+    }
+
+    // regiongroupstats へ最新組み合わせ保存
+    const tx = db.transaction("regiongroupstats", "readwrite");
+    const store = tx.objectStore("regiongroupstats");
+
+    for (const region in latestGroups) {
+      const groups = latestGroups[region];
+      groups.forEach((group, groupIndex) => {
+        const groupSector = String.fromCharCode(65 + groupIndex); // A, B, ...
+        group.forEach(teamId => {
+          const entry = {
+            teamId,
+            regionname: region,
+            groupsector: groupSector,
+            point: 0,
+            matchplayed: 0,
+            win: 0,
+            loss: 0,
+            tie: 0,
+            goalscored: 0,
+            goalallowed: 0,
+            goaldifference: 0
+          };
+          store.put(entry);
+        });
+      });
+    }
+
+    tx.oncomplete = () => {
+      alert("組み合わせを保存し、過去の試合データを削除して新規の大会を開始しました。");
+      db.close();
+    };
+
+    tx.onerror = (e) => {
+      console.error("regiongroupstats 保存エラー:", e.target.error);
+      alert("組み合わせ保存時にエラーが発生しました。コンソールを確認してください。");
+    };
+
+  } catch (error) {
+    console.error("saveGroups 全体エラー:", error);
+    alert("DB接続エラー: " + error);
+  }
+}
 
 
   </script>

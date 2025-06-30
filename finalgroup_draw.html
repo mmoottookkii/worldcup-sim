@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>本大会組み合わせ抽選</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  h1 {
+    color: #f9d342;
+    font-size: 1.5rem;
+    margin: 1rem 0;
+  }
+  
+    .nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+
+  .nav button {
+    background-color: #f9d342;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #203a43;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 100px;
+  }
+  #returnMenu {
+  background-color: #FF6928;
+  }
+  
+  
+  button {
+    background-color: #4CAF50;
+    border: none;
+    padding: 0.6rem 1rem;
+    margin: 0.5rem;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #fff;
+  }
+  button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .group-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+  .group-card {
+    background: #ffffff22;
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: 150px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  }
+  .group-title {
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+    color: #f9d342;
+  }
+  .team-entry {
+    font-size: 0.9rem;
+    margin: 0.2rem 0;
+    word-break: break-word;
+  }
+</style>
+</head>
+<body>
+
+  <div class="nav">
+    <button id="viewSchedule" onclick="location.href='finalgroup_schedule_viewer.html'">試合日程へ進む</button>
+    <button id="returnMenu" onclick="location.href='worldcup_index.html'">戻る</button>
+  </div>
+
+<h1>本大会組み合わせ抽選</h1>
+<button id="drawBtn">抽選する</button>
+<button id="saveBtn" disabled>組み合わせ保存</button>
+<div id="groupsContainer" class="group-container"></div>
+
+
+<script>
+// あなたが提示した regions 完全版を regionMap として使用
+const regions = {
+  "ヨーロッパ": {
+    teamIds: ["england","germany","france","spain","italy","netherlands","portugal","croatia","belgium","sweden",
+      "switzerland","poland","austria","denmark","norway","ukraine","serbia","czech","scotland","wales",
+      "finland","ireland","iceland","greece","slovakia","slovenia","hungary","turkey","israel","bulgaria",
+      "romania","georgia","northmacedonia","albania","bosnia","montenegro","russia"],
+    groupCount: 7
+  },
+  "南米": {
+    teamIds: ["brazil","argentina","colombia","uruguay","chile","paraguay","peru","ecuador","venezuela","bolivia"],
+    groupCount: 2
+  },
+  "アフリカ": {
+    teamIds: ["nigeria","ghana","egypt","morocco","tunisia","cameroon","senegal","algeria","mali","southafrica","ivorycoast"],
+    groupCount: 2
+  },
+  "北中米": {
+    teamIds: ["usa","mexico","canada","jamaica","panama","honduras","guatemala","elsalvador","costarica","australia","newzealand"],
+    groupCount: 2
+  },
+  "アジア": {
+    teamIds: ["japan","southkorea","iran","iraq","qatar","china","saudiarabia","northkorea","uae","jordan","uzbekistan"],
+    groupCount: 2
+  }
+};
+
+function getRegionFromTeamId(teamId) {
+  for (const [region, data] of Object.entries(regions)) {
+    if (data.teamIds.includes(teamId)) {
+      return region;
+    }
+  }
+  return "不明";
+}
+
+const teamNameMap = {
+      england: "イングランド", germany: "ドイツ", france: "フランス", spain: "スペイン", italy: "イタリア",
+      netherlands: "オランダ", portugal: "ポルトガル", croatia: "クロアチア", belgium: "ベルギー", sweden: "スウェーデン",
+      switzerland: "スイス", poland: "ポーランド", austria: "オーストリア", denmark: "デンマーク", norway: "ノルウェー",
+      ukraine: "ウクライナ", serbia: "セルビア", czech: "チェコ", scotland: "スコットランド", wales: "ウェールズ",
+      finland: "フィンランド", ireland: "アイルランド", iceland: "アイスランド", greece: "ギリシャ", slovakia: "スロバキア",
+      slovenia: "スロベニア", hungary: "ハンガリー", turkey: "トルコ", israel: "イスラエル", bulgaria: "ブルガリア",
+      romania: "ルーマニア", georgia: "ジョージア", northmacedonia: "北マケドニア", albania: "アルバニア",
+      bosnia: "ボスニア", montenegro: "モンテネグロ", russia: "ロシア",
+      brazil: "ブラジル", argentina: "アルゼンチン", colombia: "コロンビア", uruguay: "ウルグアイ", chile: "チリ",
+      paraguay: "パラグアイ", peru: "ペルー", ecuador: "エクアドル", venezuela: "ベネズエラ", bolivia: "ボリビア",
+      nigeria: "ナイジェリア", ghana: "ガーナ", egypt: "エジプト", morocco: "モロッコ", tunisia: "チュニジア",
+      cameroon: "カメルーン", senegal: "セネガル", algeria: "アルジェリア", mali: "マリ", southafrica: "南アフリカ",
+      ivorycoast: "コートジボワール", usa: "アメリカ", mexico: "メキシコ", canada: "カナダ", jamaica: "ジャマイカ",
+      panama: "パナマ", honduras: "ホンジュラス", guatemala: "グアテマラ", elsalvador: "エルサルバドル",
+      costarica: "コスタリカ", australia: "豪州", newzealand: "ニュージーランド",
+      japan: "日本", southkorea: "韓国", iran: "イラン", iraq: "イラク", qatar: "カタール",
+      china: "中国", saudiarabia: "サウジアラビア", northkorea: "北朝鮮", uae: "UAE", jordan: "ヨルダン",
+      uzbekistan: "ウズベキスタン"
+};
+
+function getJPName(teamId) {
+  return teamNameMap[teamId] || teamId;
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open("GameDB", 27);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function fetchFinalists() {
+  const db = await openDB();
+  return new Promise((resolve) => {
+    const tx = db.transaction("finalists", "readonly");
+    const store = tx.objectStore("finalists");
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result);
+  });
+}
+
+async function fetchFormations() {
+  const db = await openDB();
+  return new Promise((resolve) => {
+    const tx = db.transaction("formations", "readonly");
+    const store = tx.objectStore("formations");
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result);
+  });
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+
+function renderGroups() {
+  const container = document.getElementById("groupsContainer");
+  if (!container) return;
+
+  container.innerHTML = ""; // 既存表示クリア
+
+  Object.entries(finalGroups).forEach(([groupName, teams]) => {
+    const groupDiv = document.createElement("div");
+    groupDiv.style.border = "1px solid #ccc";
+    groupDiv.style.margin = "8px";
+    groupDiv.style.padding = "8px";
+    groupDiv.style.borderRadius = "4px";
+    groupDiv.style.backgroundColor = "#222";
+
+    const title = document.createElement("h3");
+    title.textContent = groupName;
+    title.style.color = "#f9d342";
+    groupDiv.appendChild(title);
+
+    teams.forEach(team => {
+      const p = document.createElement("p");
+      p.textContent = `${getJPName(team.teamId)} (${team.region || "不明"})`;
+      p.style.color = "#fff";
+      groupDiv.appendChild(p);
+    });
+
+    container.appendChild(groupDiv);
+  });
+}
+
+
+
+
+
+let finalGroups = {};
+
+async function drawGroups() {
+    const finalists = await fetchFinalists();
+    const formations = await fetchFormations();
+    const strengthMap = {};
+    formations.forEach(f => {
+        strengthMap[f.teamId] = f.total || 0;
+    });
+
+    // 地域属性補完
+    finalists.forEach(team => {
+        if (!team.region || team.region === "") {
+            team.region = getRegionFromTeamId(team.teamId);
+        }
+    });
+
+    finalists.sort((a, b) => (strengthMap[b.teamId] || 0) - (strengthMap[a.teamId] || 0));
+
+    const pods = [[], [], [], []];
+    finalists.forEach((team, idx) => {
+        pods[Math.floor(idx / 8)].push(team);
+    });
+
+    let success = false;
+    let attemptLimit = 100;
+    while (!success && attemptLimit-- > 0) {
+        finalGroups = {};
+        for (let i = 0; i < 8; i++) {
+            finalGroups[`Group${String.fromCharCode(65 + i)}`] = [];
+        }
+
+        try {
+            for (let podIdx = 0; podIdx < 4; podIdx++) {
+                const pod = [...pods[podIdx]];
+                shuffleArray(pod);
+
+                let groupIndex = 0;
+                while (pod.length > 0) {
+                    const team = pod.shift();
+                    const region = team.region;
+                    const groupName = `Group${String.fromCharCode(65 + groupIndex)}`;
+                    const group = finalGroups[groupName];
+
+                    const regionCount = group.filter(t => t.region === region).length;
+                    const europeCount = group.filter(t => t.region === "ヨーロッパ").length;
+                    const isEurope = region === "ヨーロッパ";
+                    const maxPerRegion = isEurope ? 2 : 1;
+
+                    let placed = false;
+                    let rotation = 0;
+
+                    while (rotation < 8) {
+                        const targetGroupName = `Group${String.fromCharCode(65 + ((groupIndex + rotation) % 8))}`;
+                        const targetGroup = finalGroups[targetGroupName];
+                        const targetRegionCount = targetGroup.filter(t => t.region === region).length;
+                        const targetEuropeCount = targetGroup.filter(t => t.region === "ヨーロッパ").length;
+
+                        const canPlace =
+                            (region === "ヨーロッパ" ? targetEuropeCount < 2 : targetRegionCount < 1);
+
+                        if (targetGroup.length < podIdx + 1 && canPlace) {
+                            targetGroup.push(team);
+                            placed = true;
+                            break;
+                        }
+                        rotation++;
+                    }
+
+                    if (!placed) {
+                        throw new Error(`抽選条件に合うグループが見つからず再抽選`);
+                    }
+                    groupIndex = (groupIndex + 1) % 8;
+                }
+            }
+            success = true;
+        } catch (e) {
+            console.log(`再抽選 [残り試行 ${attemptLimit}]:`, e.message);
+        }
+    }
+
+    if (success) {
+        renderGroups();
+        document.getElementById("saveBtn").disabled = false;
+    } else {
+        alert("抽選失敗。条件が厳しすぎるか参加チーム構成が不均衡です。再試行してください。");
+    }
+}
+
+
+
+
+async function saveGroups() {
+  const confirmResult = confirm("今あるW杯本大会のデータを削除して新規の本大会を始めていいですか?");
+  if (!confirmResult) {
+    return; // キャンセル時は中断
+  }
+
+  try {
+    const db = await openDB();
+
+    // 削除対象ストア
+    const storesToClear = [
+      "finalgroupstats",
+      "knockout",
+      "matchresultsworldcup",
+      "matchresultsknockout"
+    ];
+
+    for (const storeName of storesToClear) {
+      if (db.objectStoreNames.contains(storeName)) {
+        const txClear = db.transaction(storeName, "readwrite");
+        const store = txClear.objectStore(storeName);
+        const clearRequest = store.clear();
+
+        clearRequest.onsuccess = () => {
+          console.log(`${storeName} ストアを全削除しました。`);
+        };
+
+        clearRequest.onerror = (e) => {
+          console.error(`${storeName} ストア削除エラー:`, e.target.error);
+          alert(`${storeName} ストア削除中にエラーが発生しました。コンソールを確認してください。`);
+        };
+      } else {
+        console.warn(`${storeName} ストアが存在しません。削除スキップ。`);
+      }
+    }
+
+    // finalgroupstats に組み合わせ保存
+    const tx = db.transaction("finalgroupstats", "readwrite");
+    const store = tx.objectStore("finalgroupstats");
+
+    Object.keys(finalGroups).forEach(groupName => {
+      finalGroups[groupName].forEach(team => {
+        if (!groupName || !team || !team.teamId) {
+          console.error("不正データスキップ", { groupName, team });
+          return;
+        }
+
+        const groupid = `${groupName}_${team.teamId}`;
+        if (!groupid) {
+          console.error("groupid不正スキップ", { groupName, team });
+          return;
+        }
+
+        const entry = {
+          groupid,
+          teamId: team.teamId,
+          regionname: team.region || "",
+          groupsector: groupName,
+          point: 0,
+          matchplayed: 0,
+          win: 0,
+          loss: 0,
+          tie: 0,
+          goalscored: 0,
+          goalallowed: 0,
+          goaldifference: 0
+        };
+
+        store.put(entry);
+      });
+    });
+
+    tx.oncomplete = () => {
+      alert("組み合わせを保存し、過去の本大会データを削除して新規の本大会を開始しました！");
+      document.getElementById("saveBtn").disabled = true;
+      window.location.href = "finalgroup_schedule_viewer.html";
+    };
+
+    tx.onerror = (e) => {
+      console.error("finalgroupstats 保存エラー:", e.target.error);
+      alert("組み合わせ保存中にエラーが発生しました。コンソールを確認してください。");
+    };
+
+  } catch (error) {
+    console.error("saveGroups 実行中エラー:", error);
+    alert("DB接続時にエラーが発生しました。コンソールを確認してください。");
+  }
+}
+
+
+document.getElementById("drawBtn").addEventListener("click", drawGroups);
+document.getElementById("saveBtn").addEventListener("click", saveGroups);
+</script>
+</body>
+</html>

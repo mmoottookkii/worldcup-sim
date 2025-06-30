@@ -162,7 +162,7 @@
 <body>
   <div class="nav">
     <button id="prevRound">←</button>
-    <button id="viewStandings" onclick="location.href='group_standings_view.html'">順位表</button>
+    <button id="viewStandings" onclick="location.href='finalgroup_standings_view.html'">順位表</button>
     <button id="nextRound">→</button>
   </div>
   <h1 id="roundTitle">ラウンド 1</h1>
@@ -215,14 +215,14 @@
     const redName = localStorage.getItem("team-red-jp");
     const blueName = localStorage.getItem("team-blue-jp");
     const group = localStorage.getItem("last-match-group");
-    const [region, groupNum] = group.split("_");
 
-    const matchId = `group_${region}_${groupNum}_${home}_${away}`;
+
+    const matchId = `group_${group}_${home}_${away}`;
     const record = {
       id: matchId,
-      phase: "group",
-      region,
-      group: groupNum,
+      phase: "finalgroup",
+      //region,
+      group,
       home,
       away,
       redScore: parseInt(redScore),
@@ -234,8 +234,8 @@
     const dbReq = indexedDB.open("GameDB", 27);
     dbReq.onsuccess = () => {
       const db = dbReq.result;
-      const tx = db.transaction("matchresults", "readwrite");
-      const store = tx.objectStore("matchresults");
+      const tx = db.transaction("matchresultsworldcup", "readwrite");
+      const store = tx.objectStore("matchresultsworldcup");
       store.put(record);
     };
 
@@ -274,13 +274,13 @@
 });
    
    
-    function loadTeamsFromRegionGroupStats() {
+    function loadTeamsFromFinalGroupStats() {
       return new Promise((resolve, reject) => {
         const request = indexedDB.open("GameDB", 27);
         request.onsuccess = () => {
           const db = request.result;
-          const tx = db.transaction("regiongroupstats", "readonly");
-          const store = tx.objectStore("regiongroupstats");
+          const tx = db.transaction("finalgroupstats", "readonly");
+          const store = tx.objectStore("finalgroupstats");
           const all = store.getAll();
           all.onsuccess = () => resolve(all.result);
           all.onerror = reject;
@@ -292,7 +292,7 @@
     function generateMatchSchedulesByGroup(teams) {
       const groupMap = {};
       for (const t of teams) {
-        const key = `${t.regionname}_${t.groupsector}`;
+        const key = `${t.groupsector}`;
         if (!groupMap[key]) groupMap[key] = [];
         groupMap[key].push(t.teamId);
       }
@@ -326,6 +326,7 @@
     }
 
 
+
 let fastMatchReadyToClose = false;
 
 // 書き込み完了通知を受け取ったらフラグを立てるだけ
@@ -337,20 +338,19 @@ window.addEventListener("message", (event) => {
 });
 
 
-
 function renderRound(roundNumber) {
-  document.getElementById("roundTitle").textContent = `地域予選 第${roundNumber + 1}節`;
+  document.getElementById("roundTitle").textContent = `ラウンド ${roundNumber + 1}`;
   const container = document.getElementById("matchList");
   container.innerHTML = "";
 
   const dbReq = indexedDB.open("GameDB", 27);
   dbReq.onsuccess = () => {
     const db = dbReq.result;
-    const tx = db.transaction("matchresults", "readonly");
-    const store = tx.objectStore("matchresults");
+    const tx = db.transaction("matchresultsworldcup", "readonly");
+    const store = tx.objectStore("matchresultsworldcup");
 
     const index = store.index("by_phase");
-    const matchResultsReq = index.getAll("group");
+    const matchResultsReq = index.getAll("finalgroup");
 
     matchResultsReq.onsuccess = () => {
       const resultList = matchResultsReq.result;
@@ -361,12 +361,10 @@ function renderRound(roundNumber) {
         groupHeader.textContent = group;
         container.appendChild(groupHeader);
 
-        const [region, groupNum] = group.split("_");
+        //const [region, groupNum] = group.split("_");
 
         for (const [home, away] of roundMatches) {
-
-
-          const matchId = `group_${region}_${groupNum}_${home}_${away}`;
+         const matchId = `group_${group}_${home}_${away}`;
 
           const matchDiv = document.createElement("div");
           matchDiv.className = "match";
@@ -406,7 +404,7 @@ if (result) {
    localStorage.setItem("last-scroll-id", `match_${matchId}`);
    localStorage.setItem("last-round", currentRound); // ← 追加！
 
-    location.href = "playmatch_watch1.html";
+    location.href = "playmatch_watch1final.html";
   };
 }
 
@@ -463,19 +461,10 @@ if (result) {
 // 閉じるボタン処理
 document.getElementById("closeIframeBtn").onclick = () => {
 
-   if (!fastMatchReadyToClose) {
+    if (!fastMatchReadyToClose) {
         alert("まだ処理が完了していません。もう少し待ってから閉じてください。");
         return;
     }
-
-  console.log(
-    localStorage.getItem("match_redScore"),
-    localStorage.getItem("match_blueScore"),
-    localStorage.getItem("team-red"),
-    localStorage.getItem("team-blue")
-);
-
-
 
   const overlay = document.getElementById("iframeOverlay");
   const iframe = document.getElementById("playmatch-frame");
@@ -483,27 +472,28 @@ document.getElementById("closeIframeBtn").onclick = () => {
   iframe.src = "";
 
   // 試合情報取得
-  const regionGroup = window.lastMatchRegionGroup;  // 例: "eu_1"
-  const [region, group] = regionGroup.split("_");
+  //const regionGroup = window.lastMatchRegionGroup;  // 例: "eu_1"
+  //const [region, group] = regionGroup.split("_");
   const home = localStorage.getItem("team-red");
   const away = localStorage.getItem("team-blue");
   const redName = localStorage.getItem("team-red-jp");
   const blueName = localStorage.getItem("team-blue-jp");
   const redScore = localStorage.getItem("match_redScore");
   const blueScore = localStorage.getItem("match_blueScore");
-
+  const group = localStorage.getItem("last-match-group");
+  
   // 表示更新（スコア付き）
   if (home && away && redScore !== null && blueScore !== null && window.lastMatchTextElement) {
     window.lastMatchTextElement.textContent = `${redName} ${redScore}-${blueScore} ${blueName}`;
   }
 
   // DB に保存
-  if (home && away && region && group && redScore !== null && blueScore !== null) {
-    const matchId = `group_${region}_${group}_${home}_${away}`;
+  if (home && away && group && redScore !== null && blueScore !== null) {
+    const matchId = `group_${group}_${home}_${away}`;
     const record = {
       id: matchId,
-      phase: "group",
-      region,
+      phase: "finalgroup",
+      //region,
       group,
       home,
       away,
@@ -515,8 +505,8 @@ document.getElementById("closeIframeBtn").onclick = () => {
     const dbReq = indexedDB.open("GameDB", 27);
     dbReq.onsuccess = () => {
       const db = dbReq.result;
-      const tx = db.transaction("matchresults", "readwrite");
-      const store = tx.objectStore("matchresults");
+      const tx = db.transaction("matchresultsworldcup", "readwrite");
+      const store = tx.objectStore("matchresultsworldcup");
       store.put(record);
 
 
@@ -553,8 +543,8 @@ document.getElementById("closeIframeBtn").onclick = () => {
   localStorage.removeItem("team-blue");
   localStorage.removeItem("team-red-jp");
   localStorage.removeItem("team-blue-jp");
-  window.lastMatchTextElement = null;
-  window.lastMatchRegionGroup = null;
+  //window.lastMatchTextElement = null;
+  //window.lastMatchRegionGroup = null;
   
   
 };
@@ -564,11 +554,12 @@ document.getElementById("closeIframeBtn").onclick = () => {
 
 // 背景クリックで閉じる
 document.getElementById("iframeOverlay").addEventListener("click", (e) => {
- 
+
     if (!fastMatchReadyToClose) {
         alert("まだ処理が完了していません。もう少し待ってから閉じてください。");
         return;
         }
+
   if (e.target.id === "iframeOverlay") {
     const overlay = e.target;
     const iframe = document.getElementById("playmatch-frame");
@@ -584,14 +575,14 @@ document.getElementById("iframeOverlay").addEventListener("click", (e) => {
       }
     };
     document.getElementById("nextRound").onclick = () => {
-      if (currentRound < 4) {
+      if (currentRound < 2) {
         currentRound++;
         renderRound(currentRound);
       }
     };
 
     (async () => {
-      const teams = await loadTeamsFromRegionGroupStats();
+      const teams = await loadTeamsFromFinalGroupStats();
       fullSchedule = generateMatchSchedulesByGroup(teams);
       renderRound(currentRound);
     })();
