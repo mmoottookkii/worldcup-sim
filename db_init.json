@@ -1,6 +1,6 @@
 {
   "dbName": "GameDB",
-  "version": 27,
+  "version": 26,
   "objectStores": {
     "finalgroupstats": {
       "keyPath": "groupid",
