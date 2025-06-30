@@ -3046,7 +3046,7 @@ fractions.forEach(({ selector, arise, attempt }) => {
 if (turn % 2 === 0 && position !== 0) {
   showGameOverMessage("PK戦終了！");
   let winner = (position > 0) ? `${redTeamId}` : `${blueTeamId}`;
-  let winnerJP = (position > 0) ? `${redTeamIdJP}` : `${blueTeamIdJP}`;
+  let winnerJP = (position > 0) ? `${redTeamJP}` : `${blueTeamJP}`;
 
   appendLog(`\n最終結果: ${winnerJP}の勝利`);
    if (!isFastMode) playGamesetYell();
