@@ -35,16 +35,27 @@ h1 {
     flex-direction: column;
     align-items: center;
 }
+
+
 .team-names {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     flex-wrap: nowrap;
+    width: 100%; /* 親幅を使って中央固定 */
+}
+
+.team-names span {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .team-names .vs {
+    flex: 0 0 auto;
+    width: 60px; /* 中央固定幅（必要に応じて調整） */
+    text-align: center;
     font-weight: bold;
     font-size: 1.3rem;
 }
@@ -53,12 +64,12 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.8rem;
+    gap: 3.8rem;
     margin-top: 0.5rem;
 }
 
 .team-flags img {
-    width: 42px;
+    width: 52px;
     height: 30px;
 }
 
@@ -134,13 +145,20 @@ footer {
 
 @media (max-width: 400px) {
     .team-names {
-        font-size: 1.0rem;
+        font-size: 0.8rem;
     }
     .team-names .vs {
         font-size: 1.0rem;
     }
+    
+    
+    .team-flags {
+    gap: 2.2rem;
+}
+    
     .team-flags img {
-        width: 42px;
+
+        width: 52px;
         height: 30px;
     }
     .watch-button {
@@ -584,7 +602,7 @@ function displayChampionIfFinalFinished() {
                     championContainer.innerHTML = `
                         <img id="championCup" src="cup.png" alt="Champion Cup" style="width:100px; cursor: pointer;"><br>
                         <span style="font-size: 1.5em; font-weight: bold;">優勝国 ${winnerName}</span>
-                        <div style="font-size:0.9em; color:#555;">※クリックで国歌再生</div>
+                        <div style="font-size:0.7em; color:#a8936c;">※クリックで国歌再生</div>
                     `;
 
                     const cupImg = document.getElementById("championCup");

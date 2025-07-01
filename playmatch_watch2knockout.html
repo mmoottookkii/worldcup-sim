@@ -884,11 +884,12 @@ button:hover {
     <div id="game-over-message">試合終了！</div>
 
     <!-- 延長戦・PKボタン -->
-    <button id="extension-button" style="position: absolute; top: 10px; right: 10px; display: none; padding: 5px 10px; font-size: 12px;">
+    <button id="extension-button" style="position: absolute; top: 20px; right: 20px; display: none; padding: 5px 10px; font-size: 20px; background-color: #f9d342;
+      color: #203a43;">
         延長戦突入！
     </button>
-    <button id="extension-button2" style="display: none;" onclick="enterExtension()">延長戦突入</button>
-    <button id="pk-button" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 1000;" onclick="enterPK()">
+    <button id="pk-button" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000; font-size: 20px; background-color: #f9d342;
+      color: #203a43;" onclick="enterPK()">
         PK戦突入
     </button>
 
@@ -3047,7 +3048,6 @@ if (turn % 2 === 0 && position !== 0) {
   showGameOverMessage("PK戦終了！");
   let winner = (position > 0) ? `${redTeamId}` : `${blueTeamId}`;
   let winnerJP = (position > 0) ? `${redTeamJP}` : `${blueTeamJP}`;
-
   appendLog(`\n最終結果: ${winnerJP}の勝利`);
    if (!isFastMode) playGamesetYell();
    clearMatchState(); 

@@ -871,11 +871,12 @@ button:hover {
     <div id="game-over-message">試合終了！</div>
 
     <!-- 延長戦・PKボタン -->
-    <button id="extension-button" style="position: absolute; top: 10px; right: 10px; display: none; padding: 5px 10px; font-size: 12px;">
+    <button id="extension-button" style="position: absolute; top: 20px; right: 20px; display: none; padding: 5px 10px; font-size: 20px; background-color: #f9d342;
+      color: #203a43;">
         延長戦突入！
     </button>
-    <button id="extension-button2" style="display: none;" onclick="enterExtension()">延長戦突入</button>
-    <button id="pk-button" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 1000;" onclick="enterPK()">
+    <button id="pk-button" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1000; font-size: 20px; background-color: #f9d342;
+      color: #203a43;" onclick="enterPK()">
         PK戦突入
     </button>
 
@@ -969,6 +970,99 @@ button:hover {
   redDiceProbabilities = [RedAP, RedBP, RedCP];
   blueDiceProbabilities = [BlueAP, BlueBP, BlueCP];
 }
+
+
+// ページ読み込み初期化処理非同期
+
+window.addEventListener("DOMContentLoaded", async () => {
+
+ try {
+
+    // サイコロ色データ読み込み
+    franceColors = await loadTeamColors(redTeamId);
+    brazilColors = await loadTeamColors(blueTeamId);
+    applyColors(redTeamId, franceIndex);
+    applyColors(blueTeamId, brazilIndex);
+
+
+    // 能力データ読み込み
+
+let redFormation = await loadFormationValues(redTeamId);
+let blueFormation = await loadFormationValues(blueTeamId);
+
+
+     // 能力値代入
+    redtrack_a_value = redFormation.attack;
+    redtrack_b_value = redFormation.midfield;
+    redtrack_c_value = redFormation.defence;
+    bluetrack_a_value = blueFormation.attack;
+    bluetrack_b_value = blueFormation.midfield;
+    bluetrack_c_value = blueFormation.defence;
+
+
+    // 頻度再計算
+    updateProbabilities();
+
+    // 確率データバー表示
+    renderRedDiceTracks();
+    renderBlueDiceTracks();
+
+   // スコアボード更新
+    document.getElementById('red-score').textContent = redScore;
+    document.getElementById('blue-score').textContent = blueScore;
+
+
+   // サイコロ色の切り替えクリックイベント
+    document.querySelectorAll(".d-Red").forEach(el => {
+      el.addEventListener("click", () => {
+        franceIndex = (franceIndex + 1) % franceColors.length;
+        applyColors(redTeamId, franceIndex);
+      });
+    });
+
+    document.querySelectorAll(".d-Blue").forEach(el => {
+      el.addEventListener("click", () => {
+        brazilIndex = (brazilIndex + 1) % brazilColors.length;
+        applyColors(blueTeamId, brazilIndex);
+      });
+    });
+
+  } catch (e) {
+    console.error("初期化失敗:", e);
+  }
+
+updateTurnCounter(); 
+
+ //ログにゲームの説明を表示
+  let log = `\n\n=== 試合画面の簡単な説明===\n`;
+      log += "\n国旗のアイコンをタッチすると国歌が再生されます";
+      log += "\nサイコロをタッチするとユニフォームの色を選択できます\n";
+      log += "\n【チームの攻中守パラメータについて】\n";
+      log += "\n選手・配置変更ボタンをタッチして先発選手を編成できます";
+      log += "\n選手の能力値とポジションがチームのパラメータ値を左右します";
+      log += "\n選手本来のポジションに配置することで能力値を最大限寄与します";
+      log += "\n中盤(保持力)のパラメータが試合の主導権を握るのに重要です";
+      log += "\n守備機会が多いため守備のパラメートも高く保つことを推奨します";
+      log += "\n攻撃は機会が多くないとはいえ得点を取るためには攻撃力も必要です";
+      log += "\n攻中守パラメータを上手に振り分け試合をコントロールしてください\n";
+      log += "\n【選手交代について】\n";
+      log += "\n試合中は[交]ボタンをタッチして選手やポジションを交代できます";
+      log += "\n選手交代やポジション変更で1回の交代回数としてカウントします";
+      log += "\n交代回数は4回までで、延長戦に入った場合は5回まで交代できます\n";
+      log += "\n【試合進行のボタンについて】\n";
+      log += "\n[自動ボタン]は自動で試合ターンが流れ、速度は上部のタブで調整できます";
+      log += "\n[高速ボタン]は1，2秒間内に試合を進行します。途中の選手交代はできません";
+      log += "\n[手動ボタン]はダッチするごとに1ターン試合を進めます";
+      log += "\n途中で自動や高速に切り替えることもできます\n";
+      log += "\n【攻略のポイント】\n";
+      log += "\n選手配置の大きなベース変更は試合前とハーフタイムの2回だけできます";
+      log += "\nその変更で試合の戦略の方針を決め、試合途中では選手交代で微調整します";
+      log += "\n残りの交代枠を考慮に入れながら攻めや守りの勝負所で適切な交代をします";
+      log += "\nPK戦までもつれこむと守備パラメータが多い方が有利になります";
+      
+      appendLog(log);
+});
+
 
 
   // 国名を左・右のデータバーラベルに表示
@@ -1076,7 +1170,6 @@ function playGoalSE() {
 }
 
 
-
  // ミュートボタンクリック
 document.getElementById("mute-toggle").addEventListener("click", () => {
   isMuted = !isMuted;
@@ -1098,7 +1191,6 @@ document.getElementById("mute-toggle").addEventListener("click", () => {
   // ボタンのアイコン更新
   document.getElementById("mute-toggle").textContent = isMuted ? "音声OFF" : "音声ON";
 });
-
 
 
 // GameDBからteamcolorを取得
@@ -1167,142 +1259,6 @@ function applyColors(team, index) {
     document.querySelector(".d-BlueC").style.backgroundColor = c3;
   }
 }
-
-
-
-
-// ページ読み込み初期化処理非同期
-
-window.addEventListener("DOMContentLoaded", async () => {
-
- try {
-
-    // 試合進行状態をlocalStorageから復元
-
-     // 先にログを復元
-     const savedLogs = localStorage.getItem("match_logs");
-     if (savedLogs !== null) {
-     gameLogs = JSON.parse(savedLogs);
-     const logBox = document.getElementById('game-log');
-     logBox.innerHTML = gameLogs.map(line => line.replace(/\n/g, "<br>")).join("");
-     logBox.scrollTop = logBox.scrollHeight;
-      }
-
-    const savedFirstHalfEnded = localStorage.getItem("match_isFirstHalfEnded");
-    if (savedFirstHalfEnded !== null) isFirstHalfEnded = savedFirstHalfEnded === "true";
-    const savedSideSwapped = localStorage.getItem("match_isSideSwapped");
-    if (savedSideSwapped !== null) isSideSwapped = savedSideSwapped === "true";
-
-    const savedTurn = localStorage.getItem("match_turn");
-    const savedRedScore = localStorage.getItem("match_redScore");
-    const savedBlueScore = localStorage.getItem("match_blueScore");
-
-    const savedSecondHalf = localStorage.getItem("match_isSecondHalfStarted");
-    const savedExtension = localStorage.getItem("match_isExtension");
-
-    if (savedTurn !== null) turn = parseInt(savedTurn, 10);
-    if (savedRedScore !== null) redScore = parseInt(savedRedScore, 10);
-    if (savedBlueScore !== null) blueScore = parseInt(savedBlueScore, 10);
-
-    if (savedSecondHalf !== null) isSecondHalfStarted = savedSecondHalf === "true";
-    if (savedExtension !== null) isExtension = savedExtension === "true";
-
-
-    // サイコロ色データ読み込み
-    franceColors = await loadTeamColors(redTeamId);
-    brazilColors = await loadTeamColors(blueTeamId);
-    applyColors(redTeamId, franceIndex);
-    applyColors(blueTeamId, brazilIndex);
-
-
-    // 能力データ読み込み
-
-let redFormation = await loadFormationValues(redTeamId);
-let blueFormation = await loadFormationValues(blueTeamId);
-
-// localStorageの更新がある場合はそれを上書き適用
-const redAtkLS = localStorage.getItem("formation_red_atk");
-const redMidLS = localStorage.getItem("formation_red_mid");
-const redDefLS = localStorage.getItem("formation_red_def");
-
-const blueAtkLS = localStorage.getItem("formation_blue_atk");
-const blueMidLS = localStorage.getItem("formation_blue_mid");
-const blueDefLS = localStorage.getItem("formation_blue_def");
-
-if (redAtkLS !== null && redMidLS !== null && redDefLS !== null) {
-  redFormation.attack   = parseFloat(redAtkLS);
-  redFormation.midfield = parseFloat(redMidLS);
-  redFormation.defence  = parseFloat(redDefLS);
-}
-
-if (blueAtkLS !== null && blueMidLS !== null && blueDefLS !== null) {
-  blueFormation.attack   = parseFloat(blueAtkLS);
-  blueFormation.midfield = parseFloat(blueMidLS);
-  blueFormation.defence  = parseFloat(blueDefLS);
-}
-
-     // 能力値代入
-    redtrack_a_value = redFormation.attack;
-    redtrack_b_value = redFormation.midfield;
-    redtrack_c_value = redFormation.defence;
-    bluetrack_a_value = blueFormation.attack;
-    bluetrack_b_value = blueFormation.midfield;
-    bluetrack_c_value = blueFormation.defence;
-
-
-// フォーメーション変更による一時的な能力値の削除(保留中)
-//localStorage.removeItem("formation_red_atk");
-//localStorage.removeItem("formation_red_mid");
-//localStorage.removeItem("formation_red_def");
-
-//localStorage.removeItem("formation_blue_atk");
-//localStorage.removeItem("formation_blue_mid");
-//localStorage.removeItem("formation_blue_def");
-
-
-
-    // 頻度再計算
-    updateProbabilities();
-
-    // 確率データバー表示
-    renderRedDiceTracks();
-    renderBlueDiceTracks();
-
-   // スコアボード更新
-    document.getElementById('red-score').textContent = redScore;
-    document.getElementById('blue-score').textContent = blueScore;
-
-   // 陣地反転をするかしないか判別更新
-    if (isSideSwapped) {
-    swapSideColumnsAndReorderDice();  // ← 左右を再入れ替え
-    reversePositionRadios();          // ← ラジオボタンも反転
-     }
-
-
-    // サイコロ色の切り替えクリックイベント
-    document.querySelectorAll(".d-Red").forEach(el => {
-      el.addEventListener("click", () => {
-        franceIndex = (franceIndex + 1) % franceColors.length;
-        applyColors(redTeamId, franceIndex);
-      });
-    });
-
-    document.querySelectorAll(".d-Blue").forEach(el => {
-      el.addEventListener("click", () => {
-        brazilIndex = (brazilIndex + 1) % brazilColors.length;
-        applyColors(blueTeamId, brazilIndex);
-      });
-    });
-
-  } catch (e) {
-    console.error("初期化失敗:", e);
-  }
-
-updateTurnCounter(); 
-
-});
-
-
 
 
 // 選手交代モーダルウィンドウを開いたとき関数
@@ -1532,8 +1488,6 @@ const blueDiceDivs = [
 // 対戦相手選択画面に戻るボタンイベント
 document.getElementById('reset-button').addEventListener('click', () => {
   
-//location.reload(); // ページをリロード（新規読み込み）
-
   clearMatchState(); 
 
 　window.location.href = "team_select.html";
@@ -1878,10 +1832,6 @@ function resetGame() {
 }
 
 
-
-
-
-
 // ゴールメッセージ表示関数非同期
 async function showGoal(pos) {
   const redMsg = document.getElementById('red-goal-message');
@@ -2096,7 +2046,6 @@ async function playTurn() {
     isFirstHalfEnded = true; // ← これで再実行を防ぐ！
     isSideSwapped = true; // ← ここでセット
 
-    saveMatchState(); // 試合の状態情報を保存
     return false;
   }
 
@@ -2136,10 +2085,10 @@ async function playTurn() {
   //ターン数表示関数呼び出し
   updateTurnCounter();
 
- 　　//ログにターン数表示呼び出し
+   //ログにターン数表示呼び出し
   let log = `=== ターン ${turn} ===\n`;
  
-　　//サイコロの目をゼロにリセット 
+  //サイコロの目をゼロにリセット 
  let redDiceResults = [0, 0, 0]; 
   let blueDiceResults = [0, 0, 0];
 

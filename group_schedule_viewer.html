@@ -157,6 +157,13 @@
   z-index: 10000;
 }
 
+
+.batch-fast-button {
+  margin-left: 1rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+}
+
   </style>
 </head>
 <body>
@@ -165,7 +172,12 @@
     <button id="viewStandings" onclick="location.href='group_standings_view.html'">順位表</button>
     <button id="nextRound">→</button>
   </div>
-  <h1 id="roundTitle">ラウンド 1</h1>
+
+
+<div id="roundHeader" style="display: flex; align-items: center; gap: 0.5rem;">
+  <h1 id="roundTitle">地域予選 第1節</h1>
+</div>
+
   <div id="matchList"></div>
 <!-- 画面全体を覆うオーバーレイ -->
 <div id="iframeOverlay" style="display:none;">
@@ -202,6 +214,72 @@
 
     let currentRound = 0;
     let fullSchedule = {}; // { groupKey: [[match1, match2...], [round2], ...] }
+
+
+
+ // 一括高速ボタンの処理
+async function runBatchFastProcess(roundNumber) {
+  const skipButtons = [];
+  const matchElems = document.querySelectorAll("#matchList .match");
+  matchElems.forEach(matchElem => {
+    const skipBtn = matchElem.querySelector(".skip-button:not(.disabled-button)");
+    if (skipBtn) skipButtons.push(skipBtn);
+  });
+
+  if (skipButtons.length === 0) {
+    alert("このラウンドの未実施試合はありません。");
+    return;
+  }
+
+for (let i = 0; i < skipButtons.length; i++) {
+    console.log(`一括高速: ${i + 1}/${skipButtons.length} 実行中`);
+    fastMatchReadyToClose = false; // 開始前にリセット
+    skipButtons[i].click();
+
+    // 処理完了まで待つ
+    await new Promise(resolve => {
+      const checkReady = setInterval(() => {
+        if (fastMatchReadyToClose) {
+          clearInterval(checkReady);
+
+          // closeIframeBtn.click() 実行と IndexedDB 完了監視
+          let dbSaved = false;
+          const originalOncomplete = indexedDB.open("GameDB", 27).onsuccess = (event) => {
+            const db = event.target.result;
+            const tx = db.transaction("matchresults", "readonly");
+            tx.oncomplete = () => {
+              if (!dbSaved) {
+                dbSaved = true;
+                resolve();
+              }
+            };
+            tx.onerror = () => {
+              if (!dbSaved) {
+                dbSaved = true;
+                resolve();
+              }
+            };
+          };
+
+          document.getElementById("closeIframeBtn").click();
+
+          // 念のためタイムアウトで待機保証
+          setTimeout(() => {
+            if (!dbSaved) {
+              dbSaved = true;
+              resolve();
+            }
+          }, 1000);
+        }
+      }, 200);
+    });
+
+    // 1試合ごとに少し待機（描画完了やIndexedDB書き込み安定化のため）
+    await new Promise(r => setTimeout(r, 300));
+}
+
+  alert("このラウンドの一括高速処理が完了しました。");
+}
 
    
  // 試合観戦から戻ってきたときの処理
@@ -340,6 +418,19 @@ window.addEventListener("message", (event) => {
 
 function renderRound(roundNumber) {
   document.getElementById("roundTitle").textContent = `地域予選 第${roundNumber + 1}節`;
+
+let batchBtn = document.getElementById("batchFastBtn");
+if (!batchBtn) {
+  batchBtn = document.createElement("button");
+  batchBtn.id = "batchFastBtn";
+  batchBtn.textContent = "一括高速";
+  batchBtn.className = "batch-fast-button";
+
+  document.getElementById("roundHeader").appendChild(batchBtn);
+}
+batchBtn.onclick = () => runBatchFastProcess(roundNumber);
+
+
   const container = document.getElementById("matchList");
   container.innerHTML = "";
 
@@ -467,14 +558,6 @@ document.getElementById("closeIframeBtn").onclick = () => {
         alert("まだ処理が完了していません。もう少し待ってから閉じてください。");
         return;
     }
-
-  console.log(
-    localStorage.getItem("match_redScore"),
-    localStorage.getItem("match_blueScore"),
-    localStorage.getItem("team-red"),
-    localStorage.getItem("team-blue")
-);
-
 
 
   const overlay = document.getElementById("iframeOverlay");
