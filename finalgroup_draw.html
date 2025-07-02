@@ -398,7 +398,8 @@ async function saveGroups() {
     tx.oncomplete = () => {
       alert("組み合わせを保存し、過去の本大会データを削除して新規の本大会を開始しました！");
       document.getElementById("saveBtn").disabled = true;
-      window.location.href = "finalgroup_schedule_viewer.html";
+      document.getElementById("viewSchedule").disabled = false;
+      //window.location.href = "finalgroup_schedule_viewer.html";
     };
 
     tx.onerror = (e) => {
@@ -411,6 +412,44 @@ async function saveGroups() {
     alert("DB接続時にエラーが発生しました。コンソールを確認してください。");
   }
 }
+
+
+async function checkFinalGroupStatsAndToggleButton() {
+  try {
+    const db = await openDB();
+    if (!db.objectStoreNames.contains("finalgroupstats")) {
+      console.warn("finalgroupstats ストアが存在しません。ボタン無効化します。");
+      document.getElementById("viewSchedule").disabled = true;
+      return;
+    }
+
+    const tx = db.transaction("finalgroupstats", "readonly");
+    const store = tx.objectStore("finalgroupstats");
+    const countRequest = store.count();
+
+    countRequest.onsuccess = () => {
+      const count = countRequest.result;
+      if (count > 0) {
+        document.getElementById("viewSchedule").disabled = false;
+      } else {
+        document.getElementById("viewSchedule").disabled = true;
+      }
+    };
+
+    countRequest.onerror = (e) => {
+      console.error("countRequest エラー:", e.target.error);
+      document.getElementById("viewSchedule").disabled = true;
+    };
+  } catch (error) {
+    console.error("checkFinalGroupStatsAndToggleButton エラー:", error);
+    document.getElementById("viewSchedule").disabled = true;
+  }
+}
+
+// ページロード時実行
+document.addEventListener("DOMContentLoaded", checkFinalGroupStatsAndToggleButton);
+
+
 
 
 document.getElementById("drawBtn").addEventListener("click", drawGroups);

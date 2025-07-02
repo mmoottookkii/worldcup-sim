@@ -213,13 +213,35 @@
     let currentRound = 0;
     let fullSchedule = {}; // { groupKey: [[match1, match2...], [round2], ...] }
 
+let gameDb = null;
+let fastMatchReadyToClose = false;
+const iframe = document.getElementById("playmatch-frame");
+const overlay = document.getElementById("iframeOverlay");
+
+// IndexedDB 接続使い回し
+function openGameDB() {
+  return new Promise((resolve, reject) => {
+    if (gameDb) return resolve(gameDb);
+    const request = indexedDB.open("GameDB", 27);
+    request.onsuccess = () => {
+      gameDb = request.result;
+      resolve(gameDb);
+    };
+    request.onerror = reject;
+  });
+}
+ 
+   // iframe 再利用破棄管理
+function closeIframe() {
+  overlay.style.display = "none";
+  iframe.src = "about:blank";
+}
    
 
  // 一括高速ボタンの処理
 async function runBatchFastProcess(roundNumber) {
   const skipButtons = [];
-  const matchElems = document.querySelectorAll("#matchList .match");
-  matchElems.forEach(matchElem => {
+  document.querySelectorAll("#matchList .match").forEach(matchElem => {
     const skipBtn = matchElem.querySelector(".skip-button:not(.disabled-button)");
     if (skipBtn) skipButtons.push(skipBtn);
   });
@@ -229,56 +251,32 @@ async function runBatchFastProcess(roundNumber) {
     return;
   }
 
-for (let i = 0; i < skipButtons.length; i++) {
+  for (let i = 0; i < skipButtons.length; i++) {
     console.log(`一括高速: ${i + 1}/${skipButtons.length} 実行中`);
-    fastMatchReadyToClose = false; // 開始前にリセット
+    fastMatchReadyToClose = false;
     skipButtons[i].click();
 
-    // 処理完了まで待つ
     await new Promise(resolve => {
-      const checkReady = setInterval(() => {
+      const timeout = setTimeout(() => {
+        console.warn("タイムアウトにより次に進みます");
+        resolve();
+      }, 3000);
+
+      const interval = setInterval(() => {
         if (fastMatchReadyToClose) {
-          clearInterval(checkReady);
-
-          // closeIframeBtn.click() 実行と IndexedDB 完了監視
-          let dbSaved = false;
-          const originalOncomplete = indexedDB.open("GameDB", 27).onsuccess = (event) => {
-            const db = event.target.result;
-            const tx = db.transaction("matchresultsworldcup", "readonly");
-            tx.oncomplete = () => {
-              if (!dbSaved) {
-                dbSaved = true;
-                resolve();
-              }
-            };
-            tx.onerror = () => {
-              if (!dbSaved) {
-                dbSaved = true;
-                resolve();
-              }
-            };
-          };
-
+          clearInterval(interval);
+          clearTimeout(timeout);
           document.getElementById("closeIframeBtn").click();
-
-          // 念のためタイムアウトで待機保証
-          setTimeout(() => {
-            if (!dbSaved) {
-              dbSaved = true;
-              resolve();
-            }
-          }, 1000);
+          resolve();
         }
-      }, 200);
+      }, 100);
     });
 
-    // 1試合ごとに少し待機（描画完了やIndexedDB書き込み安定化のため）
     await new Promise(r => setTimeout(r, 300));
-}
+  }
 
   alert("このラウンドの一括高速処理が完了しました。");
 }
-
 
 
 
@@ -405,10 +403,6 @@ for (let i = 0; i < skipButtons.length; i++) {
       return rounds;
     }
 
-
-
-let fastMatchReadyToClose = false;
-
 // 書き込み完了通知を受け取ったらフラグを立てるだけ
 window.addEventListener("message", (event) => {
     if (event.data?.type === "fastMatchFinished") {
@@ -525,15 +519,18 @@ if (result) {
     const overlay = document.getElementById("iframeOverlay");
     const iframe = document.getElementById("playmatch-frame");
     overlay.style.display = "flex";
-    iframe.src = "playmatch_rapid.html";
+    iframe.src = "playmatch_rapidfinal.html";
 
-    function handleReady(event) {
-      if (event.data?.type === "readyForFastStart") {
-        window.removeEventListener("message", handleReady);
-        iframe.contentWindow.postMessage({ type: "triggerFastStart" }, "*");
-      }
-    }
-    window.addEventListener("message", handleReady);
+function handleIframeMessages(event) {
+  if (event.data?.type === "readyForFastStart") {
+    iframe.contentWindow.postMessage({ type: "triggerFastStart" }, "*");
+  }
+  if (event.data?.type === "fastMatchFinished") {
+    fastMatchReadyToClose = true;
+    console.log("書き込み完了通知を受信: 閉じる準備完了");
+  }
+}
+window.addEventListener("message", handleIframeMessages);
   };
 }
         
@@ -559,11 +556,6 @@ document.getElementById("closeIframeBtn").onclick = () => {
         alert("まだ処理が完了していません。もう少し待ってから閉じてください。");
         return;
     }
-
-  const overlay = document.getElementById("iframeOverlay");
-  const iframe = document.getElementById("playmatch-frame");
-  overlay.style.display = "none";
-  iframe.src = "";
 
   // 試合情報取得
   //const regionGroup = window.lastMatchRegionGroup;  // 例: "eu_1"
@@ -622,7 +614,8 @@ document.getElementById("closeIframeBtn").onclick = () => {
         }
         
             // フラグをリセット
-    fastMatchReadyToClose = false;
+  closeIframe();
+  fastMatchReadyToClose = false;
         
       };
     };
@@ -675,11 +668,14 @@ document.getElementById("iframeOverlay").addEventListener("click", (e) => {
       }
     };
 
-    (async () => {
-      const teams = await loadTeamsFromFinalGroupStats();
-      fullSchedule = generateMatchSchedulesByGroup(teams);
-      renderRound(currentRound);
-    })();
+(async () => {
+  await openGameDB();
+  const teams = await loadTeamsFromFinalGroupStats();
+  fullSchedule = generateMatchSchedulesByGroup(teams);
+  renderRound(currentRound);
+})();
+
+
   </script>
 </body>
 </html>

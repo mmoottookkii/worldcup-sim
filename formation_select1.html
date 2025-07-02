@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html><!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -320,6 +320,7 @@
 
 <script>
 
+let originalPositions = []; // 初期状態保存用
 
 let attack = 0, midfield = 0, defense = 0;
 
@@ -854,28 +855,106 @@ document.getElementById("countrySelect").addEventListener("change", e => {
   });
 });
 
+
+
 // 初期読み込み時：playmatch.htmlで選択された国の選手を取得
 window.addEventListener("DOMContentLoaded", () => {
-  const teamId = localStorage.getItem("formteamId");
+
+const role = localStorage.getItem("formteamRole");
+  const formationSelect = document.getElementById("formationSelect");
   const countrySelect = document.getElementById("countrySelect");
 
-
-  if (teamId) {
-    countrySelect.value = teamId;
-    countrySelect.disabled = true; // ← 操作不可に
-    formationSelect.disabled = true;
-    getPlayersByTeam(teamId, players => {
-      allPlayers = players;
-      renderFormation(currentFormation);
-    });
-  } else {
-    // teamId がない場合は fallback（従来通り）
-    const defaultCountry = countrySelect.value;
-    getPlayersByTeam(defaultCountry, players => {
-      allPlayers = players;
-      renderFormation(currentFormation);
-    });
+  if (!formationSelect || !countrySelect) {
+    alert("必須のセレクトボックスが見つかりません。");
+    return;
   }
+
+  // 初期フォーメーションを保持
+  let currentFormation = formationSelect.value;
+
+
+  // 初期処理：選択されたチームを取得
+const teamId = localStorage.getItem("formteamId");
+
+if (!teamId || !role) {
+  alert("チームIDまたはロール情報が見つかりません。");
+  return;
+}
+
+countrySelect.value = teamId;
+countrySelect.disabled = true;
+formationSelect.disabled = true;
+
+// 選手取得とマップ描画
+getPlayersByTeam(teamId, players => {
+  allPlayers = players;
+  playerMap = new Map(players.map(p => [String(p.id), p]));
+  renderFormation(currentFormation);
+
+  // 1. localStorage から配置情報を取得
+  const localKey = `formation_${role}_positions`;
+  const localData = JSON.parse(localStorage.getItem(localKey));
+
+  if (Array.isArray(localData) && localData.length > 0) {
+    console.log("localStorage の配置を使用");
+    usedPlayerIds.clear();
+    document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+    const posElems = Array.from(document.querySelectorAll(".position"));
+
+    localData.forEach((entry, i) => {
+      const player = allPlayers.find(p => String(p.id) === String(entry.playerId));
+      if (entry.playerId && posElems[i] && player) {
+        assignPlayerToPosition(player, posElems[i]);
+      }
+    });
+
+    calculateTeamStats();
+
+originalPositions = Array.from(document.querySelectorAll(".position")).map(pos => ({
+  pos: pos.dataset.pos,
+  playerId: pos.dataset.assignedId || null
+}));
+
+    return; // ← DBの読み込みは行わない
+  }
+
+  // 2. localStorageが無ければ IndexedDB から配置情報を取得
+  const request = indexedDB.open("GameDB", 27);
+  request.onsuccess = () => {
+    const db = request.result;
+    const tx = db.transaction("playerpositions", "readonly");
+    const store = tx.objectStore("playerpositions");
+    const getReq = store.get(teamId);
+
+    getReq.onsuccess = () => {
+      const data = getReq.result;
+      if (!data || !data.positions) {
+        alert("保存されたポジション情報が見つかりません。");
+         parent.postMessage("closeChangeModal2", "*");
+        return;
+      }
+
+      usedPlayerIds.clear();
+      document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+      const posElems = Array.from(document.querySelectorAll(".position"));
+
+      data.positions.forEach(entry => {
+        const { order, playerId } = entry;
+        const player = allPlayers.find(p => String(p.id) === String(playerId));
+        if (player && posElems[order]) {
+          assignPlayerToPosition(player, posElems[order]);
+        }
+      });
+
+      calculateTeamStats();
+
+originalPositions = Array.from(document.querySelectorAll(".position")).map(pos => ({
+  pos: pos.dataset.pos,
+  playerId: pos.dataset.assignedId || null
+}));
+
+    };
+  };
 });
 
 
@@ -1016,6 +1095,8 @@ document.getElementById("resetAssignBtn").addEventListener("click", () => {
 });
 
 // 手動クリックで選手選択する従来の挙動はそのまま維持
+
+}); 
 
 </script>
 

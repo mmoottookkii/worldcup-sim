@@ -75,6 +75,11 @@
     background-color: #ffe066;
   }
 
+  button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
   .region {
     margin: 2rem 0;
     width: 100%;
@@ -125,7 +130,7 @@
 
   <div class="button-area">
     <button onclick="runDraw()">組み合わせ抽選</button>
-    <button onclick="saveGroups()">組み合わせ保存</button>
+    <button id="saveBtn" button onclick="saveGroups()"disabled>組み合わせ保存</button>
   </div>
 
   <div id="result"></div>
@@ -243,6 +248,8 @@ const regions = {
         });
         container.appendChild(regionDiv);
       }
+      
+      document.getElementById("saveBtn").disabled = false;
     }
 
      function openDatabase() {
@@ -339,6 +346,7 @@ async function saveGroups() {
 
     tx.oncomplete = () => {
       alert("組み合わせを保存し、過去の試合データを削除して新規の大会を開始しました。");
+      document.getElementById("viewSchedule").disabled = false;
       db.close();
     };
 
@@ -353,6 +361,43 @@ async function saveGroups() {
   }
 }
 
+
+async function checkRegionGroupStatsAndToggleButton() {
+  try {
+    const db = await openDatabase();
+    if (!db.objectStoreNames.contains("regiongroupstats")) {
+      console.warn("regiongroupstats ストアが存在しません。ボタンを無効化します。");
+      document.getElementById("viewSchedule").disabled = true;
+      return;
+    }
+
+    const tx = db.transaction("regiongroupstats", "readonly");
+    const store = tx.objectStore("regiongroupstats");
+    const countRequest = store.count();
+
+    countRequest.onsuccess = () => {
+      const count = countRequest.result;
+      if (count > 0) {
+        document.getElementById("viewSchedule").disabled = false;
+      } else {
+        document.getElementById("viewSchedule").disabled = true;
+      }
+      db.close();
+    };
+
+    countRequest.onerror = (e) => {
+      console.error("regiongroupstats カウント取得エラー:", e.target.error);
+      document.getElementById("viewSchedule").disabled = true;
+      db.close();
+    };
+  } catch (error) {
+    console.error("checkRegionGroupStatsAndToggleButton 実行エラー:", error);
+    document.getElementById("viewSchedule").disabled = true;
+  }
+}
+
+// ページ読み込み時実行
+document.addEventListener("DOMContentLoaded", checkRegionGroupStatsAndToggleButton);
 
   </script>
 </body>

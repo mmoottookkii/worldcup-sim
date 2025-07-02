@@ -613,6 +613,13 @@ window.addEventListener("DOMContentLoaded", () => {
 // デフォルト登録
 
 document.getElementById("saveDefaultBtn").addEventListener("click", () => {
+
+
+    if (usedPlayerIds.size !== 11) {
+        alert("選手11人を配置してからデフォルト登録できます");
+        return; // 何も処理をしない
+    }
+
     const teamId = document.getElementById("countrySelect").value;
     const formation = document.getElementById("formationSelect").value;
     const attack = parseInt(document.getElementById("atk").textContent) || 0;
