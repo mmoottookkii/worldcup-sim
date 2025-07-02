@@ -218,7 +218,7 @@
 let gameDb = null;
 let fastMatchReadyToClose = false;
 const iframe = document.getElementById("playmatch-frame");
-
+let isBatchFastMode = false;
 
 
 function openGameDB() {
@@ -278,7 +278,9 @@ async function runBatchFastProcess(roundNumber) {
     await new Promise(r => setTimeout(r, 300));
   }
 
+      isBatchFastMode = false; // 処理後に戻す（または iframe close 時など）
   alert("このラウンドの一括高速処理が完了しました。");
+  
 }
 
    
@@ -428,8 +430,12 @@ if (!batchBtn) {
 
   document.getElementById("roundHeader").appendChild(batchBtn);
 }
-batchBtn.onclick = () => runBatchFastProcess(roundNumber);
 
+batchBtn.onclick = () => {
+    isBatchFastMode = true;
+    runBatchFastProcess(roundNumber);
+
+};
 
   const container = document.getElementById("matchList");
   container.innerHTML = "";
@@ -535,7 +541,9 @@ function handleReady(event) {
 }
 window.addEventListener("message", handleReady);
 
-    iframe.src = "playmatch_rapid.html"; // 再利用し、閉じるときは about:blank
+    iframe.src = isBatchFastMode
+        ? "playmatch_rapid.html?batch=1"
+        : "playmatch_rapid.html";
 
   };
 }

@@ -215,6 +215,8 @@
 
 let gameDb = null;
 let fastMatchReadyToClose = false;
+let isBatchFastMode = false;
+
 const iframe = document.getElementById("playmatch-frame");
 const overlay = document.getElementById("iframeOverlay");
 
@@ -274,7 +276,8 @@ async function runBatchFastProcess(roundNumber) {
 
     await new Promise(r => setTimeout(r, 300));
   }
-
+  
+  isBatchFastMode = false; // 処理後に戻す（または iframe close 時など）
   alert("このラウンドの一括高速処理が完了しました。");
 }
 
@@ -425,8 +428,10 @@ if (!batchBtn) {
 
   document.getElementById("roundHeader").appendChild(batchBtn);
 }
-batchBtn.onclick = () => runBatchFastProcess(roundNumber);
-
+batchBtn.onclick = () =>  {
+    isBatchFastMode = true;
+    runBatchFastProcess(roundNumber);
+};
 
   const container = document.getElementById("matchList");
   container.innerHTML = "";
@@ -519,18 +524,22 @@ if (result) {
     const overlay = document.getElementById("iframeOverlay");
     const iframe = document.getElementById("playmatch-frame");
     overlay.style.display = "flex";
-    iframe.src = "playmatch_rapidfinal.html";
 
-function handleIframeMessages(event) {
-  if (event.data?.type === "readyForFastStart") {
-    iframe.contentWindow.postMessage({ type: "triggerFastStart" }, "*");
-  }
-  if (event.data?.type === "fastMatchFinished") {
-    fastMatchReadyToClose = true;
-    console.log("書き込み完了通知を受信: 閉じる準備完了");
-  }
+
+// 修正: skipBtn.onclick 内
+function handleReady(event) {
+    if (event.data?.type === "readyForFastStart") {
+        window.removeEventListener("message", handleReady);
+        iframe.contentWindow.postMessage({ type: "triggerFastStart" }, "*");
+    }
 }
-window.addEventListener("message", handleIframeMessages);
+window.addEventListener("message", handleReady);
+
+
+    iframe.src = isBatchFastMode
+        ? "playmatch_rapidfinal.html?batch=1"
+        : "playmatch_rapidfinal.html";
+
   };
 }
         
