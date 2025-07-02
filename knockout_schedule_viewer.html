@@ -564,6 +564,10 @@ namesDiv.appendChild(nameB);
 
 
 
+if (!localStorage.getItem("currentKnockoutRound")) {
+    localStorage.setItem("currentKnockoutRound", "R16");
+}
+
 renderKnockout();
 
 
