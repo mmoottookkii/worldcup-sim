@@ -295,7 +295,7 @@ function renderTable(groupKey, teams, matchResults, currentGroupKey) {
   const thead = document.createElement("thead");
   thead.innerHTML = `
     <tr>
-      <th>順位</th><th>国名</th><th>勝点</th><th>勝</th><th>負</th><th>引</th><th>得差</th>
+      <th>順位</th><th>国名</th><th>勝点</th><th>勝</th><th>引</th><th>負</th><th>得差</th>
     </tr>`;
   table.appendChild(thead);
 
@@ -308,8 +308,8 @@ function renderTable(groupKey, teams, matchResults, currentGroupKey) {
       <td class="country-name">${teamNameMap[team.teamId] || team.teamId}</td>
       <td>${team.point}</td>
       <td>${team.win}</td>
-      <td>${team.loss}</td>
       <td>${team.tie}</td>
+      <td>${team.loss}</td>
       <td>${team.goaldifference}</td>
     `;
     tbody.appendChild(row);
