@@ -1,19 +1,12 @@
 ﻿ 
 <!DOCTYPE html> 
 <html lang="ja"> 
- 
-  <head> 
-     
-   <meta charset="UTF-8"> 
-    
+  <head>  
+   <meta charset="UTF-8">  
    <title>ガン消しサッカーシミュレーター</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
 <style>
-
-
-
 /* ページ全体 */
 body {
   background-color: #1e1e1e; /* ダーク背景 */
@@ -409,11 +402,6 @@ button:hover {
 }
 
 
-
-
-
-
-
 #start-button,
 #manual-start-button,
 #fast-start-button {
@@ -634,8 +622,6 @@ button:hover {
   left: 50%;
   transform: translateX(-50%);
 }
-
-
 
 .attack-label {
   position: absolute;
@@ -891,7 +877,6 @@ button:hover {
 
  <script>
 
-
   // グローバル変数宣言
 
    let franceColors = [];
@@ -933,8 +918,6 @@ button:hover {
 
   const redTeamJP = localStorage.getItem("team-red-jp") || "赤チーム国名";
   const blueTeamJP = localStorage.getItem("team-blue-jp") || "青チーム国名";
-
-
   console.log("チームRED:", redTeamId);  // 例: "japan"
   console.log("チームBLUE:", blueTeamId); // 例: "brazil"
 
@@ -946,8 +929,7 @@ button:hover {
    var bluetrack_c_value = 0;
 
 
-// 頻度調整   
-   
+// 頻度調整     
    var RedAP, RedBP, RedCP, BlueAP, BlueBP, BlueCP;
    let redDiceProbabilities, blueDiceProbabilities;
 
@@ -964,14 +946,11 @@ button:hover {
   blueDiceProbabilities = [BlueAP, BlueBP, BlueCP];
 }
 
-
-
   // 国名を左・右のデータバーラベルに表示
 
   // 「攻撃力」「保持力」「守備力」ラベルを国名付きに更新
   const redDiceLabels = document.querySelectorAll("#left-column .dice-label");
   const blueDiceLabels = document.querySelectorAll("#right-column .dice-label");
-
   const labelNames = ["攻撃力", "保持力", "守備力"];
 
   redDiceLabels.forEach((label, index) => {
@@ -982,8 +961,6 @@ button:hover {
     label.textContent = `${blueTeamJP}${labelNames[index]}`;
   });
 
-
-
   // チームIDに対応する画像アイコンを生成
   const redFlagImg = document.getElementById("red-flag-icon");
   const blueFlagImg = document.getElementById("blue-flag-icon");
@@ -991,7 +968,6 @@ button:hover {
 
   redFlagImg.src = `flagpng/${redTeamId}icon.png`;
   blueFlagImg.src = `flagpng/${blueTeamId}icon.png`;
-
 
   // 国歌再生関数
   let currentPlayingTeam = null; // 今再生中のチーム名
@@ -1020,13 +996,9 @@ function playAnthem(teamId) {
   });
 }
 
-
-
   // 国旗クリック時に国歌再生
   redFlagImg.addEventListener("click", () => playAnthem(redTeamId));
   blueFlagImg.addEventListener("click", () => playAnthem(blueTeamId));
-
-
 
   // BGM効果音再生関数
 function playBGM() {
@@ -1044,7 +1016,6 @@ function playBGM() {
   bgmAudio.onended = () => { isBgmPlaying = false; };
   bgmAudio.onerror = () => { isBgmPlaying = false; };
 }
-
 
 function playYell() {
   const se = new Audio('bgm/stadiumyell.mp3');
@@ -1070,8 +1041,6 @@ function playGoalSE() {
   allSE.push(se); // リストに追加
 }
 
-
-
  // ミュートボタンクリック
 document.getElementById("mute-toggle").addEventListener("click", () => {
   isMuted = !isMuted;
@@ -1093,8 +1062,6 @@ document.getElementById("mute-toggle").addEventListener("click", () => {
   // ボタンのアイコン更新
   document.getElementById("mute-toggle").textContent = isMuted ? "音声OFF" : "音声ON";
 });
-
-
 
 // GameDBからteamcolorを取得
 function loadTeamColors(teamId) {
@@ -1163,25 +1130,21 @@ function applyColors(team, index) {
   }
 }
 
-
 // ページ読み込み初期化処理非同期
 
 window.addEventListener("DOMContentLoaded", async () => {
 
  try {
-
     // サイコロ色データ読み込み
     franceColors = await loadTeamColors(redTeamId);
     brazilColors = await loadTeamColors(blueTeamId);
     applyColors(redTeamId, franceIndex);
     applyColors(blueTeamId, brazilIndex);
 
-
    // 能力データ読み込み
 
 let redFormation = await loadFormationValues(redTeamId);
 let blueFormation = await loadFormationValues(blueTeamId);
-
 
      // 能力値代入
     redtrack_a_value = redFormation.attack;
@@ -1191,10 +1154,8 @@ let blueFormation = await loadFormationValues(blueTeamId);
     bluetrack_b_value = blueFormation.midfield;
     bluetrack_c_value = blueFormation.defence;
 
-
     // 頻度再計算
     updateProbabilities();
-
 
     // 確率データバー表示
     renderRedDiceTracks();
@@ -1203,7 +1164,6 @@ let blueFormation = await loadFormationValues(blueTeamId);
    // スコアボード更新
     document.getElementById('red-score').textContent = redScore;
     document.getElementById('blue-score').textContent = blueScore;
-
 
     // サイコロ色の切り替えクリックイベント
     document.querySelectorAll(".d-Red").forEach(el => {
@@ -1290,7 +1250,6 @@ function closeChangeModal() {
   isPaused = false;  // 試合を再開
 }
 
-
 window.addEventListener("message", event => {
   if (event.data === "closeChangeModal") {
     setTimeout(() => {
@@ -1326,9 +1285,7 @@ document.getElementById("changeblue-button").addEventListener("click", function 
 });
 
 
-
 //試合進行情報の保存関数
-
 function saveMatchState() {
   localStorage.setItem("match_turn", turn);
   localStorage.setItem("match_redScore", redScore);
@@ -1404,7 +1361,6 @@ const blueDiceDivs = [
   document.querySelector('.d-BlueC')
 ];
 
-
 // 対戦相手選択画面に戻るボタンイベント
 document.getElementById('reset-button').addEventListener('click', () => {
   
@@ -1413,7 +1369,6 @@ document.getElementById('reset-button').addEventListener('click', () => {
 　window.location.href = "team_select.html";
 
 });
-
 
 // 自動モードスタートイベント
 document.getElementById('start-button').addEventListener('click', () => {
@@ -1476,7 +1431,6 @@ document.getElementById('fast-start-button').addEventListener('click', () => {
   }
 });
 
-
 // ボタンイベント延長戦ボタンイベント
 document.getElementById('extension-button').addEventListener('click', () => {
 document.getElementById('game-over-message').style.display = 'none';
@@ -1484,8 +1438,6 @@ document.getElementById('extension-button').style.display = 'none';
 enterExtension();
 
 });
-
-
 
 // 自動モードスタート関数
 function startAutoGame() {
@@ -1532,8 +1484,6 @@ async function fastModeGame() {
   isFastMode = false;  // 終了後は戻しておくと安全
 }
 
-
-
 // 高速モードPKスタート関数
 async function fastModePK() {
   isFastMode = true;
@@ -1548,15 +1498,12 @@ async function fastModePK() {
 //非同期処理ミリ秒指定関数
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-
-
 // ラジオボックス現在位置の更新関数
 function updatePositionRadio(pos) {
 document.querySelectorAll('input[name="position"]').forEach(radio => {
 radio.checked = parseInt(radio.value) === pos;
       });
     }
-
 
 // 試合時間ターンカウンター更新関数
 function updateTurnCounter() {
@@ -1568,8 +1515,6 @@ function updateTurnCounter() {
 
   document.getElementById('turn-counter').textContent = `試合時間: ${displayTurn}`;
 }
-
-
 
 // ログ記録関数
 function appendLog(text) {
@@ -1583,7 +1528,6 @@ function appendLog(text) {
   // localStorageに保存
   localStorage.setItem("match_logs", JSON.stringify(gameLogs));
 }
-
 
 // ラジオボックス色の更新関数
 function updateRadioColors() {
@@ -1616,7 +1560,6 @@ document.querySelectorAll('input[name="position"]').forEach(radio => {
   });
 }
 
-
 // スマイルマーク更新関数
 function updateDiceDots(diceResults, diceDivs) {
   for (let i = 0; i < diceResults.length; i++) {
@@ -1636,7 +1579,6 @@ function updateDiceDots(diceResults, diceDivs) {
     }
   }
 }
-
 
 // 自動手動高速モードボタンの表示関数
 function showModeButtons() {
@@ -1661,16 +1603,10 @@ function hideModeButtons() {
   document.getElementById('reset-button').style.display = 'none'; 
 }
 
-
-
-
 // 延長戦条件チェック関数
 function checkExtensionCondition() {
   return redScore === blueScore;
 }
-
-
-
 
 // 試合終了ポップアップ表示関数
 function showGameOverMessage(message) {
@@ -1678,8 +1614,6 @@ function showGameOverMessage(message) {
   gameOverMessage.textContent = message;
   gameOverMessage.style.display = 'block';
 }
-
-
 
 // 延長戦ボタン表示関数
 function showExtensionButton() {
@@ -1774,7 +1708,6 @@ async function showGoal(pos) {
   }
 }
 
-
 // サイコロアニメーションリセット関数
 
 function clearDiceActive() {
@@ -1806,11 +1739,7 @@ function diceBact(activeBlueClasses) {
   });
 }
 
-
-
-
 // 確率データバー表示関数
-
 
 function renderRedDiceTracks() {
   const values = [redtrack_a_value, redtrack_b_value, redtrack_c_value];
@@ -1848,8 +1777,6 @@ function renderRedDiceTracks() {
   });
 }
 
-
-
 function renderBlueDiceTracks() {
   const values = [bluetrack_a_value, bluetrack_b_value, bluetrack_c_value];
   const diceIds = ["blue-dice-track-a", "blue-dice-track-b", "blue-dice-track-c"];
@@ -1885,7 +1812,6 @@ function renderBlueDiceTracks() {
     container.appendChild(bar);
   });
 }
-
 
 //ハーフタイム陣地入れ替え関数
 
@@ -1973,7 +1899,29 @@ async function playTurn() {
             ? "試合終了！"
             : "試合終了！"  );
 
-       clearMatchState(); 
+  //ターン数表示関数呼び出し
+ updateTurnCounter();
+
+//サイコロ分数カウンターの更新呼び出し
+const fractions = [
+  { selector: '.d-RedA .redAcounter', arise: redAarise, attempt: redAattempt },
+  { selector: '.d-RedB .redBcounter', arise: redBarise, attempt: redBattempt },
+  { selector: '.d-RedC .redCcounter', arise: redCarise, attempt: redCattempt },
+  { selector: '.d-BlueA .blueAcounter', arise: blueAarise, attempt: blueAattempt },
+  { selector: '.d-BlueB .blueBcounter', arise: blueBarise, attempt: blueBattempt },
+  { selector: '.d-BlueC .blueCcounter', arise: blueCarise, attempt: blueCattempt },
+];
+
+fractions.forEach(({ selector, arise, attempt }) => {
+  const fractionLabel = document.querySelector(selector);
+  fractionLabel.textContent = `${arise} / ${attempt}`;
+});
+
+//得点の更新
+    document.getElementById('red-score').textContent = redScore;
+    document.getElementById('blue-score').textContent = blueScore;
+
+    clearMatchState(); 
 
   localStorage.setItem("match_redScore", redScore);
   localStorage.setItem("match_blueScore", blueScore);
@@ -1983,41 +1931,35 @@ async function playTurn() {
     }, 100); // 100ms程度で十分（環境による）
 
     return false;
-
   }
 
-   
   if(turn ==46){
     position=0;
     counterMode = null; // 特殊モード解除
     tenseMode = null;  // 特殊モード解除
     backattackMode = null; // 特殊モード解除
     backattackfail = null;
-　　updatePositionRadio(position);
-  　updateRadioColors();    
-    appendLog("位置リセット。\n");
+
    }
 
 
   //ターン数表示関数呼び出し
-  updateTurnCounter();
+  //updateTurnCounter();
 
  　　//ログにターン数表示呼び出し
-  let log = `=== ターン ${turn} ===\n`;
+  //let log = `=== ターン ${turn} ===\n`;
  
 　　//サイコロの目をゼロにリセット 
- let redDiceResults = [0, 0, 0]; 
+  let redDiceResults = [0, 0, 0]; 
   let blueDiceResults = [0, 0, 0];
 
-
     //サイコロアニメーション呼び出し
-  clearDiceActive();
+  //clearDiceActive();
 
     //以下メインのサイコロふり
 
-
  if (counterMode === 1) {
-    log += "★カウンターモード中\n";
+    //log += "★カウンターモード中\n";
 
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
@@ -2038,19 +1980,15 @@ async function playTurn() {
     blueCattempt++;
     if (blueDiceResults[2]) blueCarise++;
 
+    //diceAact(['d-RedA', 'd-RedB']);
+    //diceBact(['d-BlueB', 'd-BlueC']);
 
-    diceAact(['d-RedA', 'd-RedB']);
-    diceBact(['d-BlueB', 'd-BlueC']);
-
-
-    log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
-    log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
-　　log += "\n集中攻撃!!!";
+    //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
+    //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
+　　//log += "\n集中攻撃!!!";
 
      redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
-
-
 
     if (
    (blueDiceResults[1] === 1 || blueDiceResults[2] === 1) &&
@@ -2058,16 +1996,14 @@ async function playTurn() {
   (blueDiceResults[1] + blueDiceResults[2] + redDiceResults[0] + redDiceResults[1] === 2)
     ) {
       counterMode = 2;
-      updateRadioColors();
-     log += "★超カウンターモード開始！\n";
+      //updateRadioColors();
+     //log += "★超カウンターモード開始！\n";
      if (!isFastMode) playYell();
     }
 
-
-
   } else if (counterMode === 2) {
 
-     log += "【★超カウンターモード中】\n";
+     //log += "【★超カウンターモード中】\n";
 
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
@@ -2092,24 +2028,20 @@ async function playTurn() {
     blueCattempt++;
     if (blueDiceResults[2]) blueCarise++;
 
+    //diceAact(['d-RedA', 'd-RedB']);
+    //diceBact(['d-BlueA', 'd-BlueB', 'd-BlueC']);
 
-    diceAact(['d-RedA', 'd-RedB']);
-    diceBact(['d-BlueA', 'd-BlueB', 'd-BlueC']);
-
-
-    log += `\n${blueTeamJP}攻(${blueDiceResults[0]})`;
-    log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
-    log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
-　　log += "\n全員守備!!!";
+    //log += `\n${blueTeamJP}攻(${blueDiceResults[0]})`;
+    //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
+    //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
+    //log += "\n全員守備!!!";
   
-    
      redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
    
-
 } else if (counterMode === -1) {
 
-    log += "★カウンターモード中\n";
+    //log += "★カウンターモード中\n";
 
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
@@ -2130,17 +2062,13 @@ async function playTurn() {
     blueBattempt++;
     if (blueDiceResults[1]) blueBarise++;
 
+    //diceAact(['d-RedB', 'd-RedC']);
+    //diceBact(['d-BlueA', 'd-BlueB']);
 
+    //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})`;
+    //log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}中(${blueDiceResults[1]})\n`;
+    //log += "\n集中攻撃!!!";
 
-    diceAact(['d-RedB', 'd-RedC']);
-    diceBact(['d-BlueA', 'd-BlueB']);
-
-    log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})`;
-    log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}中(${blueDiceResults[1]})\n`;
-    log += "\n集中攻撃!!!";
-
-
-    
      redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
 
@@ -2151,15 +2079,14 @@ async function playTurn() {
 
     ) {
       counterMode = -2;
-      updateRadioColors();
-    log += "★超カウンターモード開始！\n";
+      //updateRadioColors();
+    //log += "★超カウンターモード開始！\n";
      if (!isFastMode) playYell();
     }
   
-
   } else if (counterMode === -2) {
 
-    log += "【★超カウンターモード中】\n";
+    //log += "【★超カウンターモード中】\n";
    
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
@@ -2184,17 +2111,13 @@ async function playTurn() {
     blueBattempt++;
     if (blueDiceResults[1]) blueBarise++;
 
+    //diceAact(['d-RedA', 'd-RedB', 'd-RedC']);
+    //diceBact(['d-BlueA', 'd-BlueB']);
 
-
-    diceAact(['d-RedA', 'd-RedB', 'd-RedC']);
-    diceBact(['d-BlueA', 'd-BlueB']);
-
-    log += `\n${redTeamJP}攻(${redDiceResults[0]})`;
-    log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})`;
-    log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}守(${blueDiceResults[1]})\n`;
-　　log += "\n全員守備!!!";
-
-
+    //log += `\n${redTeamJP}攻(${redDiceResults[0]})`;
+    //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})`;
+    //log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}守(${blueDiceResults[1]})\n`;
+　　//log += "\n全員守備!!!";
 
      redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
@@ -2203,14 +2126,10 @@ async function playTurn() {
 
     switch (position) {
 
-
       case 1:   
 
-     
  if (lastPosition === 2) { if (backattackfail===1) {
  
-
-
                redDiceResults[0] = Math.random() < redDiceProbabilities[0] ? 1 : 0;
                redAattempt++;
                if (redDiceResults[0]) redAarise++;
@@ -2219,17 +2138,17 @@ async function playTurn() {
                blueAattempt++;
                if (blueDiceResults[0]) blueAarise++;
 
-               diceAact(['d-RedA']);
-               diceBact(['d-BlueA']);
+              //diceAact(['d-RedA']);
+               //diceBact(['d-BlueA']);
 
-               log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
-               log += "\n中央守備";
+               //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
+               //log += "\n中央守備";
  
               if (redDiceResults[0] === blueDiceResults[0]) {
                  position = 0;
                  backattackfail = null;
                  lastPosition = position;
-                 log += `\nセンターへ移動！`;
+                 //log += `\nセンターへ移動！`;
               
                  } else if (redDiceResults[0] === 0 && blueDiceResults[0] === 1) {
                              position = 0;
@@ -2243,7 +2162,6 @@ async function playTurn() {
                         } 
        }  
                  
-
               else {
     
     redDiceResults[1] = Math.random() < redDiceProbabilities[1] ? 1 : 0;
@@ -2254,23 +2172,21 @@ async function playTurn() {
     blueAattempt++;
     if (blueDiceResults[0]) blueAarise++;
 
-    diceAact(['d-RedB']);
-    diceBact(['d-BlueA']);
+    //diceAact(['d-RedB']);
+    //diceBact(['d-BlueA']);
 
-
-
-    log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
-    log += "\n中央守備";
+    //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
+    //log += "\n中央守備";
  
        if (redDiceResults[1] === blueDiceResults[0]) {
        position = 0;
       lastPosition = position;
-       log += `\nセンターへ移動！`;
+       //log += `\nセンターへ移動！`;
         } else if (redDiceResults[1] === 0 && blueDiceResults[0] === 1) {
                position = 0;
                lastPosition = position;
                    }
-      
+ 
         }  
  } else {
     // 青色サイコロCのみ
@@ -2279,26 +2195,22 @@ async function playTurn() {
     blueCattempt++;
     if (blueDiceResults[2]) blueCarise++;
 
+    //diceBact(['d-BlueC']);
 
-    diceBact(['d-BlueC']);
-
-    log += `\n${blueTeamJP}守(${blueDiceResults[2]})\n`;
+    //log += `\n${blueTeamJP}守(${blueDiceResults[2]})\n`;
     lastPosition = position;
 
-
-
-　  　if (blueDiceResults[2] == 0) {
+    if (blueDiceResults[2] == 0) {
         position = 2;
-         log += `\n初期守備を通過しゴール前へ移動！\n`;
+         //log += `\n初期守備を通過しゴール前へ移動！\n`;
         } else { 
-               log += `\n強固な初期守備！押し返す!`;
+               //log += `\n強固な初期守備！押し返す!`;
                     }
        }
     
 break;
 
         case 2:
-
 
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
@@ -2314,13 +2226,11 @@ break;
     if (blueDiceResults[2]) blueCarise++;
 
 
-    diceAact(['d-RedA']);
-    diceBact(['d-BlueC']);
+    //diceAact(['d-RedA']);
+    //diceBact(['d-BlueC']);
 
-
-
-        log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
-        log += `\n${redTeamJP}の初期攻撃`;
+        //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
+        //log += `\n${redTeamJP}の初期攻撃`;
 
        lastPosition = position;
 
@@ -2338,17 +2248,14 @@ break;
     blueCattempt++;
     if (blueDiceResults[2]) blueCarise++;
 
+    //diceAact(['d-RedA']);
+    //diceBact(['d-BlueB', 'd-BlueC']);
 
-
-    diceAact(['d-RedA']);
-    diceBact(['d-BlueB', 'd-BlueC']);
-
-        log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
-        log += `\n${blueTeamJP}守(${blueDiceResults[2]})\n`;
-　　　　log += `\n${redTeamJP}の通常攻撃`;
+        //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
+        //log += `\n${blueTeamJP}守(${blueDiceResults[2]})\n`;
+　　　　//log += `\n${redTeamJP}の通常攻撃`;
        lastPosition = position;
 }
-
 
    if (
   redDiceResults[0] === 1 &&
@@ -2357,23 +2264,19 @@ break;
    ) 
      {
        counterMode = 1;
-      updateRadioColors();
-      log += "★カウンターモード開始！\n";
+      //updateRadioColors();
+      //log += "★カウンターモード開始！\n";
       if (!isFastMode) playYell();
     }
-
 
   redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
   blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
 
        break;
 
-        
-
       case -1:
 
   if (lastPosition === -2) {  if(backattackfail) {
-
 
            // 赤色サイコロA、青色サイコロA
 
@@ -2385,17 +2288,17 @@ break;
     blueAattempt++;
     if (blueDiceResults[0]) blueAarise++;
 
-    diceAact(['d-RedA']);
-    diceBact(['d-BlueA']);
+    //diceAact(['d-RedA']);
+    //diceBact(['d-BlueA']);
 
-    log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
-    log += "\n中央守備";
+    //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
+    //log += "\n中央守備";
 
     if (redDiceResults[0] === blueDiceResults[0]) {
     position = 0;
     backattackfail = null;
     lastPosition = position;
-    log += `\nセンターへ移動！\n`;
+    //log += `\nセンターへ移動！\n`;
 
        } else  if (redDiceResults[0] ==1 && blueDiceResults[0] == 0)
                      {
@@ -2426,17 +2329,17 @@ break;
     blueBattempt++;
     if (blueDiceResults[1]) blueBarise++;
 
-    diceAact(['d-RedA']);
-    diceBact(['d-BlueB']);
+    //diceAact(['d-RedA']);
+    //diceBact(['d-BlueB']);
 
-    log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})\n`;
-    log += "\n中央守備";
+    //log += `\n${redTeamJP}攻(${redDiceResults[0]}) ${blueTeamJP}中(${blueDiceResults[1]})\n`;
+    //log += "\n中央守備";
 
     if (redDiceResults[0] === blueDiceResults[1]) {
     position = 0;
     lastPosition = position;
     
-    log += `\nセンターへ移動！\n`;
+    //log += `\nセンターへ移動！\n`;
 
           } else  if (redDiceResults[0] ==1 && blueDiceResults[1] == 0) {
                                   position = 0; lastPosition = position;
@@ -2454,33 +2357,28 @@ break;
     redCattempt++;
     if (redDiceResults[2]) redCarise++;
 
-    diceAact(['d-RedC']);
+    //diceAact(['d-RedC']);
 
-    log += `\n${redTeamJP}守(${redDiceResults[2]})\n`;
+    //log += `\n${redTeamJP}守(${redDiceResults[2]})\n`;
 
     lastPosition = position;
 
  if (redDiceResults[2] == 0) {
      position = -2;
-    log += `\n初期守備を通過しゴール前へ移動！\n`;
+    //log += `\n初期守備を通過しゴール前へ移動！\n`;
          } else { 
-              log += `\n強固な初期守備！押し返す!`;
+              //log += `\n強固な初期守備！押し返す!`;
                }
 }
    
-  
-
-break;
-
+break; 
 
       case -2:
 
      redDiceProbabilities = [RedAP, RedBP*0.6, RedCP*1.4];  // 赤A, 赤B, 赤C
      blueDiceProbabilities = [BlueAP, BlueBP*0.6, BlueCP*1.4]; // 青A, 青B, 青C
 
-
      if  (lastPosition !== -2) {
-
 
     redDiceResults[2] = Math.random() < redDiceProbabilities[2] ? 1 : 0;
     redCattempt++;
@@ -2490,18 +2388,15 @@ break;
     blueAattempt++;
     if (blueDiceResults[0]) blueAarise++;
 
+    //diceAact(['d-RedC']);
+    //diceBact(['d-BlueA']);
 
-
-    diceAact(['d-RedC']);
-    diceBact(['d-BlueA']);
-
-        log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
-     　 log += `\n${blueTeamJP}の初期攻撃`;
+        //log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}攻(${blueDiceResults[0]})\n`;
+     　 //log += `\n${blueTeamJP}の初期攻撃`;
 
         lastPosition = position;
 
    } else {
-
 
     redDiceResults[1] = Math.random() < redDiceProbabilities[1] ? 1 : 0;
     redBattempt++;
@@ -2510,19 +2405,16 @@ break;
     redDiceResults[2] = Math.random() < redDiceProbabilities[2] ? 1 : 0;
     redCattempt++;
     if (redDiceResults[2]) redCarise++;
-
-
+    
     blueDiceResults[0] = Math.random() < blueDiceProbabilities[0] ? 1 : 0;
     blueAattempt++;
     if (blueDiceResults[0]) blueAarise++;
+    //diceAact(['d-RedB', 'd-RedC']);
+    //diceBact(['d-BlueA']);
 
-
-    diceAact(['d-RedB', 'd-RedC']);
-    diceBact(['d-BlueA']);
-
-        log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]}) `;
-        log += `\n${redTeamJP}守(${redDiceResults[2]}) \n`;
-　　　　log += `\n${blueTeamJP}の通常攻撃`;
+        //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}攻(${blueDiceResults[0]}) `;
+        //log += `\n${redTeamJP}守(${redDiceResults[2]}) \n`;
+　　　　//log += `\n${blueTeamJP}の通常攻撃`;
         lastPosition = position;
 }
 
@@ -2533,8 +2425,8 @@ break;
    ) 
     {
        counterMode = -1;
-      updateRadioColors();
-      log += "★カウンターモード開始！\n";
+      //updateRadioColors();
+      //log += "★カウンターモード開始！\n";
       if (!isFastMode) playYell();
 
     }
@@ -2542,23 +2434,20 @@ break;
   redDiceProbabilities = [RedAP, RedBP, RedCP];  // 赤A, 赤B, 赤C
   blueDiceProbabilities = [BlueAP, BlueBP, BlueCP]; // 青A, 青B, 青C
 
-
         break;
-
 
       case 0:
   
-
   redDiceProbabilities = [RedAP, RedBP*1.4, RedCP*0.6];  // 赤A, 赤B, 赤C
   blueDiceProbabilities = [BlueAP, BlueBP*1.4, BlueCP*0.6]; // 青A, 青B, 青C
 
       if (tenseMode === 1) {
-       log += "★テンションモード中\n";
+       //log += "★テンションモード中\n";
                   
      }
  
      if(tenseMode === 2) {
-       log += "【★超テンションモード中】\n";
+       //log += "【★超テンションモード中】\n";
                              
      }  
 
@@ -2579,12 +2468,12 @@ break;
     if (blueDiceResults[1]) blueBarise++;
         
 
-    diceAact(['d-RedC', 'd-RedB']);
-    diceBact(['d-BlueC', 'd-BlueB']);
+    //diceAact(['d-RedC', 'd-RedB']);
+    //diceBact(['d-BlueC', 'd-BlueB']);
 
-        log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
-        log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
-        log += "\nセンターでの攻防";
+        //log += `\n${redTeamJP}中(${redDiceResults[1]}) ${blueTeamJP}中(${blueDiceResults[1]})`;
+        //log += `\n${redTeamJP}守(${redDiceResults[2]}) ${blueTeamJP}守(${blueDiceResults[2]})\n`;
+        //log += "\nセンターでの攻防";
       　  
 　　　lastPosition = position;
 
@@ -2598,8 +2487,8 @@ if (!tenseMode) {
       redDiceResults[2] === 1 && redDiceResults[1] === 1) 
    {
     tenseMode = 2;
-    updateRadioColors();
-    log += "★超テンションモード開始！\n";
+    //updateRadioColors();
+    //log += "★超テンションモード開始！\n";
 
   } else if (
 
@@ -2609,8 +2498,8 @@ if (!tenseMode) {
 ) 
    {
     tenseMode = 1;
-    updateRadioColors();
-    log += "★テンションモード開始！\n";
+    //updateRadioColors();
+    //log += "★テンションモード開始！\n";
     if (!isFastMode) playYell();
   }
 } 
@@ -2624,15 +2513,13 @@ else if (tenseMode === 1) {
   )
     {
     tenseMode = 2;
-    updateRadioColors();
-    log += "★超テンションモード開始！\n";
+    //updateRadioColors();
+    //log += "★超テンションモード開始！\n";
     if (!isFastMode) playYell();
    }
 
   
 }
-
-
 
 break;
         
@@ -2640,34 +2527,25 @@ break;
 
  }   //elseの閉じ 
 
-
-
 // サイコロ分数カウンターの更新呼び出し
 
-const fractions = [
-  { selector: '.d-RedA .redAcounter', arise: redAarise, attempt: redAattempt },
-  { selector: '.d-RedB .redBcounter', arise: redBarise, attempt: redBattempt },
-  { selector: '.d-RedC .redCcounter', arise: redCarise, attempt: redCattempt },
-  { selector: '.d-BlueA .blueAcounter', arise: blueAarise, attempt: blueAattempt },
-  { selector: '.d-BlueB .blueBcounter', arise: blueBarise, attempt: blueBattempt },
-  { selector: '.d-BlueC .blueCcounter', arise: blueCarise, attempt: blueCattempt },
-];
+//const fractions = [
+  //{ selector: '.d-RedA .redAcounter', arise: redAarise, attempt: redAattempt },
+  //{ selector: '.d-RedB .redBcounter', arise: redBarise, attempt: redBattempt },
+  //{ selector: '.d-RedC .redCcounter', arise: redCarise, attempt: redCattempt },
+  //{ selector: '.d-BlueA .blueAcounter', arise: blueAarise, attempt: blueAattempt },
+  //{ selector: '.d-BlueB .blueBcounter', arise: blueBarise, attempt: blueBattempt },
+  //{ selector: '.d-BlueC .blueCcounter', arise: blueCarise, attempt: blueCattempt },
+//];
 
-fractions.forEach(({ selector, arise, attempt }) => {
-  const fractionLabel = document.querySelector(selector);
-  fractionLabel.textContent = `${arise} / ${attempt}`;
-});
-
-
-
+//fractions.forEach(({ selector, arise, attempt }) => {
+  //const fractionLabel = document.querySelector(selector);
+  //fractionLabel.textContent = `${arise} / ${attempt}`;
+//});
 
 // サイコロスマイルマークの更新呼び出し
-   updateDiceDots(redDiceResults, redDiceDivs);
-   updateDiceDots(blueDiceResults, blueDiceDivs);
-
-
-
-
+   //updateDiceDots(redDiceResults, redDiceDivs);
+   //updateDiceDots(blueDiceResults, blueDiceDivs);
 
 // 位置の移動処理
 let redTotal = redDiceResults.reduce((sum, value) => sum + value, 0);
@@ -2687,38 +2565,34 @@ if (counterMode === 2 || counterMode === -2) {
 }
 
 if (difference === 0) {
-  log += "\n\n";
+  //log += "\n\n";
 
 } else if (difference > 0) {
 
   position += difference + p;
-  log += `\n${redTeamJP}が${difference + p}進む\n`;
+  //log += `\n${redTeamJP}が${difference + p}進む\n`;
   positionChanged = true;
   counterMode = null;
   tenseMode = null;
-  updateRadioColors();
+  //updateRadioColors();
 
   if (!isFastMode) playYell();
 
 
 } else {
   position += difference - p; // differenceは負なので--と同じ意味
-  log += `\n${blueTeamJP}が${Math.abs(difference) + p}進む\n`;
+  //log += `\n${blueTeamJP}が${Math.abs(difference) + p}進む\n`;
   positionChanged = true;
   counterMode = null;
   tenseMode = null;
-  updateRadioColors();
+  //updateRadioColors();
 
   if (!isFastMode) playYell();
  
 }
    
-     
-   
-
-updatePositionRadio(position);
-
-
+ 
+//updatePositionRadio(position);
 
  // ゴール判定
 
@@ -2731,41 +2605,36 @@ if (isPlaying) return;  // 追加: 実行中なら即リターン
     
     if (!isFastMode) playGoalSE(); // ★←追加：ゴール効果音再生
 　　　
-    log += "\n■■■■■ ゴール!■■■■■\n";
-    appendLog(log);
+    //log += "\n■■■■■ ゴール!■■■■■\n";
+    //appendLog(log);
     
     if (!isFastMode) await showGoal(position);
     if (position >= 3) {
       redScore++;
-      appendLog(`${redTeamJP}に1点。位置リセット。\n`);
+      //appendLog(`${redTeamJP}に1点。位置リセット。\n`);
     } else {
       blueScore++;
-      appendLog(`${blueTeamJP}に1点。位置リセット。\n`);
+      //appendLog(`${blueTeamJP}に1点。位置リセット。\n`);
     }
     position = 0;
     backattackMode = null;
-    updatePositionRadio(position);
-    document.getElementById('red-score').textContent = redScore;
-    document.getElementById('blue-score').textContent = blueScore;
+    //updatePositionRadio(position);
+    //document.getElementById('red-score').textContent = redScore;
+    //document.getElementById('blue-score').textContent = blueScore;
  
   } else {
-    log += `\n現在位置: ${position}\n${redTeamJP}の得点: ${redScore}\n ${blueTeamJP}の得点: ${blueScore}\n\n`;
-    appendLog(log);
+    //log += `\n現在位置: ${position}\n${redTeamJP}の得点: ${redScore}\n ${blueTeamJP}の得点: ${blueScore}\n\n`;
+    //appendLog(log);
   }
    
    } finally {
     isPlaying = false;  // 追加: 実行終了時に解除
    }
 
-  
-
-
   turn++;
 
   return true;  // 継続
 }
-
-
 
 
   //ＰＫ戦関数
