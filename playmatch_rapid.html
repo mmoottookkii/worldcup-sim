@@ -961,13 +961,26 @@ button:hover {
     label.textContent = `${blueTeamJP}${labelNames[index]}`;
   });
 
-  // チームIDに対応する画像アイコンを生成
-  const redFlagImg = document.getElementById("red-flag-icon");
-  const blueFlagImg = document.getElementById("blue-flag-icon");
-  const anthemPlayer = document.getElementById("anthem-player");
 
-  redFlagImg.src = `flagpng/${redTeamId}icon.png`;
-  blueFlagImg.src = `flagpng/${blueTeamId}icon.png`;
+
+    // クエリパラメータの batch=1 を取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const isBatch = urlParams.get("batch") === "1";
+
+    if (!isBatch) {
+        // 通常起動時のみ以下を実行
+        const redFlagImg = document.getElementById("red-flag-icon");
+        const blueFlagImg = document.getElementById("blue-flag-icon");
+
+
+        redFlagImg.src = `flagpng/${redTeamId}icon.png`;
+        blueFlagImg.src = `flagpng/${blueTeamId}icon.png`;
+
+    } else {
+        // 一括高速時は何もしない（アイコン・音声ロードを省略）
+    }
+
+ const anthemPlayer = document.getElementById("anthem-player");
 
   // 国歌再生関数
   let currentPlayingTeam = null; // 今再生中のチーム名
@@ -997,8 +1010,8 @@ function playAnthem(teamId) {
 }
 
   // 国旗クリック時に国歌再生
-  redFlagImg.addEventListener("click", () => playAnthem(redTeamId));
-  blueFlagImg.addEventListener("click", () => playAnthem(blueTeamId));
+  //redFlagImg.addEventListener("click", () => playAnthem(redTeamId));
+  //blueFlagImg.addEventListener("click", () => playAnthem(blueTeamId));
 
   // BGM効果音再生関数
 function playBGM() {
