@@ -1,6 +1,6 @@
 {
   "dbName": "GameDB",
-  "version": 26,
+  "version": 27,
   "objectStores": {
     "finalgroupstats": {
       "keyPath": "groupid",
@@ -80,90 +80,90 @@
         {
           "teamId": "albania",
           "formation": "freestyle",
-          "attack": 29,
-          "midfield": 60,
-          "defence": 80,
-          "total": 170
+          "attack": 24,
+          "midfield": 49,
+          "defence": 69,
+          "total": 143
         },
         {
           "teamId": "algeria",
           "formation": "freestyle",
-          "attack": 95,
-          "midfield": 59,
-          "defence": 62,
-          "total": 217
+          "attack": 87,
+          "midfield": 52,
+          "defence": 53,
+          "total": 193
         },
         {
           "teamId": "argentina",
           "formation": "freestyle",
-          "attack": 120,
+          "attack": 143,
           "midfield": 73,
-          "defence": 78,
-          "total": 273
+          "defence": 73,
+          "total": 291
         },
         {
           "teamId": "australia",
           "formation": "freestyle",
-          "attack": 38,
-          "midfield": 60,
-          "defence": 52,
-          "total": 152
+          "attack": 31,
+          "midfield": 49,
+          "defence": 44,
+          "total": 125
         },
         {
           "teamId": "austria",
           "formation": "freestyle",
-          "attack": 63,
-          "midfield": 68,
-          "defence": 82,
-          "total": 214
+          "attack": 58,
+          "midfield": 60,
+          "defence": 73,
+          "total": 192
         },
         {
           "teamId": "belgium",
           "formation": "freestyle",
-          "attack": 116,
-          "midfield": 77,
-          "defence": 85,
-          "total": 280
+          "attack": 127,
+          "midfield": 81,
+          "defence": 89,
+          "total": 297
         },
         {
           "teamId": "bolivia",
           "formation": "freestyle",
-          "attack": 54,
-          "midfield": 40,
-          "defence": 23,
-          "total": 118
+          "attack": 45,
+          "midfield": 33,
+          "defence": 19,
+          "total": 98
         },
         {
           "teamId": "bosnia",
           "formation": "freestyle",
-          "attack": 45,
-          "midfield": 76,
-          "defence": 79,
-          "total": 201
+          "attack": 43,
+          "midfield": 67,
+          "defence": 68,
+          "total": 179
         },
         {
           "teamId": "brazil",
           "formation": "freestyle",
           "attack": 67,
-          "midfield": 108,
-          "defence": 101,
-          "total": 277
+          "midfield": 111,
+          "defence": 107,
+          "total": 286
         },
         {
           "teamId": "bulgaria",
           "formation": "freestyle",
-          "attack": 45,
-          "midfield": 46,
-          "defence": 47,
-          "total": 139
+          "attack": 36,
+          "midfield": 37,
+          "defence": 39,
+          "total": 113
         },
         {
           "teamId": "cameroon",
           "formation": "freestyle",
-          "attack": 88,
-          "midfield": 39,
-          "defence": 65,
-          "total": 193
+          "attack": 73,
+          "midfield": 33,
+          "defence": 57,
+          "total": 164
         },
         {
           "teamId": "canada",
@@ -176,74 +176,74 @@
         {
           "teamId": "chile",
           "formation": "freestyle",
-          "attack": 62,
-          "midfield": 80,
-          "defence": 72,
-          "total": 215
+          "attack": 54,
+          "midfield": 73,
+          "defence": 62,
+          "total": 190
         },
         {
           "teamId": "china",
           "formation": "freestyle",
-          "attack": 49,
-          "midfield": 39,
-          "defence": 40,
-          "total": 129
+          "attack": 41,
+          "midfield": 32,
+          "defence": 33,
+          "total": 108
         },
         {
           "teamId": "colombia",
           "formation": "freestyle",
-          "attack": 112,
-          "midfield": 54,
-          "defence": 77,
-          "total": 244
+          "attack": 106,
+          "midfield": 50,
+          "defence": 72,
+          "total": 229
         },
         {
           "teamId": "costarica",
           "formation": "freestyle",
-          "attack": 39,
-          "midfield": 39,
-          "defence": 74,
-          "total": 152
+          "attack": 31,
+          "midfield": 31,
+          "defence": 65,
+          "total": 128
         },
         {
           "teamId": "croatia",
           "formation": "freestyle",
-          "attack": 44,
-          "midfield": 116,
-          "defence": 81,
-          "total": 243
+          "attack": 42,
+          "midfield": 113,
+          "defence": 73,
+          "total": 229
         },
         {
           "teamId": "czech",
           "formation": "freestyle",
-          "attack": 47,
-          "midfield": 76,
-          "defence": 68,
-          "total": 192
+          "attack": 39,
+          "midfield": 63,
+          "defence": 58,
+          "total": 162
         },
         {
           "teamId": "denmark",
           "formation": "freestyle",
-          "attack": 77,
-          "midfield": 69,
-          "defence": 78,
-          "total": 225
+          "attack": 69,
+          "midfield": 62,
+          "defence": 70,
+          "total": 202
         },
         {
           "teamId": "ecuador",
           "formation": "freestyle",
-          "attack": 50,
-          "midfield": 43,
-          "defence": 56,
-          "total": 150
+          "attack": 41,
+          "midfield": 35,
+          "defence": 46,
+          "total": 123
         },
         {
           "teamId": "egypt",
           "formation": "freestyle",
-          "attack": 53,
-          "midfield": 46,
-          "defence": 65,
-          "total": 165
+          "attack": 51,
+          "midfield": 39,
+          "defence": 53,
+          "total": 145
         },
         {
           "teamId": "elsalvador",
@@ -256,58 +256,58 @@
         {
           "teamId": "england",
           "formation": "freestyle",
-          "attack": 100,
+          "attack": 109,
           "midfield": 86,
           "defence": 85,
-          "total": 273
+          "total": 281
         },
         {
           "teamId": "finland",
           "formation": "freestyle",
-          "attack": 50,
-          "midfield": 47,
-          "defence": 59,
-          "total": 158
+          "attack": 42,
+          "midfield": 38,
+          "defence": 52,
+          "total": 133
         },
         {
           "teamId": "france",
           "formation": "freestyle",
-          "attack": 98,
-          "midfield": 89,
-          "defence": 103,
-          "total": 291
+          "attack": 111,
+          "midfield": 96,
+          "defence": 109,
+          "total": 316
         },
         {
           "teamId": "georgia",
           "formation": "freestyle",
-          "attack": 40,
-          "midfield": 48,
-          "defence": 64,
-          "total": 153
+          "attack": 32,
+          "midfield": 39,
+          "defence": 52,
+          "total": 124
         },
         {
           "teamId": "germany",
           "formation": "freestyle",
-          "attack": 72,
-          "midfield": 127,
-          "defence": 83,
-          "total": 284
+          "attack": 77,
+          "midfield": 134,
+          "defence": 89,
+          "total": 301
         },
         {
           "teamId": "ghana",
           "formation": "freestyle",
-          "attack": 41,
-          "midfield": 72,
-          "defence": 65,
-          "total": 179
+          "attack": 34,
+          "midfield": 62,
+          "defence": 56,
+          "total": 153
         },
         {
           "teamId": "greece",
           "formation": "freestyle",
-          "attack": 65,
-          "midfield": 46,
-          "defence": 76,
-          "total": 188
+          "attack": 53,
+          "midfield": 40,
+          "defence": 68,
+          "total": 161
         },
         {
           "teamId": "guatemala",
@@ -320,402 +320,402 @@
         {
           "teamId": "honduras",
           "formation": "freestyle",
-          "attack": 47,
-          "midfield": 33,
-          "defence": 27,
-          "total": 109
+          "attack": 40,
+          "midfield": 28,
+          "defence": 24,
+          "total": 93
         },
         {
           "teamId": "hungary",
           "formation": "freestyle",
-          "attack": 47,
-          "midfield": 46,
-          "defence": 61,
-          "total": 156
+          "attack": 39,
+          "midfield": 38,
+          "defence": 55,
+          "total": 133
         },
         {
           "teamId": "iceland",
           "formation": "freestyle",
-          "attack": 64,
-          "midfield": 48,
-          "defence": 48,
-          "total": 161
+          "attack": 52,
+          "midfield": 40,
+          "defence": 39,
+          "total": 133
         },
         {
           "teamId": "iran",
           "formation": "freestyle",
-          "attack": 81,
-          "midfield": 40,
-          "defence": 47,
-          "total": 169
+          "attack": 68,
+          "midfield": 32,
+          "defence": 38,
+          "total": 139
         },
         {
           "teamId": "iraq",
           "formation": "freestyle",
-          "attack": 23,
-          "midfield": 31,
-          "defence": 50,
-          "total": 105
+          "attack": 20,
+          "midfield": 27,
+          "defence": 42,
+          "total": 90
         },
         {
           "teamId": "ireland",
           "formation": "freestyle",
-          "attack": 48,
-          "midfield": 59,
-          "defence": 76,
-          "total": 184
+          "attack": 40,
+          "midfield": 49,
+          "defence": 64,
+          "total": 153
         },
         {
           "teamId": "israel",
           "formation": "freestyle",
-          "attack": 74,
-          "midfield": 39,
-          "defence": 39,
-          "total": 153
+          "attack": 62,
+          "midfield": 32,
+          "defence": 32,
+          "total": 127
         },
         {
           "teamId": "italy",
           "formation": "freestyle",
-          "attack": 91,
-          "midfield": 76,
-          "defence": 107,
-          "total": 275
+          "attack": 92,
+          "midfield": 79,
+          "defence": 110,
+          "total": 282
         },
         {
           "teamId": "ivorycoast",
           "formation": "freestyle",
-          "attack": 66,
-          "midfield": 85,
-          "defence": 56,
-          "total": 209
+          "attack": 59,
+          "midfield": 76,
+          "defence": 49,
+          "total": 184
         },
         {
           "teamId": "jamaica",
           "formation": "freestyle",
-          "attack": 49,
-          "midfield": 35,
-          "defence": 48,
-          "total": 133
+          "attack": 41,
+          "midfield": 30,
+          "defence": 39,
+          "total": 111
         },
         {
           "teamId": "japan",
           "formation": "freestyle",
-          "attack": 67,
-          "midfield": 49,
-          "defence": 55,
-          "total": 173
+          "attack": 56,
+          "midfield": 41,
+          "defence": 45,
+          "total": 143
         },
         {
           "teamId": "jordan",
           "formation": "freestyle",
-          "attack": 50,
-          "midfield": 23,
-          "defence": 19,
-          "total": 94
+          "attack": 42,
+          "midfield": 21,
+          "defence": 21,
+          "total": 85
         },
         {
           "teamId": "mali",
           "formation": "freestyle",
-          "attack": 72,
-          "midfield": 63,
-          "defence": 35,
-          "total": 171
+          "attack": 60,
+          "midfield": 52,
+          "defence": 31,
+          "total": 143
         },
         {
           "teamId": "mexico",
           "formation": "freestyle",
-          "attack": 72,
-          "midfield": 66,
-          "defence": 69,
-          "total": 209
+          "attack": 67,
+          "midfield": 57,
+          "defence": 59,
+          "total": 184
         },
         {
           "teamId": "montenegro",
           "formation": "freestyle",
-          "attack": 59,
-          "midfield": 39,
-          "defence": 55,
-          "total": 155
+          "attack": 49,
+          "midfield": 34,
+          "defence": 47,
+          "total": 131
         },
         {
           "teamId": "morocco",
           "formation": "freestyle",
-          "attack": 86,
-          "midfield": 61,
-          "defence": 67,
-          "total": 215
+          "attack": 77,
+          "midfield": 55,
+          "defence": 58,
+          "total": 191
         },
         {
           "teamId": "netherlands",
           "formation": "freestyle",
-          "attack": 80,
-          "midfield": 91,
-          "defence": 101,
-          "total": 273
+          "attack": 78,
+          "midfield": 96,
+          "defence": 108,
+          "total": 282
         },
         {
           "teamId": "newzealand",
           "formation": "freestyle",
-          "attack": 37,
-          "midfield": 37,
-          "defence": 46,
-          "total": 120
+          "attack": 32,
+          "midfield": 32,
+          "defence": 39,
+          "total": 103
         },
         {
           "teamId": "nigeria",
           "formation": "freestyle",
-          "attack": 66,
-          "midfield": 58,
-          "defence": 68,
-          "total": 194
+          "attack": 56,
+          "midfield": 51,
+          "defence": 58,
+          "total": 166
         },
         {
           "teamId": "northkorea",
           "formation": "freestyle",
-          "attack": 32,
-          "midfield": 18,
-          "defence": 13,
-          "total": 64
+          "attack": 29,
+          "midfield": 21,
+          "defence": 18,
+          "total": 69
         },
         {
           "teamId": "northmacedonia",
           "formation": "freestyle",
-          "attack": 42,
-          "midfield": 56,
-          "defence": 51,
-          "total": 150
+          "attack": 34,
+          "midfield": 47,
+          "defence": 43,
+          "total": 125
         },
         {
           "teamId": "norway",
           "formation": "freestyle",
-          "attack": 97,
-          "midfield": 58,
-          "defence": 47,
-          "total": 203
+          "attack": 89,
+          "midfield": 49,
+          "defence": 39,
+          "total": 178
         },
         {
           "teamId": "panama",
           "formation": "freestyle",
-          "attack": 34,
-          "midfield": 19,
-          "defence": 31,
-          "total": 85
+          "attack": 31,
+          "midfield": 18,
+          "defence": 29,
+          "total": 79
         },
         {
           "teamId": "paraguay",
           "formation": "freestyle",
-          "attack": 39,
-          "midfield": 64,
-          "defence": 86,
-          "total": 190
+          "attack": 32,
+          "midfield": 53,
+          "defence": 72,
+          "total": 159
         },
         {
           "teamId": "peru",
           "formation": "freestyle",
-          "attack": 76,
-          "midfield": 49,
-          "defence": 46,
-          "total": 172
+          "attack": 63,
+          "midfield": 40,
+          "defence": 37,
+          "total": 141
         },
         {
           "teamId": "poland",
           "formation": "freestyle",
-          "attack": 98,
-          "midfield": 60,
-          "defence": 73,
-          "total": 233
+          "attack": 102,
+          "midfield": 54,
+          "defence": 69,
+          "total": 226
         },
         {
           "teamId": "portugal",
           "formation": "freestyle",
-          "attack": 108,
-          "midfield": 103,
-          "defence": 60,
-          "total": 272
+          "attack": 120,
+          "midfield": 104,
+          "defence": 58,
+          "total": 283
         },
         {
           "teamId": "qatar",
           "formation": "freestyle",
-          "attack": 47,
-          "midfield": 40,
-          "defence": 53,
-          "total": 141
+          "attack": 38,
+          "midfield": 33,
+          "defence": 44,
+          "total": 116
         },
         {
           "teamId": "romania",
           "formation": "freestyle",
-          "attack": 51,
-          "midfield": 51,
-          "defence": 59,
-          "total": 161
+          "attack": 41,
+          "midfield": 41,
+          "defence": 49,
+          "total": 133
         },
         {
           "teamId": "russia",
           "formation": "freestyle",
-          "attack": 78,
-          "midfield": 94,
-          "defence": 52,
-          "total": 226
+          "attack": 71,
+          "midfield": 84,
+          "defence": 47,
+          "total": 203
         },
         {
           "teamId": "saudiarabia",
           "formation": "freestyle",
-          "attack": 39,
-          "midfield": 45,
-          "defence": 52,
-          "total": 137
+          "attack": 31,
+          "midfield": 37,
+          "defence": 43,
+          "total": 112
         },
         {
           "teamId": "scotland",
           "formation": "freestyle",
-          "attack": 48,
-          "midfield": 101,
-          "defence": 44,
-          "total": 194
+          "attack": 41,
+          "midfield": 88,
+          "defence": 39,
+          "total": 168
         },
         {
           "teamId": "senegal",
           "formation": "freestyle",
-          "attack": 74,
-          "midfield": 79,
-          "defence": 74,
-          "total": 228
+          "attack": 73,
+          "midfield": 74,
+          "defence": 69,
+          "total": 216
         },
         {
           "teamId": "serbia",
           "formation": "freestyle",
-          "attack": 89,
-          "midfield": 74,
-          "defence": 72,
-          "total": 237
+          "attack": 82,
+          "midfield": 71,
+          "defence": 66,
+          "total": 219
         },
         {
           "teamId": "slovakia",
           "formation": "freestyle",
-          "attack": 48,
-          "midfield": 84,
-          "defence": 63,
-          "total": 197
+          "attack": 39,
+          "midfield": 73,
+          "defence": 59,
+          "total": 172
         },
         {
           "teamId": "slovenia",
           "formation": "freestyle",
-          "attack": 87,
-          "midfield": 46,
-          "defence": 62,
-          "total": 196
+          "attack": 77,
+          "midfield": 38,
+          "defence": 65,
+          "total": 181
         },
         {
           "teamId": "southafrica",
           "formation": "freestyle",
-          "attack": 43,
-          "midfield": 48,
-          "defence": 42,
-          "total": 135
+          "attack": 36,
+          "midfield": 39,
+          "defence": 35,
+          "total": 111
         },
         {
           "teamId": "southkorea",
           "formation": "freestyle",
-          "attack": 56,
-          "midfield": 57,
-          "defence": 40,
-          "total": 154
+          "attack": 48,
+          "midfield": 51,
+          "defence": 33,
+          "total": 133
         },
         {
           "teamId": "spain",
           "formation": "freestyle",
           "attack": 59,
-          "midfield": 135,
-          "defence": 93,
-          "total": 288
+          "midfield": 145,
+          "defence": 104,
+          "total": 310
         },
         {
           "teamId": "sweden",
           "formation": "freestyle",
-          "attack": 97,
-          "midfield": 57,
-          "defence": 53,
-          "total": 209
+          "attack": 84,
+          "midfield": 49,
+          "defence": 47,
+          "total": 181
         },
         {
           "teamId": "switzerland",
           "formation": "freestyle",
-          "attack": 44,
-          "midfield": 77,
-          "defence": 105,
-          "total": 227
+          "attack": 39,
+          "midfield": 69,
+          "defence": 96,
+          "total": 205
         },
         {
           "teamId": "tunisia",
           "formation": "freestyle",
-          "attack": 61,
-          "midfield": 55,
-          "defence": 52,
-          "total": 169
+          "attack": 50,
+          "midfield": 46,
+          "defence": 43,
+          "total": 139
         },
         {
           "teamId": "turkey",
           "formation": "freestyle",
-          "attack": 60,
-          "midfield": 75,
-          "defence": 75,
-          "total": 211
+          "attack": 53,
+          "midfield": 64,
+          "defence": 65,
+          "total": 183
         },
         {
           "teamId": "uae",
           "formation": "freestyle",
-          "attack": 54,
-          "midfield": 27,
-          "defence": 22,
-          "total": 105
+          "attack": 45,
+          "midfield": 25,
+          "defence": 20,
+          "total": 92
         },
         {
           "teamId": "ukraine",
           "formation": "freestyle",
-          "attack": 91,
-          "midfield": 59,
-          "defence": 58,
-          "total": 209
+          "attack": 79,
+          "midfield": 51,
+          "defence": 50,
+          "total": 180
         },
         {
           "teamId": "uruguay",
           "formation": "freestyle",
-          "attack": 97,
-          "midfield": 91,
-          "defence": 73,
-          "total": 262
+          "attack": 101,
+          "midfield": 88,
+          "defence": 72,
+          "total": 261
         },
         {
           "teamId": "usa",
           "formation": "freestyle",
-          "attack": 57,
-          "midfield": 56,
-          "defence": 61,
-          "total": 175
+          "attack": 48,
+          "midfield": 47,
+          "defence": 50,
+          "total": 145
         },
         {
           "teamId": "uzbekistan",
           "formation": "freestyle",
-          "attack": 55,
-          "midfield": 43,
-          "defence": 25,
-          "total": 124
+          "attack": 45,
+          "midfield": 36,
+          "defence": 22,
+          "total": 104
         },
         {
           "teamId": "venezuela",
           "formation": "freestyle",
-          "attack": 62,
-          "midfield": 44,
-          "defence": 70,
-          "total": 177
+          "attack": 51,
+          "midfield": 37,
+          "defence": 57,
+          "total": 146
         },
         {
           "teamId": "wales",
           "formation": "freestyle",
-          "attack": 43,
-          "midfield": 71,
-          "defence": 62,
-          "total": 177
+          "attack": 39,
+          "midfield": 62,
+          "defence": 51,
+          "total": 152
         }
       ]
     },
