@@ -68,7 +68,7 @@
       color: #004085;
     }
 
-    #saveDefaultBtn, #returnMatchBtn2 {
+    #saveDefaultBtn, #returnMatchBtn2, #pullDefaultBtn {
       position: fixed;
       z-index: 1000;
       padding: 12px 20px;
@@ -98,6 +98,18 @@
     #returnMatchBtn2:hover {
       background-color: #ffa074;
     }
+    
+        #pullDefaultBtn {
+      bottom: 80px;
+      left: 10px;
+      background-color: #FF6928;
+      color: #fff;
+    }
+
+    #pullDefaultBtn:hover {
+      background-color: #ffa074;
+    }
+    
 
     #statsBox {
       position: fixed;
@@ -296,6 +308,7 @@
 
   <!-- ボタン -->
   <button id="saveDefaultBtn" class="btn">デフォルト登録</button>
+  <button id="pullDefaultBtn" class="btn">デフォルトを呼ぶ</button>
   <button id="returnMatchBtn2" class="btn">登録しないで戻る</button>
 
   <!-- JS（Bootstrap用） -->
@@ -505,7 +518,7 @@ function calculateTeamStats() {
       coeff = 0.9;
     }
 
-    const score = (player.rating-60) * coeff;
+    const score = (1.077 ** (player.rating - 60)) * 4 * coeff;
 
     // ポジションの貢献比率を取得（攻撃・中盤・守備）
     const [atkRate, midRate, defRate] = getPositionWeights(targetPos);
@@ -609,6 +622,102 @@ window.addEventListener("DOMContentLoaded", () => {
     formationSelect.disabled = true;
   });
 });
+
+
+
+
+// 選手を指定ポジションに割当てる補助関数
+function assignPlayerToPosition(player, posElem) {
+  if (!player || !posElem) return;
+
+  const prevId = posElem.dataset.assignedId;
+  if (prevId) usedPlayerIds.delete(prevId); // 古いID解除
+
+  posElem.textContent = `${player.position} ${player.name} (${player.rating})`;
+  posElem.style.backgroundColor = "#003366";
+  posElem.style.color = "white";
+  posElem.dataset.assignedId = player.id;
+
+  usedPlayerIds.add(player.id);
+}
+
+
+
+// デフォルトの選手を呼ぶ
+document.getElementById("pullDefaultBtn").addEventListener("click", () => {
+  const teamId = document.getElementById("countrySelect").value;
+  if (!teamId) {
+    alert("チームIDが見つかりません。");
+    return;
+  }
+
+  // まずチームの選手を取得
+  getPlayersByTeam(teamId, players => {
+    allPlayers = players; // 念のため更新
+    playerMap = new Map(players.map(p => [String(p.id), p]));
+
+    // フォーメーションを再描画してポジション初期化
+    renderFormation(currentFormation);
+
+    // デフォルトポジションをDBから取得
+    const request = indexedDB.open("GameDB", 27);
+    request.onsuccess = () => {
+      const db = request.result;
+      const tx = db.transaction("playerpositions", "readonly");
+      const store = tx.objectStore("playerpositions");
+      const getReq = store.get(teamId);
+
+      getReq.onsuccess = () => {
+        const data = getReq.result;
+        if (!data || !data.positions) {
+          alert("保存されたポジション情報が見つかりません。");
+          return;
+        }
+
+        // ポジション反映処理
+        usedPlayerIds.clear();
+        document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+
+
+// ポジション反映処理（修正版）
+usedPlayerIds.clear();
+document.querySelectorAll(".position").forEach(pos => removePlayerFromPosition(pos));
+
+// すべてのポジションDOMを取得（配列に変換して index 指定できるように）
+const posElems = Array.from(document.querySelectorAll(".position"));
+
+// 保存された順に処理
+data.positions.forEach(entry => {
+  const { order, playerId } = entry;
+  if (playerId == null) return;
+
+  const posElem = posElems[order]; // ← これが正しいマップ上の位置
+  const player = allPlayers.find(p => String(p.id) === String(playerId));
+  if (posElem && player) {
+    assignPlayerToPosition(player, posElem);
+  }
+});
+
+        //updateAssignedColors();
+        calculateTeamStats();
+      };
+
+      getReq.onerror = () => {
+        alert("ポジション情報の取得に失敗しました。");
+      };
+    };
+
+    request.onerror = () => {
+      alert("データベース接続に失敗しました。");
+    };
+  });
+});
+
+
+
+
+
+
 
 // デフォルト登録
 

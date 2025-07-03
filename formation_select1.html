@@ -548,7 +548,7 @@ function calculateTeamStats() {
       coeff = 0.9;
     }
 
-    const score = (player.rating-60) * coeff;
+    const score = (1.077 ** (player.rating - 60)) * 4 * coeff;
 
     // ポジションの貢献比率を取得（攻撃・中盤・守備）
     const [atkRate, midRate, defRate] = getPositionWeights(targetPos);
